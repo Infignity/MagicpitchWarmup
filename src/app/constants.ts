@@ -1,4 +1,13 @@
+export const API_BASE = "https://mpwarm.azurewebsites.net/v1"
+
+export const SESSION_STATUS = {
+  LOADING: "loading",
+  AUTHENTICATED: "authenticated",
+  UNAUTHENTICATED: "unauthenticated"
+}
+
 export const routes = {
+  HOME: "/",
   MAIL_SERVERS: "/mail-servers",
   NEW_MAIL_SERVER: "/mail-servers/new",
   WARM_UPS: "/warm-ups",
@@ -37,6 +46,7 @@ export const sampleWarmups = [
 export const sampleMailServers = [
   {
     _id: "wwlkwk",
+    isChecked: true,
     no: "01",
     name: "Neww1",
     email: "anwar359**@gmail.com",
@@ -47,6 +57,7 @@ export const sampleMailServers = [
   },
   {
     _id: "asdkfjasdf",
+    isChecked: false,
     no: "02",
     name: "New mail service2",
     email: "sadiq65**@gmail.com",
@@ -58,6 +69,7 @@ export const sampleMailServers = [
   {
     _id: "aklsdfnsdmf",
     no: "03",
+    isChecked: false,
     name: "Mail man mail service",
     email: "mailman232@yahoo.com",
     day: 20,

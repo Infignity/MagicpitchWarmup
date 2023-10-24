@@ -1,13 +1,14 @@
 "use client"
-import Loader1 from "./components/Loader1"
+import Loader1 from "@/app/(dashboard)/components/Loader1"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { routes } from "./constants"
 
 export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    router.push("/warm-ups")
+    router.push(routes.WARM_UPS)
   }, [])
 
   return (

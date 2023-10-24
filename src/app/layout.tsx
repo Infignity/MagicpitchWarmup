@@ -1,7 +1,7 @@
-import { Inter } from 'next/font/google'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'], weight: ["300", "400", "500"] })
+import GlobalToastProvider from "./contexts/GlobalToastProvider"
+import AuthProvider from './contexts/AuthProvider'
+import AuthProtected from './components/AuthProtected'
 
 export default function RootLayout({
   children,
@@ -10,8 +10,14 @@ export default function RootLayout({
   }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} w-screen h-screen`}>
-        {children}
+      <body className={`w-screen h-screen`}>
+        <GlobalToastProvider>
+          <AuthProvider>
+            <AuthProtected>
+              {children}
+            </AuthProtected>
+          </AuthProvider>
+        </GlobalToastProvider>
       </body>
     </html>
   )
