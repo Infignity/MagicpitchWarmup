@@ -13,9 +13,9 @@ export default function RootLayout({
       <body className={`w-screen h-screen`}>
         <GlobalToastProvider>
           <AuthProvider>
-            <AuthProtected>
+            {/* <AuthProtected> */ }
               {children}
-            </AuthProtected>
+            {/* </AuthProtected> */ }
           </AuthProvider>
         </GlobalToastProvider>
       </body>
