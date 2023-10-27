@@ -109,7 +109,7 @@ const Signup = () => {
 
 
     try{
-      const {data, status} = await axios.post(`${API_BASE}/users`, {  username: formState.username, password: formState.password, fullName: formState.fullName, email: formState.email, accessCode: formState.accessCode })
+      const {data, status} = await axios.post(`${API_BASE}/users`, {  username: formState.username, password: formState.password, fullname: formState.fullName, email: formState.email, accessCode: formState.accessCode })
       console.log("signup data: ", data)
       if (status === 201){
         const response = await signIn("credentials", { redirect: false, username: formState.username, password: formState.password })
@@ -124,24 +124,18 @@ const Signup = () => {
             showErrorToast("Couldn't sign in. Something went wrong")
           }
         }else{
-          showErrorToast("Could not complete sign in")
+          showErrorToast("Unable to complete sign in")
         }
       }
     }catch(error: any){
-      let message = ""
       if (error.response) {
-        //TODO: complete implementing error handling for signup
-        // The server responded with a status code outside 2xx.
-        console.error('Response Error:', error.response.status, error.response.data);
+        showErrorToast(error.response.data.description)
       } else if (error.request) {
-        // The request was made but no response was received (e.g., network error).
-        console.error('Request Error:', error.request);
+        showErrorToast("Unable to create user. Try again")
       } else {
-        // Something else happened.
-        console.error('Error:', error.message);
+        showErrorToast("Unable to create user")
       }
     }
-
 
 
     setIsLoading(false)

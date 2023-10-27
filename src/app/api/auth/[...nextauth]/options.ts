@@ -57,7 +57,6 @@ export const options: NextAuthOptions = {
 			if (user) {
 				token.user = user
 			}
-			console.log(token)
 			return token
 		},
 	},

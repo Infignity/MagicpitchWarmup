@@ -1,4 +1,25 @@
+import { MailServerVerificationTypeObject } from "./types"
+
 export const API_BASE = "https://mpwarm.azurewebsites.net/v1"
+
+export const mode: {
+  NEW: "NEW",
+  EDIT: "EDIT"
+} = {
+  NEW: "NEW",
+  EDIT: "EDIT"
+}
+
+export const mailServerVerificationType: MailServerVerificationTypeObject = {
+  imap: "imap",
+  smtp: "smtp",
+}
+
+export const securityOptions = [
+  { text: "SSL", value: "ssl" },
+  { text: "TLS", value: "tls" },
+  { text: "Unsecure", value: "unsecure" },
+]
 
 export const SESSION_STATUS = {
   LOADING: "loading",

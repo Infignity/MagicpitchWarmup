@@ -1,27 +1,46 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../store"
-import { sampleMailServers } from "@/app/constants"
+import { FormMode, MailServer } from "@/app/types"
+import { mode } from "@/app/constants"
 
 const initialState: {
-    mailServers: typeof sampleMailServers
+    selectedMailServer: null | MailServer,
+    isOpenServerForm: boolean,
+    serverFormMode: FormMode
 } = {
-        mailServers: [...sampleMailServers]
+        selectedMailServer: null,
+        isOpenServerForm: false,
+        serverFormMode: mode.NEW
     }
 
 const mailServersSlice = createSlice({
     name: "mailServers",
     initialState,
     reducers: {
-        setMailServers: (state, action) => {
-            state.mailServers = action.payload
+        setSelectedMailServer: (state, action) => {
+            state.selectedMailServer = action.payload
+        },
+        openServerForm(state, action){
+            state.isOpenServerForm = true
+            state.serverFormMode = action.payload
+        },
+        closeServerForm(state){
+            state.isOpenServerForm = false
         },
     }
 })
 
-
-export const { setMailServers } = mailServersSlice.actions
+export const { setSelectedMailServer, openServerForm, closeServerForm } = mailServersSlice.actions
 export default mailServersSlice.reducer
 
-export function selectMailServers(state: RootState) {
-    return state.mailServers.mailServers
+export function getSelectedMailServer(state: RootState): MailServer | null{
+    return state.mailServers.selectedMailServer
+}
+
+export function getIsOpenServerForm(state: RootState){
+    return state.mailServers.isOpenServerForm
+}
+
+export function getServerFormMode(state: RootState): FormMode{
+    return state.mailServers.serverFormMode
 }
