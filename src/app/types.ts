@@ -95,3 +95,26 @@ export type NewWarmup = {
   targetOpenRate: number,
   targetReplyRate: number
 }
+
+/*
+ *  API Error Types
+ * */
+// type BadRequestResponse = {
+//   message: string,
+//   description: string,
+// }
+//
+// type UnauthorizedRequestResponse =  BadRequestResponse
+//
+// type ValidationErrorResponse = BadRequestResponse & { 
+//   detail: {
+//     loc: number[],
+//     msg: string
+//   }[] 
+// }
+
+export type AddMailServerResponse = {
+  message: string,
+  description: string,
+  mailServer: MailServer
+}

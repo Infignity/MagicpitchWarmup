@@ -67,7 +67,9 @@ export default function MailServerForm() {
 
   const [isSMTPVerified, setIsSMTPVerified] = useState(false)
   const [isIMAPVerified, setIsIMAPVerified] = useState(false)
-  const isSubmitDisabled = isSMTPVerified === false || isIMAPVerified === false
+  // const isSubmitDisabled = isSMTPVerified === false || isIMAPVerified === false
+  // const isSubmitDisabled = isSMTPVerified === false
+  const isSubmitDisabled = false
 
   useEffect(() => {
     if(server && currentMode === mode.EDIT){
@@ -89,7 +91,6 @@ export default function MailServerForm() {
 
 
   async function handleVerifySMTPDetails(){
-    console.log("smtp: ", formState.smtpDetails)
     let smtp = formState.smtpDetails
     if (validateSMTP({ smtp, smtpHostnameRef, smtpPortRef, smtpEmailRef, smtpPasswordRef, smtpSecurityRef, smtpRecipientEmailRef }) === false){
       return 
@@ -106,11 +107,14 @@ export default function MailServerForm() {
         showErrorToast(resp.description)
       }
     }catch(err: any){
-      console.log("error on smtp validation: ", err)
-      if (err.data){
-        showErrorToast(err.data.description)
+      if (err.message){
+        showErrorToast(err.message)
       }else{
-        showErrorToast("SMTP Details are invalid")
+        if (err.error){
+          showErrorToast(err.error)
+        }else{
+          showErrorToast("Unable to complete smtp verification")
+        }
       }
     }
   }
@@ -125,7 +129,6 @@ export default function MailServerForm() {
     }
     try{
       const resp = await verifyIMAP({ token, config: {...imap} }).unwrap()
-      console.log("resp: ", resp)
       if (resp.verificationStatus === "success"){
         showSuccessToast("IMAP Details are valid")
         setIsIMAPVerified(true)
@@ -133,11 +136,14 @@ export default function MailServerForm() {
         showErrorToast("IMAP Details are invalid")
       }
     }catch(err: any){
-      if (err.data){
-        console.log("error on imap validation: ", err)
-        showErrorToast("IMAP Details are invalid")
+      if (err.message){
+        showErrorToast(err.message)
       }else{
-        showErrorToast("IMAP Details are invalid")
+        if (err.error){
+          showErrorToast(err.error)
+        }else{
+          showErrorToast("Unable to complete imap verification")
+        }
       }
     }
   }
@@ -163,27 +169,37 @@ export default function MailServerForm() {
 
     try{
       if (currentMode === mode.NEW){
-        const resp = await addMailServer({ token, name: formState.name, imapDetails: formState.imapDetails, smtpDetails: formState.smtpDetails })
-        console.log("mail server creation: ", resp)
+        await addMailServer({ token, name: formState.name, imapDetails: formState.imapDetails, smtpDetails: formState.smtpDetails }).unwrap()
         showSuccessToast("Mail Server Created!")
         setFormState(initialMailServerData)
       }else{
-        const resp = await updateMailServer({ token, name: formState.name, imapDetails: formState.imapDetails, smtpDetails: formState.smtpDetails, mailServerId: server?._id as string })
-        console.log("mail server update: ", resp)
+        await updateMailServer({ token, name: formState.name, imapDetails: formState.imapDetails, smtpDetails: formState.smtpDetails, mailServerId: server?._id as string }).unwrap()
         showSuccessToast("Mail Server Updated!")
       }
     }catch(err: any){
       if (currentMode === mode.NEW){
-        if(err.data){
+        if (err.data){
           showErrorToast(err.data.description)
-        }else {
-          showErrorToast("Unable to create new mail server")
+        }else if (err.message){
+          showErrorToast(err.message)
+        }else{
+          if (err.error){
+            showErrorToast(err.error)
+          }else{
+            showErrorToast("Unable to create mail server")
+          }
         }
       }else{
-        if(err.data){
+        if (err.data){
           showErrorToast(err.data.description)
-        }else {
-          showErrorToast("Unable to create edit mail server")
+        }else if (err.message){
+          showErrorToast(err.message)
+        }else{
+          if (err.error){
+            showErrorToast(err.error)
+          }else{
+            showErrorToast("Unable to update mail server")
+          }
         }
       }
     }
@@ -203,7 +219,7 @@ export default function MailServerForm() {
           </div>
           <div className="flex flex-col gap-12 h-full w-full">
             <div className="w-full flex flex-col md:flex-row gap-5">
-              <TextInput errRef={nameRef} label='Name of email service' placeholder='Enter mail server name' value={formState.name} onChange={(e) => handleOnChange({ name: e.target.value }) } />
+              <TextInput errRef={nameRef} label='Name of email server' placeholder='Enter mail server name' value={formState.name} onChange={(e) => handleOnChange({ name: e.target.value }) } />
             </div>
             <div className="flex flex-col gap-5">
               <h3 className="text-gray-800 text-xl">SMTP (sending emails)</h3>

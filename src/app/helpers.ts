@@ -6,14 +6,32 @@ export function isValidEmail(email: string) {
   return emailRegex.test(email);
 }
 
+export function isValidNumber(text: string){
+  const num = parseInt(text)
+  if(isNaN(num)){
+    return false
+  }else{
+    return true
+  }
+}
 
-export function validateInput({ value, errRef, errorText, isEmail = false} : { 
+
+export function validateInput({ value, errRef, errorText, isEmail = false, isNumber = false} : { 
   value: string, 
   errRef: RefObject<HTMLParagraphElement>, 
   errorText: string, 
-  isEmail?: boolean 
+  isEmail?: boolean,
+  isNumber?: boolean
 }): boolean {
   if (!value){
+    if (errRef && errRef.current){
+      errRef.current.focus()
+      errRef.current.textContent = errorText
+    }
+    return false
+  }
+
+  if (isNumber && isValidNumber(value) === false){
     if (errRef && errRef.current){
       errRef.current.focus()
       errRef.current.textContent = errorText
@@ -50,6 +68,10 @@ export  function validateSMTP({ smtp, smtpHostnameRef, smtpPortRef, smtpEmailRef
   }
   // check port
   if (validateInput({ value: smtp.port, errRef: smtpPortRef, errorText: "SMTP Port is required" }) === false){
+    return false
+  }
+  // check port validity as number
+  if (validateInput({ value: smtp.port, errRef: smtpPortRef, errorText: "SMTP Port has to be a valid whole number", isNumber: true }) === false){
     return false
   }
   // check email
@@ -93,6 +115,10 @@ export function validateIMAP({ imap, imapHostnameRef, imapPortRef, imapEmailRef,
   }
   // check port
   if (validateInput({ value: imap.port, errRef: imapPortRef, errorText: "IMAP Port is required" }) === false){
+    return false
+  }
+  // check port validity as number
+  if (validateInput({ value: imap.port, errRef: imapPortRef, errorText: "IMAP Port has to be a valid whole number", isNumber: true }) === false){
     return false
   }
   // check email

@@ -1,11 +1,11 @@
 import { mode, routes } from "@/app/constants"
 import { MailServer } from "@/app/types"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IconContext } from "react-icons"
 import { BsX as XMark } from "react-icons/bs"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa"
-import { getSelectedMailServer, openServerForm } from "../../store/slices/mailServersSlice"
+import { getMarkedMailServerIDs, getSelectedMailServer, openServerForm, toggleMarkForDelete } from "../../store/slices/mailServersSlice"
 import { useAppSelector, useAppDispatch } from "../../store/hooks"
 import { setSelectedMailServer } from "../../store/slices/mailServersSlice"
 
@@ -21,12 +21,21 @@ export default function MailServersList({results, next, prev, lastItemCount, fir
 }){
   const mailServer = useAppSelector(getSelectedMailServer)
   const dispatch = useAppDispatch()
+  const markedServers = useAppSelector(getMarkedMailServerIDs)
+
+  useEffect(() => {
+    console.log("marked servers: ", markedServers)
+  }, [markedServers])
 
   const [isOpen, setIsOpen] = useState(false)
 
   function handleMailServerSelect(server: MailServer){
     dispatch(setSelectedMailServer(server))
     setIsOpen(true)
+  }
+
+  function handleToggleCheck(serverId: string){
+    dispatch(toggleMarkForDelete(serverId))
   }
 
   return (
@@ -40,7 +49,7 @@ export default function MailServersList({results, next, prev, lastItemCount, fir
                 return (
                   <div key={server._id} role="button" className="grid grid-cols-[50px_100px_auto_auto] gap-3 text-gray-500 p-4 lg:px-8 border-b-[0.5px] w-full" onClick={() => handleMailServerSelect(server)}>
                     <div className="">
-                      <input type="checkbox" className="scale-105 rounded-md" />
+                      <input type="checkbox" className="scale-105 rounded-md"  onChange={() => handleToggleCheck(server._id) }/>
                     </div>
                     <p className="">{itemNumber}</p>
                     <p className="">{ server.name }</p>

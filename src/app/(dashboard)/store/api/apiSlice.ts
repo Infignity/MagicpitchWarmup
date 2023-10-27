@@ -1,6 +1,6 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react"
 import { API_BASE, mailServerVerificationType } from "@/app/constants"
-import { EmailList, MailServer, MailServerSecurity, MailServerVerificationType, NewWarmup, SMTPServerConfig, ServerConfig, UpdateWarmupState, Warmup, WarmupState } from "@/app/types"
+import { AddMailServerResponse, EmailList, MailServer, MailServerSecurity, MailServerVerificationType, NewWarmup, SMTPServerConfig, ServerConfig, UpdateWarmupState, Warmup, WarmupState } from "@/app/types"
 
 function getHeaders(token: string){
     return {
@@ -13,6 +13,7 @@ const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: `${API_BASE}`
     }),
+    tagTypes: ["MailServers"], 
     endpoints: (builder) => ({
         getUser: builder.query({
             query: ({ token }) => {
@@ -35,7 +36,8 @@ const apiSlice = createApi({
                     url: `/mailservers?index=${index}`,
                     headers: getHeaders(token)
                 }
-            }
+            },
+            providesTags: ["MailServers"]
         }),
         verifyMailServer: builder.mutation<{
             verificationStatus: string, message: string, description: string, verificationType: MailServerVerificationType
@@ -60,7 +62,7 @@ const apiSlice = createApi({
                 }
             }
         }),
-        addMailServer: builder.mutation<{ message: string, description: string, mailServer: MailServer }, { token: string, name: string, imapDetails: ServerConfig, smtpDetails: ServerConfig } >({
+        addMailServer: builder.mutation<any, { token: string, name: string, imapDetails: ServerConfig, smtpDetails: ServerConfig } >({
             query: ({ name, imapDetails, smtpDetails, token }) => {
                 return {
                     url: `/mailservers`,
@@ -70,9 +72,10 @@ const apiSlice = createApi({
                         name, imapDetails, smtpDetails
                     }
                 }
-            }
+            },
+            invalidatesTags: ["MailServers"]
         }),
-        updateMailServer: builder.mutation<{ message: string, description: string }, { mailServerId: string, token: string, name: string, imapDetails: ServerConfig, smtpDetails: ServerConfig } >({
+        updateMailServer: builder.mutation<any, { mailServerId: string, token: string, name: string, imapDetails: ServerConfig, smtpDetails: ServerConfig } >({
             query: ({ mailServerId,  name, imapDetails, smtpDetails, token }) => {
                 return {
                     url: `/mailservers/${mailServerId}`,
@@ -82,7 +85,8 @@ const apiSlice = createApi({
                         name, imapDetails, smtpDetails
                     }
                 }
-            }
+            },
+            invalidatesTags: ["MailServers"]
         }),
         deleteMailServers: builder.mutation<{ message: string, description: string, totalMailserversDeleted: number }, 
         { mailServerIds: string[], token: string } >({
@@ -95,7 +99,8 @@ const apiSlice = createApi({
                         mailServerIds
                     }
                 }
-            }
+            },
+            invalidatesTags: ["MailServers"]
         }),
 
 
