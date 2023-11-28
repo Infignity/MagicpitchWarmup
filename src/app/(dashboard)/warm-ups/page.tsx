@@ -5,12 +5,11 @@ import Image from "next/image"
 import CheckGreen from "@/app/assets/icons/svg/check-green.svg"
 import CheckRed from "@/app/assets/icons/svg/check-red.svg"
 import NotFound from "@/app/assets/images/illustrations/page-not-found.svg"
-import { useAppSelector } from "../store/hooks"
-import { selectWarmups } from "../store/slices/warmupsSlice"
 import { routes } from "@/app/constants"
+import RequireAuth from "../contexts/requireAuth"
 
 const WarmUp = () => {
-  const warmups = useAppSelector(selectWarmups)
+  const warmups: any[] = []
   const router = useRouter()
   function goToCreateWarmup(){
     router.push(routes.NEW_WARM_UP)
@@ -23,6 +22,7 @@ const WarmUp = () => {
   }
 
   return (
+    <RequireAuth>
     <section className='flex w-full h-full overflow-hidden'>
       <div className="flex w-full h-full overflow-x-auto border-x-[0.5px] text-sm">
         <div className="flex flex-col w-full min-w-[60rem]">
@@ -70,6 +70,7 @@ const WarmUp = () => {
         </div>
       </div>
     </section>
+    </RequireAuth>
   )
 }
 

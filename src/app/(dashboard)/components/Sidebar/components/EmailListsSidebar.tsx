@@ -3,8 +3,8 @@ import React from 'react'
 import Link from "next/link"
 import { IconContext } from 'react-icons'
 import { FaPlus, FaReply, FaUsers } from 'react-icons/fa'
-import { useAppSelector } from '@/app/(dashboard)/store/hooks'
-import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
+// import { useAppSelector } from '@/app/(dashboard)/store/hooks'
+// import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
 import { Tooltip } from 'react-tooltip'
 import { routes } from '@/app/constants'
 import { usePathname } from 'next/navigation'
@@ -23,7 +23,7 @@ const links = [
 ]
 
 export default function EmailListsSidebar() {
-  const isSidebarOpen = useAppSelector(selectIsSidebarOpen)
+  const isSidebarOpen = true
   const pathname = usePathname()
   return (
     <div className="flex flex-col w-full h-full items-center gap-3">

@@ -8,3 +8,11 @@
         --bg-blue: 91 10 225;
     }
 }
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .animate-blink {
+    animation: blink 1s linear infinite;
+  }

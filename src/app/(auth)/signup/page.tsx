@@ -127,7 +127,7 @@ const Signup = () => {
         });
         console.log("signin data: ", response);
         if (response.status === 200) {
-          router.push(routes.HOME);
+          router.push(routes.WARM_UPS);
           setFormState(initialFormState);
           showSuccessToast("Login Successful!");
         } else {

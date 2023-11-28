@@ -1,7 +1,6 @@
 "use client"
 import React from 'react'
 import TextInput from '@/app/(dashboard)/components/TextInput'
-
 const CreateWarmup = () => {
 
   function handleOnChange(){

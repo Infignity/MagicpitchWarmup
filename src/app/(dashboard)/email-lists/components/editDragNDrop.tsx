@@ -6,22 +6,23 @@ import { AllEmailListApi } from "@/app/api/allemaillistapi";
 import { BsX as XMark } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Loader1 from "../../components/Loader1";
+import EditEmailListApi from "@/app/api/editemaillistapi";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 
-const DragNDrop = ({
+const EditDragNDrop = ({
   close,
   setResults,
 }: {
   close: () => void;
   setResults: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
+  const { showErrorToast, showSuccessToast } = useGlobalToastContext();
   const [listName, setListName] = useState<string>("");
   const [fileData, setFileData] = useState<FileList | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [routeurl, setRouteUrl] = useState<string>("");
-  const { showErrorToast, showSuccessToast } = useGlobalToastContext();
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -67,20 +68,21 @@ const DragNDrop = ({
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsLoading(true);
+    const id = localStorage.getItem("rowId");
     const formData = new FormData();
-    if (fileData && fileData.length > 0) {
+    formData.append("name", listName);
+    if (fileData) {
       formData.append("file", fileData[0]);
     }
-    formData.append("name", listName);
-    formData.append("listType", routeurl);
-    formData.append("listType", routeurl);
+    formData.append("updateType", "merge");
 
     try {
       console.log(formData);
-      const response = await CreateListApi(formData);
+      console.log(id);
+      const response = await EditEmailListApi(id, formData);
       console.log(response);
       close();
-      showSuccessToast("List created successfully");
+      showSuccessToast("List updated successfully");
       const newResults = await AllEmailListApi(routeurl);
       setResults(newResults.data.emailLists);
       setIsLoading(false);
@@ -89,22 +91,12 @@ const DragNDrop = ({
       setIsLoading(false);
       showErrorToast("Something went wrong");
     }
-
-    // // Simulating file upload progress for demonstration purposes
-    // setIsUploadingFiles(true);
-    // const totalSteps = 10; // Simulate 10 steps for upload progress
-    // for (let step = 1; step <= totalSteps; step++) {
-    //   setFileUploadProgress((step / totalSteps) * 100);
-    //   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulating upload delay
-    // }
-    // setIsUploadingFiles(false);
-    // setFileUploadProgress(0);
   }
 
   return (
     <>
       {isLoading ? (
-        <p className="scale-75 flex justify-center items-center relative h-full w-full z-[1000px]">
+        <p className="scale-75 flex justify-center items-center relative h-full w-full">
           <Loader1 />
         </p>
       ) : null}
@@ -194,4 +186,4 @@ const DragNDrop = ({
   );
 };
 
-export default DragNDrop;
+export default EditDragNDrop;

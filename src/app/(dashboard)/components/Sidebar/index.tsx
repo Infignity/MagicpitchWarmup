@@ -10,8 +10,8 @@ import WarmupSidebar from './components/WarmupSidebar'
 import MailServersSidebar from './components/MailServersSidebar'
 import EmailListsSidebar from "./components/EmailListsSidebar"
 import { usePathname } from 'next/navigation'
-import { useAppDispatch, useAppSelector } from '@/app/(dashboard)/store/hooks'
-import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
+// import { useAppDispatch, useAppSelector } from '@/app/(dashboard)/store/hooks'
+// import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
 import { Tooltip } from 'react-tooltip'
 
 interface Sidebar {
@@ -37,9 +37,8 @@ const sidebars: Sidebar[] = [
 const Sidebar = () => {
   const pathname = usePathname()
   let SecSidebar: Sidebar | null = null
-  const dispatch = useAppDispatch()
-  const isSidebarOpen = useAppSelector(selectIsSidebarOpen)
-
+  // const dispatch = useAppDispatch()
+  const isSidebarOpen = true
   const warmUpsRoute = "/warm-ups"
   const mailServersRoute = "/mail-servers"
   const emailListsRoute = "/email-lists"

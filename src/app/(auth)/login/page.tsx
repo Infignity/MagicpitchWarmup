@@ -7,6 +7,7 @@ import { SignInApi } from "@/app/api/signinapi";
 import { signIn } from "next-auth/react";
 import Loader1 from "@/app/(dashboard)/components/Loader1";
 import Loader2 from "@/app/(dashboard)/components/Loader2";
+import { useAuth } from "@/app/(dashboard)/contexts/authContext";
 
 const initialFormState = {
   username: "",
@@ -21,7 +22,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { showErrorToast, showSuccessToast } = useGlobalToastContext();
   const router = useRouter();
-
+  const { token, login } = useAuth();
   function handleOnChange(update: { [key: string]: string }) {
     setFormState((prev) => {
       return { ...prev, ...update };
@@ -62,19 +63,23 @@ const Login = () => {
     }
 
     setIsLoading(true);
+    console.log("formState: ", formState);
     try {
-      const response = await signIn("credentials", {
-        redirect: false,
-        username: formState.username,
-        password: formState.password,
-      });
-      console.log("auth response: ", response);
-      if (response?.error === "CredentialsSignin") {
-        showErrorToast("username or password is incorrect");
-      } else if (response?.error === null) {
-        router.push("/");
+      const formData = new FormData();
+      formData.append("username", formState.username);
+      formData.append("password", formState.password);
+      const response = await SignInApi(formData);
+      console.log("response: ", response);
+      console.log(response.data.accessToken)
+      const token = sessionStorage.setItem("token", response.data.accessToken);
+      if (response) {
+        const token = response.data.accessToken;
+        login(token);
+        router.push("/warm-ups");
         setFormState(initialFormState);
         showSuccessToast("Login Successful!");
+      } else {
+        showErrorToast("Could not complete sign in");
       }
     } catch (error) {
       console.error("Sign in error: ", error);
@@ -82,6 +87,28 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+    // try {
+    //   const response = await signIn("credentials", {
+    //     redirect: false,
+    //     username: formState.username,
+    //     password: formState.password,
+    //   });
+    //   const token = sessionStorage.setItem("token", response?.token || "");
+    //   console.log("token: ", token);
+    //   console.log("auth response: ", response);
+    //   if (response?.error === "CredentialsSignin") {
+    //     showErrorToast("username or password is incorrect");
+    //   } else if (response?.error === null) {
+    //     router.push("/");
+    //     setFormState(initialFormState);
+    //     showSuccessToast("Login Successful!");
+    //   }
+    // } catch (error) {
+    //   console.error("Sign in error: ", error);
+    //   showErrorToast("An error occurred during sign in");
+    // } finally {
+    //   setIsLoading(false);
+    // }
     // if (response){
     //   if (response.error === null){
     //     router.push("/")
