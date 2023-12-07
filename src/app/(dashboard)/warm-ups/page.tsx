@@ -88,7 +88,7 @@ const WarmUp = () => {
   useEffect(() => {
     const fetchWarmups = async () => {
       try {
-        const response = await AllWarmupServersApi(currentPage, null);
+        const response = await AllWarmupServersApi(currentPage);
         console.log(response.data);
         setWarmups(response.data.results);
         setTotalResults(response.data.totalResults);
@@ -109,9 +109,9 @@ const WarmUp = () => {
 
       try {
         const response = await AllWarmupServersApi(
-          index,
-          searchQuery,
-          filterValue
+          index ,
+          searchQuery === "" ? null : searchQuery,
+          filterValue === "" ? null : filterValue
         );
         console.log(response.data);
         setWarmups(response.data.results);
@@ -363,7 +363,7 @@ const WarmUp = () => {
             <div className="w-full justify-center gap-3 items-center mr-3 flex p-2">
               <SelectInput
                 value={filterValue}
-                onChange={(selectedValue) => setFilterValue(selectedValue)}
+                onChange={(selectedValue) => setFilterValue(selectedValue?.toLowerCase().trim())}
                 placeholder="Filter"
                 options={[
                   { value: null, text: "All" },

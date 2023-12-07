@@ -13,7 +13,7 @@ const EmailLists = () => {
   }, [])
 
   return (
-    <section className="flex justify-center items-center p-5 bg-white h-full w-full overflow-auto">
+    <section className=" p-5 bg-white h-full w-full overflow-hidden">
       <ReplyEmails />
     </section>
   )

@@ -179,8 +179,10 @@ export default function EmailList({
         >
           <Loader1 />
         </div>
-      )}
-      <div className="flex  justify-between w-full h-fit  items-center p-5">
+      )} 
+      <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-x-auto">
+
+      <div className="flex  justify-between w-full h-fit  items-center p-5 min-w-[60rem]">
         <button
           type="button"
           onClick={() => openDragNDrop()}
@@ -211,7 +213,7 @@ export default function EmailList({
           )}
         </div>
       </div>
-      <div>
+      <div className="w-full">
         <button
           onClick={handleDeleteRows}
           disabled={selectedRows.length === 0}
@@ -222,7 +224,7 @@ export default function EmailList({
           Delete Selected
         </button>
       </div>
-      <table className="overflow-auto border-collapse w-full">
+      <table className="overflow-auto border-collapse w-full min-w-[60rem]">
         <thead>
           <tr>
             {/* button to select all */}
@@ -308,6 +310,7 @@ export default function EmailList({
           ))}
         </tbody>
       </table>
+      </section>
     </>
   );
 }

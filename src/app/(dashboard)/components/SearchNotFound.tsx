@@ -1,5 +1,5 @@
 import React from 'react'
-import NotFoundIllustration from "@/app/assets/images/illustrations/result-not-found.svg"
+import NotFoundIllustration from "@/app/assets/images/illustrations/notfound.svg"
 
 export default function SearchNotFound({ message, title }: { message?: string | React.ReactNode, title?: string | React.ReactNode }){
   const defaultMessage = <p> We couldn't find Email that match your search. Please try using <br />different, fewer filters or typing another search request</p>
