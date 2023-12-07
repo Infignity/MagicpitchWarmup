@@ -16,7 +16,9 @@ export const ViewAllModal = ({ onClose }) => {
     <div className="modal bg-gray-800 bg-opacity-50 w-full h-full overflow-auto z-50 flex justify-center items-center">
       <div className="modal-content bg-white h-fit max-w-[60rem]  mx-auto w-full z-50">
         <div className="flex justify-between p-5">
-          <h2>View All Warmups</h2>
+          <h2>
+          All Details
+          </h2>
           <button
             type="button"
             className="w-fit h-fit self-end"

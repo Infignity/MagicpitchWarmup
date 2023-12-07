@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, SetStateAction } from "react";
 import EmptyListPlaceholder from "../components/EmptyListPlaceholder";
-import Image from "next/image";
+import Link from "next/link";
 import CheckGreen from "@/app/assets/icons/svg/check-green.svg";
 import CheckRed from "@/app/assets/icons/svg/check-red.svg";
 import CheckYellow from "@/app/assets/icons/svg/check-yellow.svg";
@@ -21,23 +21,30 @@ import ResumeIcon from "@/app/assets/icons/svg/resume.svg";
 import Loader1 from "../components/Loader1";
 import Search from "../components/Header/Search";
 import { ViewAllModal } from "./components/viewallmodal";
+import { useSearchParams } from "next/navigation";
 const WarmUp = () => {
   const [warmups, setWarmups] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [checkboxes, setCheckboxes] = useState<Map<number, boolean>>(new Map());
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   // State to control the delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const searchParams = useSearchParams();
+  const [totalResults, setTotalResults] = useState(0);
+  const [pageSize, setPageSize] = useState(50);
+  const currentPage = searchParams.get("page") ?? 0;
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
+  const [checked, setChecked] = useState([]);
   const dropdownRef = useRef(null);
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
     new Map()
   );
   const [isEditDragNDropOpen, setIsEditDragNDropOpen] = useState(false);
+  // State to manage checked rows using an object
+  const [checkedRows, setCheckedRows] = useState<Record<string, boolean>>({});
+
   const router = useRouter();
   const index = 0;
 
@@ -81,9 +88,11 @@ const WarmUp = () => {
   useEffect(() => {
     const fetchWarmups = async () => {
       try {
-        const response = await AllWarmupServersApi(index, null);
+        const response = await AllWarmupServersApi(currentPage, null);
         console.log(response.data);
         setWarmups(response.data.results);
+        setTotalResults(response.data.totalResults);
+        setPageSize(response.data.pageSize);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -91,7 +100,7 @@ const WarmUp = () => {
       }
     };
     fetchWarmups();
-  }, []);
+  }, [currentPage]);
 
   // filtervalue and search query
   useEffect(() => {
@@ -113,7 +122,9 @@ const WarmUp = () => {
       }
     };
     fetchWarmups();
-  }, [filterValue, searchQuery]);
+  }, [filterValue, searchQuery, currentPage]);
+
+
 
   function goToCreateWarmup() {
     router.push(routes.NEW_WARM_UP);
@@ -128,25 +139,6 @@ const WarmUp = () => {
       />
     );
   }
-
-  // Method to handle individual row selection
-  const handleSelect = (rowId: number) => {
-    const newCheckboxes = new Map(checkboxes);
-    newCheckboxes.set(rowId, !newCheckboxes.get(rowId));
-    setCheckboxes(newCheckboxes);
-  };
-  const handleSelectAll = () => {
-    const newCheckboxes = new Map(checkboxes);
-    const areAllSelected = [...newCheckboxes.values()].every(
-      (isChecked) => isChecked
-    );
-
-    warmups.forEach((warmup) => {
-      newCheckboxes.set(warmup._id, !areAllSelected);
-    });
-
-    setCheckboxes(newCheckboxes);
-  };
 
   const handleDeleteRows = async () => {
     try {
@@ -255,6 +247,40 @@ const WarmUp = () => {
       showErrorToast("Error resuming warmup");
     }
   };
+  function handlePageChange(isprev: boolean) {
+    if (Number(currentPage) === 0 && isprev) {
+      return `/warm-ups?page=${currentPage}`;
+    }
+    if (isprev) {
+      `/warm-ups?page=${Number(currentPage) - 30}`;
+    }
+    return `/warm-ups?page=${Number(currentPage) + 30}`;
+  }
+
+  // Method to handle individual row selection
+
+  const handleRowSelect = (id: string) => {
+    const isSelected = selectedRows.includes(id);
+    let updatedSelectedRows: string[];
+
+    if (isSelected) {
+      updatedSelectedRows = selectedRows.filter((rowId) => rowId !== id);
+    } else {
+      updatedSelectedRows = [...selectedRows, id];
+    }
+
+    setSelectedRows(updatedSelectedRows);
+
+    // Check if all rows are selected after row selection/deselection
+    setSelectAll(updatedSelectedRows.length === warmups.length);
+  };
+
+  // Method to handle 'Select All' checkbox
+  const handleSelectAll = () => {
+    const newSelectedRows = selectAll ? [] : warmups.map((row) => row._id);
+    setSelectedRows(newSelectedRows);
+    setSelectAll(!selectAll);
+  };
 
   return (
     <RequireAuth>
@@ -355,15 +381,64 @@ const WarmUp = () => {
               />
             </div>
           </div>
+          <div className="flex gap-3 items-center justify-end">
+            <Link
+              href={handlePageChange(true)}
+              className={`bg-white px-3 py-1 rounded-md text-gray-500
+            ${
+              Number(currentPage) === 0
+                ? "pointer-events-none opacity-20"
+                : "block"
+            }
+            
+            `}
+            >
+              Previous
+            </Link>
+
+            <button>
+              <Link
+                href={handlePageChange(false)}
+                className={`bg-white px-3 py-1 rounded-md text-gray-500
+            ${
+              Number(currentPage) + pageSize > totalResults
+                ? "pointer-events-none opacity-20"
+                : "block"
+            }
+            `}
+              >
+                Next
+              </Link>
+            </button>
+          </div>
 
           <div className="flex flex-col w-full min-w-[60rem]">
             <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
               <div className="flex justify-center">
-              <input
-              type="checkbox"
-              
-             
-            />
+                <button
+                  onClick={handleSelectAll}
+                  className={`custom-checkbox ${selectAll ? "checked" : ""}`}
+                >
+                  <span className="checkmark border-2 rounded-sm">
+                    {selectAll && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 50 50"
+                        style={{
+                          filter: "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
+                        }}
+                      >
+                        {/* Adjust the properties of the checkmark */}
+                        <polyline
+                          points="10,25 20,35 40,15"
+                          stroke="#fff"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                      </svg>
+                    )}
+                  </span>
+                </button>
               </div>
               <div className="flex justify-center text-gray-800">Name</div>
               <div className="flex justify-center text-gray-800">Status</div>
@@ -398,10 +473,39 @@ const WarmUp = () => {
                   key={warmup._id}
                 >
                   <div className="flex  justify-center w-full">
-                    <input
-                  type="checkbox"
-                 
-                />
+                    <button
+                      className={`custom-checkbox ${
+                        selectedRows.includes(warmup._id) ? "checked" : ""
+                      }`}
+                      onClick={() => handleRowSelect(warmup._id)}
+                    >
+                      <span className="checkmark border-2 rounded-sm">
+                        {selectedRows.includes(warmup._id) && (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 50 50"
+                            style={{
+                              filter:
+                                "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
+                            }}
+                          >
+                            <polyline
+                              points="10,25 20,35 40,15"
+                              stroke="#fff"
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                          </svg>
+                        )}
+                      </span>
+                    </button>
+
+                    {/* <input
+                      type="checkbox"
+                      key={warmup._id}
+                      onChange={() => handleRowSelect(warmup._id)}
+                    checked={selectedRows.includes(warmup._id)}
+                    /> */}
                   </div>
                   <div className="flex text-center  mx-auto">{warmup.name}</div>
                   <div className="flex justify-center items-center w-full mx-auto gap-1.5">

@@ -23,7 +23,7 @@ const CreateWarmup = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormFields((prev) => ({ ...prev, [name]: value }));
   };
@@ -148,14 +148,24 @@ const CreateWarmup = () => {
                 value={formFields.dailySendLimit}
                 onChange={handleOnChange}
               />
-              <TextInput
-                label="Increase Rate (in %)"
-                name="increaseRate"
-                type="number"
-                placeholder=" Enter your Increase Rate"
-                value={formFields.increaseRate}
-                onChange={handleOnChange}
-              />
+              <div>
+                <TextInput
+                  label="Increase Rate (in %)"
+                  name="increaseRate"
+                  type="number"
+                  placeholder=" Enter your Increase Rate"
+                  value={formFields.increaseRate}
+                  onChange={handleOnChange}
+                />
+                <p className="text-xs">
+                  Rate of increase in sending volume. You can specify a value
+                  between 0.1 - 0.9 for relative amount, e.g 0.5 for 50%. You
+                  can as well specify a valus between 1-20.
+                </p>
+              </div>
+
+              {/* note */}
+
               {/* toggle button */}
               <div className="flex flex-col items-center gap-2">
                 <input
@@ -193,7 +203,8 @@ const CreateWarmup = () => {
               !formFields.maxDays ||
               !formFields.startVolume ||
               !formFields.dailySendLimit ||
-              !formFields.increaseRate || isLoading
+              !formFields.increaseRate ||
+              isLoading
             }
           >
             Submit
