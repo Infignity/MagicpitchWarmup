@@ -19,7 +19,7 @@ import { CreateMailServerApi } from "@/app/api/createmailserverapi";
 import { useUser } from "../../contexts/UserProvider";
 import Loader1 from "../../components/Loader1";
 import { AllMailServersApi } from "@/app/api/allmailserversapi";
-
+import { EditMailServersApi } from "@/app/api/editmailserversapi";
 type MailServerFormProps = {
   name: string;
   smtpHostname: string;
@@ -31,19 +31,24 @@ type MailServerFormProps = {
 };
 type MailServerProps = {
   setAllMailServers: React.Dispatch<React.SetStateAction<any[]>>; // Adjust the type as per your 'setAllMailServers' function
+  setIsEditDragNDropOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export default function MailServerForm({ setAllMailServers }: MailServerProps) {
+export default function EditServerForm({
+  setAllMailServers,
+  setIsEditDragNDropOpen,
+}: MailServerProps) {
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
-  const { isMailServerModal, setIsMailServerModal } = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const defaultvalues = localStorage.getItem("selectedMailServer");
+  const defaultvaluesJSON = defaultvalues ? JSON.parse(defaultvalues) : {};
   const [formFields, setFormFields] = useState<MailServerFormProps>({
-    name: "",
-    smtpHostname: "",
-    smtpPort: "",
-    smtpEmail: "",
-    smtpPassword: "",
-    smtpSecurity: "",
-    smtpRecipientEmail: "",
+    name: defaultvaluesJSON.name || "",
+    smtpHostname: defaultvaluesJSON.smtpDetails?.hostname || "",
+    smtpPort: defaultvaluesJSON.smtpDetails?.port || "",
+    smtpEmail: defaultvaluesJSON.smtpDetails?.email || "",
+    smtpPassword: defaultvaluesJSON.smtpDetails?.password || "",
+    smtpSecurity: defaultvaluesJSON.smtpDetails?.security || "",
+    smtpRecipientEmail: defaultvaluesJSON.smtpDetails?.recipientEmail || "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,10 +121,11 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
         security: formFields.smtpSecurity,
       },
     });
+    const id = localStorage.getItem("rowId");
     try {
-      const response = await CreateMailServerApi(data);
+      const response = await EditMailServersApi(id,data);
       console.log(response);
-      setIsMailServerModal(false);
+      setIsEditDragNDropOpen(false);
       const allMailServersResponse = await AllMailServersApi();
       setAllMailServers(allMailServersResponse.data.results);
       setIsLoading(false);
@@ -144,11 +150,11 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
             </>
           ) : null}
           <div className="flex w-full justify-between gap-3">
-            <h3 className="text-xl text-blue font-medium">Add Mail Server</h3>
+            <h3 className="text-xl text-blue font-medium">Edit Mail Server</h3>
             <button
               type="button"
               className="w-fit h-fit self-end"
-              onClick={() => setIsMailServerModal(false)}
+              onClick={() => setIsEditDragNDropOpen(false)}
             >
               <IconContext.Provider
                 value={{

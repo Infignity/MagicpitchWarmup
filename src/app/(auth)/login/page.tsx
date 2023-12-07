@@ -126,6 +126,23 @@ const Login = () => {
 
   return (
     <div className="w-full flex flex-col gap-3">
+       {/* {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            background: "rgba(255, 255, 255, 0.8)",
+            padding: "20px",
+            borderRadius: "5px",
+          }}
+        >
+          <Loader1 />
+        </div>
+      )} */}
+
       <TextInput
         errRef={usernameErrRef}
         placeholder="e.g. john23"
@@ -163,23 +180,3 @@ const Login = () => {
 
 export default Login;
 
-// setIsLoading(true);
-// console.log("formState: ", formState);
-// try {
-//   const formData = new FormData();
-//   formData.append("username", formState.username);
-//   formData.append("password", formState.password);
-//   const response = await SignInApi(formData);
-//   if (response) {
-//     router.push("/");
-//     setFormState(initialFormState);
-//     showSuccessToast("Login Successful!");
-//   } else {
-//     showErrorToast("Could not complete sign in");
-//   }
-// } catch (error) {
-//   console.error("Sign in error: ", error);
-//   showErrorToast("An error occurred during sign in");
-// } finally {
-//   setIsLoading(false);
-// }

@@ -1,6 +1,6 @@
-"use client"
-import SearchNotFound from '@/app/(dashboard)/components/SearchNotFound'
-import EmailList from '../components/EmailList'
+"use client";
+import SearchNotFound from "@/app/(dashboard)/components/SearchNotFound";
+import EmailList from "../components/EmailList";
 import React, { useEffect, useState } from "react";
 import { AllEmailListApi } from "@/app/api/allemaillistapi";
 import Loader1 from "../../components/Loader1";
@@ -9,8 +9,7 @@ export default function ReplyEmails() {
   const [isLoading, setIsLoading] = useState(false);
   const [clientEmails, setClientEmails] = useState<any[]>([]);
   const [routeurl, setRouteUrl] = useState<string>("");
-  
-  
+
   useEffect(() => {
     const pathname = window.location.pathname;
 
@@ -28,7 +27,8 @@ export default function ReplyEmails() {
     setIsLoading(true);
     const getEmails = async () => {
       try {
-        if (routeurl) { // Check if routeurl has a value before making the API call
+        if (routeurl) {
+          // Check if routeurl has a value before making the API call
           const response = await AllEmailListApi(routeurl);
           console.log(response);
           setClientEmails(response.data.emailLists); // Assuming response is the array of email lists
@@ -42,12 +42,9 @@ export default function ReplyEmails() {
     getEmails();
   }, [routeurl]); // Run this effect whenever routeurl changes
 
- 
   const searchTerm = "";
   return (
     <>
-    
-
       {
         // attempt to display the search results, after it's done loading, if there's a search Term
         searchTerm ? (
@@ -63,23 +60,23 @@ export default function ReplyEmails() {
               title={<>Result Not Found</>}
             />
           ) : (
-            <EmailList results={clientEmails} setResults={setClientEmails}/>
+            <EmailList results={clientEmails} setResults={setClientEmails} />
           )
         ) : (
-          <EmailList results={clientEmails} setResults={setClientEmails}/>
+          <EmailList results={clientEmails} setResults={setClientEmails} />
         )
       }
-        {isLoading && (
+      {isLoading && (
         <div
           style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             zIndex: 9999,
-            background: 'rgba(255, 255, 255, 0.8)',
-            padding: '20px',
-            borderRadius: '5px',
+            background: "rgba(255, 255, 255, 0.8)",
+            padding: "20px",
+            borderRadius: "5px",
           }}
         >
           <Loader1 />

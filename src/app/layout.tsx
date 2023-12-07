@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AuthProvider } from "./(dashboard)/contexts/authContext";
+import { UserProvider } from "./(dashboard)/contexts/UserProvider";
 import GlobalToastProvider from "./contexts/GlobalToastProvider";
 
 export default function RootLayout({
@@ -11,7 +12,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`w-screen h-screen`}>
         <AuthProvider>
-          <GlobalToastProvider>{children}</GlobalToastProvider>
+          <UserProvider>
+            <GlobalToastProvider>{children}</GlobalToastProvider>
+          </UserProvider>
         </AuthProvider>
       </body>
     </html>

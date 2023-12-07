@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const ApiManager = axios.create({
-  baseURL: "http://localhost:8070/v1",
+  baseURL: "https://api-warmup.infignity.uk/v1",
   headers: {
     "Content-Type": "application/json",
   },
