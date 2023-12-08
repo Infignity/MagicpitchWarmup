@@ -161,12 +161,12 @@ function MailServers() {
   }
 
   return (
-    <section className="flex flex-col gap-2 w-full h-full relative bg-white">
+    <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-hidden">
       {isMailServerModal && (
         <MailServerForm setAllMailServers={setAllMailServers} />
       )}
-      <div className="overflow-x-auto w-full">
-        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center pr-5 md:pr-10  py-3 relative">
+      <div className="overflow-x-auto w-full h-full flex flex-col">
+        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative min-w-[60rem]">
           <button
             type="button"
             className="z-30 rounded-full bg-gray-200 transition duration-200 -translate-x-1/2 w-7 h-7 flex justify-center items-center"
@@ -240,7 +240,7 @@ function MailServers() {
           )}
         </section>
         {/* previous and next buttons */}
-        <div className="flex gap-3 items-center justify-end">
+        <div className="flex gap-3 items-center justify-end w-full">
           <Link
             href={handlePageChange(true)}
             className={`bg-white px-3 py-1 rounded-md text-gray-500

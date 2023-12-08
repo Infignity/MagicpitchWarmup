@@ -7,14 +7,11 @@ import Image from "next/image"
 import Notification from "@/app/assets/icons/svg/Notification.svg"
 import Profile from "@/app/assets/images/profile-images/Ellipse 1.png"
 import { usePathname } from 'next/navigation'
-import { useAppDispatch, useAppSelector } from '@/app/(dashboard)/store/hooks'
-import { closeSidebar, openSidebar, selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
 import PlayOutline from "@/app/assets/icons/svg/play-outline.svg"
 import Book from "@/app/assets/icons/svg/book.svg"
 import Search from './Search'
 import ToolbarButton from './ToolbarButton'
 import { routes } from '@/app/constants'
-import { selectWarmups } from '@/app/(dashboard)/store/slices/warmupsSlice'
 
 const Header = () => {
   // const dispatch = useAppDispatch()

@@ -22,6 +22,8 @@ import Loader1 from "../components/Loader1";
 import Search from "../components/Header/Search";
 import { ViewAllModal } from "./components/viewallmodal";
 import { useSearchParams } from "next/navigation";
+
+
 const WarmUp = () => {
   const [warmups, setWarmups] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +39,7 @@ const WarmUp = () => {
   const currentPage = searchParams.get("page") ?? 0;
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
   const [checked, setChecked] = useState([]);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
     new Map()
   );
@@ -63,7 +65,12 @@ const WarmUp = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const toggleDropdown = (dropdownId: number) => {
+  const toggleDropdown = (dropdownId: number | null) => {
+    if (dropdownId === null) {
+      // handle the case when dropdownId is null
+      return;
+    }
+  
     const newDropdownStates = new Map(dropdownStates);
     newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
@@ -88,7 +95,7 @@ const WarmUp = () => {
   useEffect(() => {
     const fetchWarmups = async () => {
       try {
-        const response = await AllWarmupServersApi(currentPage, null);
+        const response = await AllWarmupServersApi(currentPage);
         console.log(response.data);
         setWarmups(response.data.results);
         setTotalResults(response.data.totalResults);
@@ -109,9 +116,9 @@ const WarmUp = () => {
 
       try {
         const response = await AllWarmupServersApi(
-          index,
-          searchQuery,
-          filterValue
+          index ,
+          searchQuery === "" ? null : searchQuery,
+          filterValue === "" ? null : filterValue
         );
         console.log(response.data);
         setWarmups(response.data.results);
@@ -363,7 +370,7 @@ const WarmUp = () => {
             <div className="w-full justify-center gap-3 items-center mr-3 flex p-2">
               <SelectInput
                 value={filterValue}
-                onChange={(selectedValue) => setFilterValue(selectedValue)}
+                onChange={(selectedValue) => setFilterValue(selectedValue?.toLowerCase().trim())}
                 placeholder="Filter"
                 options={[
                   { value: null, text: "All" },

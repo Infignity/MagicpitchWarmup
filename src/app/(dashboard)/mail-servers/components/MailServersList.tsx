@@ -20,7 +20,7 @@ export default function MailServersList({
   selectedRows: any[];
   selectAll: boolean;
 }) {
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
     new Map()
   );
@@ -41,7 +41,12 @@ export default function MailServersList({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const toggleDropdown = (dropdownId: number) => {
+  const toggleDropdown = (dropdownId: number | null) => {
+    if (dropdownId === null) {
+      // handle the case when dropdownId is null
+      return;
+    }
+  
     const newDropdownStates = new Map(dropdownStates);
     newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
@@ -69,7 +74,7 @@ export default function MailServersList({
   };
 
   return (
-    <div className=" w-full">
+    <div className="flex flex-col w-full min-w-[60rem]">
       {isEditDragNDropOpen && (
         <section className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
           <EditServerForm
