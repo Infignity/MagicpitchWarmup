@@ -120,7 +120,7 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
       const response = await CreateMailServerApi(data);
       console.log(response);
       setIsMailServerModal(false);
-      const allMailServersResponse = await AllMailServersApi();
+      const allMailServersResponse = await AllMailServersApi(0);
       setAllMailServers(allMailServersResponse.data.results);
       setIsLoading(false);
       showSuccessToast("Mail server Added successfully");

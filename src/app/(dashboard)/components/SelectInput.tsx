@@ -5,7 +5,7 @@ import { FaAngleRight } from 'react-icons/fa';
 type SelectInputProps = {
   label?: string;
   placeholder: string;
-  options: { text: string; value: string }[];
+  options: { text: string; value: string | null}[];
   onChange: (item: string) => void;
   value: string;
   errRef?: LegacyRef<HTMLParagraphElement>;

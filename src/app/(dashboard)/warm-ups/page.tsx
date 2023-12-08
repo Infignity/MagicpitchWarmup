@@ -22,6 +22,8 @@ import Loader1 from "../components/Loader1";
 import Search from "../components/Header/Search";
 import { ViewAllModal } from "./components/viewallmodal";
 import { useSearchParams } from "next/navigation";
+
+
 const WarmUp = () => {
   const [warmups, setWarmups] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +39,7 @@ const WarmUp = () => {
   const currentPage = searchParams.get("page") ?? 0;
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
   const [checked, setChecked] = useState([]);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
     new Map()
   );
@@ -63,7 +65,12 @@ const WarmUp = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const toggleDropdown = (dropdownId: number) => {
+  const toggleDropdown = (dropdownId: number | null) => {
+    if (dropdownId === null) {
+      // handle the case when dropdownId is null
+      return;
+    }
+  
     const newDropdownStates = new Map(dropdownStates);
     newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);

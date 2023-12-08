@@ -20,7 +20,7 @@ export default function MailServersList({
   selectedRows: any[];
   selectAll: boolean;
 }) {
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
     new Map()
   );
@@ -41,7 +41,12 @@ export default function MailServersList({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const toggleDropdown = (dropdownId: number) => {
+  const toggleDropdown = (dropdownId: number | null) => {
+    if (dropdownId === null) {
+      // handle the case when dropdownId is null
+      return;
+    }
+  
     const newDropdownStates = new Map(dropdownStates);
     newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);

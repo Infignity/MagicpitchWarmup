@@ -43,7 +43,7 @@ export default function EmailList({
   const [isEditDragNDropOpen, setIsEditDragNDropOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [routeurl, setRouteUrl] = useState<string>("");
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -95,7 +95,12 @@ export default function EmailList({
     }
   };
 
-  const toggleDropdown = (dropdownId: number) => {
+  const toggleDropdown = (dropdownId: number | null) => {
+    if (dropdownId === null) {
+      // handle the case when dropdownId is null
+      return;
+    }
+  
     const newDropdownStates = new Map(dropdownStates);
     newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
