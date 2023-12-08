@@ -159,6 +159,7 @@ const WarmUp = () => {
       setSelectedRows([]);
       setSelectAll(false);
       showSuccessToast("Warmup deleted successfully");
+      setShowDeleteModal(false);
       const fetchWarmups = async () => {
         setIsLoading(true);
         try {
