@@ -26,7 +26,7 @@ type MailServerFormProps = {
   smtpPort: string;
   smtpEmail: string;
   smtpPassword: string;
-  smtpSecurity: string; // Change this to string type if it's not already
+  smtpSecurity: string | null; // Change this to string type if it's not already
   smtpRecipientEmail: string;
 };
 type MailServerProps = {
@@ -55,7 +55,7 @@ export default function EditServerForm({
     const { name, value } = e.target;
     setFormFields((prevState) => ({ ...prevState, [name]: value }));
   };
-  const handleSelectInputChange = (selectedValue: string) => {
+  const handleSelectInputChange = (selectedValue: string | null) => {
     setFormFields((prevState) => ({
       ...prevState,
       smtpSecurity: selectedValue,
@@ -126,7 +126,7 @@ export default function EditServerForm({
       const response = await EditMailServersApi(id,data);
       console.log(response);
       setIsEditDragNDropOpen(false);
-      const allMailServersResponse = await AllMailServersApi();
+      const allMailServersResponse = await AllMailServersApi(0);
       setAllMailServers(allMailServersResponse.data.results);
       setIsLoading(false);
       showSuccessToast("Mail server Added successfully");

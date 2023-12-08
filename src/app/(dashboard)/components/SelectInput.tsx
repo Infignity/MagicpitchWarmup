@@ -6,8 +6,8 @@ type SelectInputProps = {
   label?: string;
   placeholder: string;
   options: { text: string; value: string | null}[];
-  onChange: (item: string) => void;
-  value: string;
+  onChange: (item: string | null) => void;
+  value: string | null;
   errRef?: LegacyRef<HTMLParagraphElement>;
 };
 
@@ -67,10 +67,10 @@ const SelectInput = ({
       <div className="w-full relative">
         <div
           className={`absolute flex flex-col gap-1 w-full bg-white transition-all duration-200  rounded-b-md overflow-auto z-50 ${
-            isOpen ? 'max-h-[15rem] border-[1px]' : 'h-0'
+            isOpen ? 'max-h-[15rem] ' : 'h-0'
           }`}
         >
-          <ul className="flex flex-col gap-1 w-full p-1 bg-white">
+          <ul className="flex flex-col gap-1 w-full p-1 bg-white border-[1px]">
             {options.map((item) => (
               <li
                 key={item.value}
