@@ -149,6 +149,9 @@ export default function EmailList({
   };
   const handleEditModal = (rowId: any) => () => {
     localStorage.setItem("rowId", rowId);
+    const listName = results.filter((server) => server._id === rowId);
+    localStorage.setItem("listName", listName[0].name);
+    console.log(listName[0].name);
     console.log(rowId);
     setIsEditDragNDropOpen(true);
   };
