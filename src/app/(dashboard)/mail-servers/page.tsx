@@ -10,6 +10,7 @@ import Loader1 from "../components/Loader1";
 import { MailServer } from "@/app/types";
 import { IconContext } from "react-icons";
 import Search from "../components/Header/Search";
+import DeleteIcon from "@/app/assets/icons/svg/delete.svg";
 import ToolbarButton from "../components/Header/ToolbarButton";
 import Book from "@/app/assets/icons/svg/book.svg";
 import PlayOutline from "@/app/assets/icons/svg/play-outline.svg";
@@ -21,6 +22,7 @@ import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import Loader2 from "@/app/(dashboard)/components/Loader2";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "../contexts/UserProvider";
+import { Tooltip } from "react-tooltip";
 export default function MailServersWrapper() {
   const [isShowSearch] = useState(true);
 
@@ -190,8 +192,10 @@ function MailServers() {
               className="w-fit bg-[#dd2222] px-3 py-1 disabled:opacity-20 rounded-md text-white"
               onClick={handleDeleteRows}
               disabled={selectedRows.length === 0}
+              data-tooltip-id="Delete"
             >
-              Delete
+              <DeleteIcon />
+              <Tooltip id="Delete" place="top" content="Delete" />
             </button>
           </div>
           {/* )

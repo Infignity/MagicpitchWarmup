@@ -26,7 +26,7 @@ type MailServerFormProps = {
   smtpPort: string;
   smtpEmail: string;
   smtpPassword: string;
-  smtpSecurity: string; // Change this to string type if it's not already
+  smtpSecurity: string | null; // Change this to string type if it's not already
   smtpRecipientEmail: string;
 };
 type MailServerProps = {
@@ -50,7 +50,7 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
     const { name, value } = e.target;
     setFormFields((prevState) => ({ ...prevState, [name]: value }));
   };
-  const handleSelectInputChange = (selectedValue: string) => {
+  const handleSelectInputChange = (selectedValue: string | null) => {
     setFormFields((prevState) => ({
       ...prevState,
       smtpSecurity: selectedValue,

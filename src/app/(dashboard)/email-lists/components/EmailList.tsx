@@ -9,11 +9,13 @@ import { IconContext } from "react-icons";
 import { FaPlus } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { routes } from "@/app/constants";
+import DeleteIcon from "@/app/assets/icons/svg/delete.svg";
 import DragNDrop from "./DragNDrop";
 import EditDragNDrop from "./editDragNDrop";
 import { formatDateToDDMMYYYY } from "./formatdate";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import path from "path";
+import { Tooltip } from "react-tooltip";
 export default function EmailList({
   results,
   setResults,
@@ -94,15 +96,19 @@ export default function EmailList({
       setSelectedRows([]);
     }
   };
-
   const toggleDropdown = (dropdownId: number | null) => {
+    const newDropdownStates = new Map(dropdownStates);
+  
     if (dropdownId === null) {
-      // handle the case when dropdownId is null
-      return;
+      // Close all dropdowns
+      newDropdownStates.forEach((value, key) => {
+        newDropdownStates.set(key, false);
+      });
+    } else {
+      // Toggle the specific dropdown
+      newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
   
-    const newDropdownStates = new Map(dropdownStates);
-    newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
   };
@@ -143,6 +149,9 @@ export default function EmailList({
   };
   const handleEditModal = (rowId: any) => () => {
     localStorage.setItem("rowId", rowId);
+    const listName = results.filter((server) => server._id === rowId);
+    localStorage.setItem("listName", listName[0].name);
+    console.log(listName[0].name);
     console.log(rowId);
     setIsEditDragNDropOpen(true);
   };
@@ -184,137 +193,143 @@ export default function EmailList({
         >
           <Loader1 />
         </div>
-      )} 
+      )}
       <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-x-auto">
-
-      <div className="flex  justify-between w-full h-fit  items-center p-5 min-w-[60rem]">
-        <button
-          type="button"
-          onClick={() => openDragNDrop()}
-          className="capitalize rounded-[7px] bg-blue-500  text-white  flex items-center gap-4 px-6 py-2"
-        >
-          <IconContext.Provider value={{ color: "" }}>
-            <FaPlus />
-          </IconContext.Provider>
-          <span>{button.text}</span>
-        </button>
-        <div className="w-fit">
-          {pathname.startsWith(routes.CLIENT_EMAILS) ? (
-            <Search
-              placeholder={"Search Emails"}
-              FlareIcon={<Funel />}
-              hideSearchIcon={true}
-              hideBorder={true}
-              onChange={(value) => setSearchQuery(value)}
-            />
-          ) : (
-            <Search
-              placeholder={"Search Emails"}
-              hideSearchIcon={true}
-              hideBorder={true}
-              hideFlare={true}
-              onChange={(value) => setSearchQuery(value)}
-            />
-          )}
+        <div className="flex  justify-between w-full h-fit  items-center p-5 min-w-[60rem]">
+          <button
+            type="button"
+            onClick={() => openDragNDrop()}
+            className="capitalize rounded-[7px] bg-blue-500  text-white  flex items-center gap-4 px-6 py-2"
+          >
+            <IconContext.Provider value={{ color: "" }}>
+              <FaPlus />
+            </IconContext.Provider>
+            <span>{button.text}</span>
+          </button>
+          <div className="w-fit">
+            {pathname.startsWith(routes.CLIENT_EMAILS) ? (
+              <Search
+                placeholder={"Search Emails"}
+                FlareIcon={<Funel />}
+                hideSearchIcon={true}
+                hideBorder={true}
+                onChange={(value) => setSearchQuery(value)}
+              />
+            ) : (
+              <Search
+                placeholder={"Search Emails"}
+                hideSearchIcon={true}
+                hideBorder={true}
+                hideFlare={true}
+                onChange={(value) => setSearchQuery(value)}
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <div className="w-full">
-        <button
-          onClick={handleDeleteRows}
-          disabled={selectedRows.length === 0}
-          className=" bg-[red] text-white font-bold py-2 px-4 rounded
+        <div className="w-full">
+          <button
+            onClick={handleDeleteRows}
+            disabled={selectedRows.length === 0}
+            className=" bg-[red] text-white font-bold py-2 px-4 rounded
         disabled:opacity-50 disabled:cursor-not-allowed ml-10 mb-3
        "
-        >
-          Delete Selected
-        </button>
-      </div>
-      <table className="overflow-auto border-collapse w-full min-w-[60rem]">
-        <thead>
-          <tr>
-            {/* button to select all */}
-            <th className="px-4 py-2">
-              <input
-                type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAll}
-              />
-            </th>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Created At</th>
-            <th className="px-4 py-2">Last Modified</th>
-            <th className="px-4 py-2">Total Emails</th>
-            <th className="px-4 py-2">List Type</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            // Display a message if no results are found
-            filteredResults.length === 0 && (
-              <tr>
-                <td colSpan={7} className="px-4 py-2 text-center text-gray-800">
-                  No results found
-                </td>
-              </tr>
-            )
-          }
-          {filteredResults.map((server) => (
-            <tr key={server._id} className="border-b border-gray-200">
-              {/* checkbox to select each row */}
-              <td className="px-4 py-2 flex items-center justify-center">
+            data-tooltip-id="Delete"
+          >
+            <DeleteIcon />
+            <Tooltip id="Delete" place="bottom" content="Delete" />
+          </button>
+        </div>
+        <table className="overflow-auto border-collapse w-full min-w-[60rem]">
+          <thead>
+            <tr>
+              {/* button to select all */}
+              <th className="px-4 py-2">
                 <input
                   type="checkbox"
-                  checked={selectedRows.includes(server._id)}
-                  onChange={() => handleRowSelect(server._id)}
+                  checked={selectAll}
+                  onChange={handleSelectAll}
                 />
-              </td>
-              <td className="px-4 py-2 text-center">{server.name}</td>
-              <td className="px-4 py-2 text-center">
-                {formatDateToDDMMYYYY(server.createdAt)}
-              </td>
-              <td className="px-4 py-2 text-center">
-                {formatDateToDDMMYYYY(server.lastModified)}
-              </td>
-              <td className="px-4 py-2 text-center">{server.totalEmails}</td>
-              <td className="px-4 py-2 text-center">{server.emailListType}</td>
-              <td className="px-4 py-2 text-center flex items-center justify-center">
-                <div className="relative">
-                  <button
-                    onClick={() => toggleDropdown(server._id)}
-                    className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-                  >
-                    <svg
-                      className="w-4 h-4 text-gray-600"
-                      viewBox="0 0 3 15"
-                      fill="currentColor"
-                    >
-                      {/* Three dots SVG path */}
-                      <circle cx="1.5" cy="2.5" r="1.5" />
-                      <circle cx="1.5" cy="7.5" r="1.5" />
-                      <circle cx="1.5" cy="12.5" r="1.5" />
-                    </svg>
-                  </button>
-                  {dropdownStates.get(server._id) && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
-                    >
-                      {/* Dropdown content */}
-                      <button
-                        onClick={handleEditModal(server._id)}
-                        className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </td>
+              </th>
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Created At</th>
+              <th className="px-4 py-2">Last Modified</th>
+              <th className="px-4 py-2">Total Emails</th>
+              <th className="px-4 py-2">List Type</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {
+              // Display a message if no results are found
+              filteredResults.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-4 py-2 text-center text-gray-800"
+                  >
+                    No results found
+                  </td>
+                </tr>
+              )
+            }
+            {filteredResults.map((server) => (
+              <tr key={server._id} className="border-b border-gray-200">
+                {/* checkbox to select each row */}
+                <td className="px-4 py-2 flex items-center justify-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.includes(server._id)}
+                    onChange={() => handleRowSelect(server._id)}
+                  />
+                </td>
+                <td className="px-4 py-2 text-center">{server.name}</td>
+                <td className="px-4 py-2 text-center">
+                  {formatDateToDDMMYYYY(server.createdAt)}
+                </td>
+                <td className="px-4 py-2 text-center">
+                  {formatDateToDDMMYYYY(server.lastModified)}
+                </td>
+                <td className="px-4 py-2 text-center">{server.totalEmails}</td>
+                <td className="px-4 py-2 text-center">
+                  {server.emailListType}
+                </td>
+                <td className="px-4 py-2 text-center flex items-center justify-center">
+                  <div className="relative">
+                    <button
+                      onClick={() => toggleDropdown(server._id)}
+                      className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                    >
+                      <svg
+                        className="w-4 h-4 text-gray-600"
+                        viewBox="0 0 3 15"
+                        fill="currentColor"
+                      >
+                        {/* Three dots SVG path */}
+                        <circle cx="1.5" cy="2.5" r="1.5" />
+                        <circle cx="1.5" cy="7.5" r="1.5" />
+                        <circle cx="1.5" cy="12.5" r="1.5" />
+                      </svg>
+                    </button>
+                    {dropdownStates.get(server._id) && (
+                      <div
+                        ref={dropdownRef}
+                        className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                      >
+                        {/* Dropdown content */}
+                        <button
+                          onClick={handleEditModal(server._id)}
+                          className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </>
   );

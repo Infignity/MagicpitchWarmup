@@ -111,13 +111,13 @@ const DragNDrop = ({
       <section className="flex justify-center w-full h-full overflow-auto absolute inset-0 bg-opacity-80 bg-gray-100 p-5">
         <div className="flex  w-full items-center justify-center max-w-[40rem] p-5">
           {/* upload file section */}
-          <form className="flex flex-col bg-white w-full p-5">
+          <form className="flex flex-col gap-2 bg-white w-full p-5">
             <input
               type="text"
               value={listName}
               onChange={(e) => setListName(e.target.value)}
               placeholder="Enter list name"
-              className="px-2 py-1 max-w-[200px] w-full"
+              className="px-2 py-1 max-w-[200px] w-full border-[1px] border-gray-500 rounded-md"
             />
             <div
               className="flex flex-col items-center gap-5 px-2 pt-2 pb-10 border-[1px] bg-white border-gray-500 rounded-md border-dashed hover:border-blue "

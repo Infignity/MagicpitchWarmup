@@ -22,7 +22,8 @@ import Loader1 from "../components/Loader1";
 import Search from "../components/Header/Search";
 import { ViewAllModal } from "./components/viewallmodal";
 import { useSearchParams } from "next/navigation";
-
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const WarmUp = () => {
   const [warmups, setWarmups] = useState<any[]>([]);
@@ -66,13 +67,18 @@ const WarmUp = () => {
     };
   }, []);
   const toggleDropdown = (dropdownId: number | null) => {
+    const newDropdownStates = new Map(dropdownStates);
+  
     if (dropdownId === null) {
-      // handle the case when dropdownId is null
-      return;
+      // Close all dropdowns
+      newDropdownStates.forEach((value, key) => {
+        newDropdownStates.set(key, false);
+      });
+    } else {
+      // Toggle the specific dropdown
+      newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
   
-    const newDropdownStates = new Map(dropdownStates);
-    newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
   };
@@ -116,7 +122,7 @@ const WarmUp = () => {
 
       try {
         const response = await AllWarmupServersApi(
-          index ,
+          index,
           searchQuery === "" ? null : searchQuery,
           filterValue === "" ? null : filterValue
         );
@@ -131,21 +137,19 @@ const WarmUp = () => {
     fetchWarmups();
   }, [filterValue, searchQuery, currentPage]);
 
-
-
   function goToCreateWarmup() {
     router.push(routes.NEW_WARM_UP);
   }
 
-  if (!warmups && warmups.length === 0) {
-    return (
-      <EmptyListPlaceholder
-        title="Everything you need to warm up your email"
-        ctaLabel="Add Warm-Up"
-        ctaAction={goToCreateWarmup}
-      />
-    );
-  }
+  // if (!warmups || warmups.length === 0) {
+  //   return (
+  //     <EmptyListPlaceholder
+  //       title="Everything you need to warm up your email"
+  //       ctaLabel="Add Warm-Up"
+  //       ctaAction={goToCreateWarmup}
+  //     />
+  //   );
+  // }
 
   const handleDeleteRows = async () => {
     try {
@@ -346,8 +350,10 @@ const WarmUp = () => {
                 className="flex items-center w-fit bg-[#dd2222] px-3 py-2 text-base disabled:opacity-20 rounded-md text-white"
                 onClick={toggleDeleteModal}
                 disabled={selectedRows.length === 0}
+                data-tooltip-id="Delete"
               >
                 <DeleteIcon />
+                <Tooltip id="Delete" place="top" content="Delete" />
               </button>
 
               {/* pause */}
@@ -355,23 +361,29 @@ const WarmUp = () => {
                 className="w-fit bg-[#FFFF00] px-3 py-2 text-base disabled:opacity-20 rounded-md text-black ml-2"
                 disabled={selectedRows.length === 0}
                 onClick={handlePause}
+                data-tooltip-id="Pause"
               >
                 <PauseIcon />
+                <Tooltip id="Pause" place="top" content="Pause" />
               </button>
               {/* resume */}
               <button
                 className="w-fit bg-[#28B446] px-3 py-2 text-base disabled:opacity-20 rounded-md text-white ml-2"
                 disabled={selectedRows.length === 0}
                 onClick={handleResume}
+                data-tooltip-id="Resume"
               >
                 <ResumeIcon />
+                <Tooltip id="Resume" place="top" content="Resume" />
               </button>
             </div>
             {/* select input */}
             <div className="w-full justify-center gap-3 items-center mr-3 flex p-2">
               <SelectInput
                 value={filterValue}
-                onChange={(selectedValue) => setFilterValue(selectedValue?.toLowerCase().trim())}
+                onChange={(selectedValue) =>
+                  setFilterValue((selectedValue || "").toLowerCase().trim())
+                }
                 placeholder="Filter"
                 options={[
                   { value: null, text: "All" },
@@ -571,7 +583,7 @@ const WarmUp = () => {
                             onClick={handleEditModal(warmup._id)}
                             className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
                           >
-                            View Contents
+                            View Details
                           </button>
                         </div>
                       )}

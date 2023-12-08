@@ -42,13 +42,18 @@ export default function MailServersList({
     };
   }, []);
   const toggleDropdown = (dropdownId: number | null) => {
+    const newDropdownStates = new Map(dropdownStates);
+  
     if (dropdownId === null) {
-      // handle the case when dropdownId is null
-      return;
+      // Close all dropdowns
+      newDropdownStates.forEach((value, key) => {
+        newDropdownStates.set(key, false);
+      });
+    } else {
+      // Toggle the specific dropdown
+      newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
   
-    const newDropdownStates = new Map(dropdownStates);
-    newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
   };
@@ -156,7 +161,7 @@ export default function MailServersList({
                         onClick={handleEditModal(mailServer._id)}
                         className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
                       >
-                        View Contents
+                        Edit
                       </button>
                     </div>
                   )}
