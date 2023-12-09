@@ -9,7 +9,7 @@ const EmailLists = () => {
   const router = useRouter()
 
   useEffect(() => {
-    router.push(routes.REPLY_EMAILS)
+    router.push(routes.CLIENT_EMAILS)
   }, [])
 
   return (

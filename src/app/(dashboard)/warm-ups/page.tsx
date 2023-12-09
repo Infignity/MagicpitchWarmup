@@ -296,7 +296,7 @@ const WarmUp = () => {
 
   return (
     <RequireAuth>
-      <section className="flex w-full h-full overflow-hidden">
+      <section className="flex w-full h-full overflow-x-hidden">
         {isLoading && (
           <div
             style={{
@@ -431,7 +431,7 @@ const WarmUp = () => {
               </Link>
             </button>
           </div>
-            <div className="overflow-x-auto">
+            <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
             <div className="flex flex-col w-full min-w-[60rem]">
             <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
               <div className="flex justify-center">
@@ -582,6 +582,7 @@ const WarmUp = () => {
                           <button
                             onClick={handleEditModal(warmup._id)}
                             className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
+                            style={{ bottom: 'auto' }}
                           >
                             View Details
                           </button>

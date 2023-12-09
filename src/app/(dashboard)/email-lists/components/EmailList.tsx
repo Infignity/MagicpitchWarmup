@@ -16,12 +16,23 @@ import { formatDateToDDMMYYYY } from "./formatdate";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import path from "path";
 import { Tooltip } from "react-tooltip";
+import Link from "next/link";
 export default function EmailList({
   results,
   setResults,
+  searchQuery,
+  setSearchQuery,
+  currentPage,
+  pageSize,
+  totalResults,
 }: {
   results: any[];
   setResults: React.Dispatch<React.SetStateAction<any[]>>;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  currentPage: any;
+  pageSize: any;
+  totalResults: any
 }) {
   const { showErrorToast, showSuccessToast } = useGlobalToastContext();
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
@@ -43,7 +54,6 @@ export default function EmailList({
   const [isLoading, setIsLoading] = useState(false);
   const [isDragNDropOpen, setIsDragNDropOpen] = useState(false);
   const [isEditDragNDropOpen, setIsEditDragNDropOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [routeurl, setRouteUrl] = useState<string>("");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -76,6 +86,16 @@ export default function EmailList({
     }
     console.log(path);
   }, [path]); // This useEffect runs only once on initial mount due to the empty dependency array
+  function handlePageChange(isprev: boolean) {
+    if (Number(currentPage) === 0 && isprev) {
+      return `/email-lists/client-emails?page=${currentPage}`;
+    }
+    if (isprev) {
+      `/email-lists/client-emails?page=${Number(currentPage) - 30}`;
+    }
+    return `/email-lists/client-emails?page=${Number(currentPage) + 30}`;
+  }
+
 
   let button = buttons[0];
   const pathname = usePathname();
@@ -157,9 +177,7 @@ export default function EmailList({
   };
 
   // Update the rendering logic for results based on the search query
-  const filteredResults = results.filter((server) =>
-    server.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
   return (
     <>
       {isDragNDropOpen && (
@@ -210,10 +228,11 @@ export default function EmailList({
             {pathname.startsWith(routes.CLIENT_EMAILS) ? (
               <Search
                 placeholder={"Search Emails"}
+                onChange={(value) => setSearchQuery(value)}
                 FlareIcon={<Funel />}
                 hideSearchIcon={true}
                 hideBorder={true}
-                onChange={(value) => setSearchQuery(value)}
+            
               />
             ) : (
               <Search
@@ -221,12 +240,12 @@ export default function EmailList({
                 hideSearchIcon={true}
                 hideBorder={true}
                 hideFlare={true}
-                onChange={(value) => setSearchQuery(value)}
+               
               />
             )}
           </div>
         </div>
-        <div className="w-full">
+        <div className="w-full flex justify-between items-center">
           <button
             onClick={handleDeleteRows}
             disabled={selectedRows.length === 0}
@@ -238,6 +257,36 @@ export default function EmailList({
             <DeleteIcon />
             <Tooltip id="Delete" place="bottom" content="Delete" />
           </button>
+          <div className="flex gap-3 items-center justify-end">
+            <Link
+              href={handlePageChange(true)}
+              className={`bg-white px-3 py-1 rounded-md text-gray-500
+            ${
+              Number(currentPage) === 0
+                ? "pointer-events-none opacity-20"
+                : "block"
+            }
+            
+            `}
+            >
+              Previous
+            </Link>
+
+            <button>
+              <Link
+                href={handlePageChange(false)}
+                className={`bg-white px-3 py-1 rounded-md text-gray-500
+            ${
+              Number(currentPage) + pageSize > totalResults
+                ? "pointer-events-none opacity-20"
+                : "block"
+            }
+            `}
+              >
+                Next
+              </Link>
+            </button>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className=" border-collapse w-full min-w-[60rem]">
@@ -262,7 +311,7 @@ export default function EmailList({
             <tbody>
               {
                 // Display a message if no results are found
-                filteredResults.length === 0 && (
+                results.length === 0 && (
                   <tr>
                     <td
                       colSpan={7}
@@ -273,7 +322,7 @@ export default function EmailList({
                   </tr>
                 )
               }
-              {filteredResults.map((server) => (
+              {results.map((server) => (
                 <tr key={server._id} className="border-b border-gray-200">
                   {/* checkbox to select each row */}
                   <td className="px-4 py-2 flex items-center justify-center">

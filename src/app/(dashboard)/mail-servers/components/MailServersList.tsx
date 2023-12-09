@@ -134,7 +134,7 @@ export default function MailServersList({
               <td className="px-4 py-2 text-center">
                 {formatDateToDDMMYYYY(mailServer.lastModified)}
               </td>
-              <td className="px-4 py-2 text-center flex items-center justify-center">
+              <td className="px-4 py-2 text-center flex items-center justify-center relative">
                 <div className="relative">
                   <button
                     onClick={() => toggleDropdown(mailServer._id)}
@@ -154,7 +154,7 @@ export default function MailServersList({
                   {dropdownStates.get(mailServer._id) && (
                     <div
                       ref={dropdownRef}
-                      className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                      className="absolute right-0 z-[100px] w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
                     >
                       {/* Dropdown content */}
                       <button

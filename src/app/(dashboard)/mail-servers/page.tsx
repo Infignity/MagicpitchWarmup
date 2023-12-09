@@ -67,7 +67,9 @@ function MailServers() {
     setIsLoading(true);
     const fetchMailServers = async () => {
       try {
-        const resp = await AllMailServersApi(currentPage);
+        const resp = await AllMailServersApi(currentPage,
+          searchQuery === "" ? null : searchQuery,
+          );
         console.log("resp: ", resp);
         setAllMailServers(resp.data.results);
         setTotalResults(resp.data.totalResults);
@@ -89,15 +91,15 @@ function MailServers() {
       }
     };
     fetchMailServers();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Loader1 />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="w-full h-full flex justify-center items-center">
+  //       <Loader1 />
+  //     </div>
+  //   );
+  // }
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -148,9 +150,7 @@ function MailServers() {
     }
   };
 
-  const filtered = allMailServers.filter((server) =>
-    server.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  
 
   function handlePageChange(isprev: boolean) {
     if (Number(currentPage) === 0 && isprev) {
@@ -163,10 +163,26 @@ function MailServers() {
   }
 
   return (
-    <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-hidden">
+    <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-x-hidden">
       {isMailServerModal && (
         <MailServerForm setAllMailServers={setAllMailServers} />
       )}
+        {isLoading && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 9999,
+              background: "rgba(255, 255, 255, 0.8)",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <Loader1 />
+          </div>
+        )}
       <div className="w-full h-full flex flex-col">
         <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative">
           <button
@@ -206,6 +222,7 @@ function MailServers() {
               <Search
                 placeholder={"Search Emails"}
                 onChange={(value) => setSearchQuery(value)}
+                hideFlare={true}
               />
             </div>
           ) : (
@@ -274,9 +291,9 @@ function MailServers() {
             </Link>
           </button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
           <MailServersList
-            allMailServers={filtered}
+            allMailServers={allMailServers}
             setAllMailServers={setAllMailServers}
             handleRowSelect={handleRowSelect}
             handleSelectAll={handleSelectAll}
