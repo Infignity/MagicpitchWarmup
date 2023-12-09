@@ -172,16 +172,16 @@ async def get_all_email_lists(
     name: Optional[str] = Query(description="Search by email list name", default=None),
 ):
     """Get all email lists"""
-    
+
     search_params = {"userId": user.id}
     if name:
         search_params["name"] = {"$regex": rf"^{name}", "$options": "i"}
 
     if list_type in ["replyEmails", "clientEmails"]:
         search_params["emailListType"] = EmailList.email_list_type
-        
+
     res = EmailList.find(search_params)
-    
+
     total_email_lists = await res.count()
     email_lists = [
         BasicEmailList(
@@ -199,7 +199,9 @@ async def get_all_email_lists(
 
     response.status = status.HTTP_200_OK
 
-    return PaginatedEmailLists(total_email_lists=total_email_lists, email_lists=email_lists)
+    return PaginatedEmailLists(
+        total_email_lists=total_email_lists, email_lists=email_lists
+    )
 
 
 @email_list_router.post(

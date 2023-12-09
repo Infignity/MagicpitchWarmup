@@ -97,8 +97,8 @@ async def get_all_mail_servers(
     ),
     name: Optional[str] = Query(description="Search by mailserver name", default=None),
 ):
-    """ Search mail servers """
-    
+    """Search mail servers"""
+
     search_params = {"userId": user.id}
     if name:
         search_params["name"] = {"$regex": rf"^{name}", "$options": "i"}
@@ -106,7 +106,7 @@ async def get_all_mail_servers(
     res = MailServer.find(search_params)
     total_mail_servers = await res.count()
     results = await res.skip(index).limit(MAIL_SERVER_PAGE_SIZE).to_list()
-    
+
     response.status_code = status.HTTP_200_OK
     return MailserverSearchResult(
         total_results=total_mail_servers, results=results, index=index

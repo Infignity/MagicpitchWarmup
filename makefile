@@ -3,4 +3,4 @@ full_restart:
 	docker-compose up -d
 
 format:
-	black .
+	black ./backend
