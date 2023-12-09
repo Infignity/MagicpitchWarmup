@@ -2,7 +2,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import TextInput from "@/app/(dashboard)/components/TextInput";
-import { AllMailServersApi } from "@/app/api/allmailserversapi";
+import { IconContext } from "react-icons";
+import { BsX } from "react-icons/bs";
+import Link from "next/link";
 import MailSelect from "../../components/mailSelectInput";
 import { EmailSelect } from "../../components/mailSelectInput";
 import { CreateWarmupApi } from "@/app/api/createwarmupapi";
@@ -91,10 +93,24 @@ const CreateWarmup = () => {
               <Loader1 />
             </div>
           )}
-          <div className="flex justify-between gap-3">
+          <div className="flex justify-between">
             <h3 className="text-xl text-blue font-medium">
               Enter details for Warm-up
             </h3>
+            <Link
+              type="button"
+              className="w-fit h-fit self-end"
+              href="/warm-ups"
+            >
+              <IconContext.Provider
+                value={{
+                  size: "2em",
+                  className: `p-1 rounded-full bg-white text-gray-800 hover:bg-gray-200`,
+                }}
+              >
+                <BsX />
+              </IconContext.Provider>
+            </Link>
           </div>
           <div className="flex gap-6 h-full">
             <div className="w-full flex flex-col gap-5">

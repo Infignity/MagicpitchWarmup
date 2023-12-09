@@ -134,7 +134,7 @@ const DragNDrop = ({
                 </IconContext.Provider>
               </button>
               <h3 className="text-2xl text-gray-800 font-medium">
-                Upload or Drop File
+                Upload or Drop File 
               </h3>
               <label
                 htmlFor="file-upload"

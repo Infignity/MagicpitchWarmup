@@ -20,7 +20,6 @@ const initialFormState = {
 };
 
 const Signup = () => {
-  const session = useSession();
   const usernameErrRef = useRef<HTMLParagraphElement | null>(null);
   const passwordErrRef = useRef<HTMLParagraphElement | null>(null);
   const fullNameErrRef = useRef<HTMLParagraphElement | null>(null);

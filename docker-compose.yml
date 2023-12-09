@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:8098"
+    env_file:
+      - .env
+
   api:
     build:
       context: .
@@ -25,6 +34,3 @@ services:
       - "8203:8203"
     env_file:
       - .env
-    
-  
-  
