@@ -178,7 +178,7 @@ async def get_all_email_lists(
         search_params["name"] = {"$regex": rf"^{name}", "$options": "i"}
 
     if list_type in ["replyEmails", "clientEmails"]:
-        search_params["emailListType"] = EmailList.email_list_type
+        search_params["emailListType"] = list_type
 
     res = EmailList.find(search_params)
 
