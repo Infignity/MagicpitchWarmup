@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8098",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 8098",
-    "lint": "next lint"
+    "start": "next start",
+    "lint": "next lint",
+    "start-all-addresses": "next start -p 8098 -h 0.0.0.0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",

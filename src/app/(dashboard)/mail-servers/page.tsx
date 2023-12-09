@@ -167,8 +167,8 @@ function MailServers() {
       {isMailServerModal && (
         <MailServerForm setAllMailServers={setAllMailServers} />
       )}
-      <div className="overflow-x-auto w-full h-full flex flex-col">
-        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative min-w-[60rem]">
+      <div className="w-full h-full flex flex-col">
+        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative">
           <button
             type="button"
             className="z-30 rounded-full bg-gray-200 transition duration-200 -translate-x-1/2 w-7 h-7 flex justify-center items-center"
@@ -274,14 +274,16 @@ function MailServers() {
             </Link>
           </button>
         </div>
-        <MailServersList
-          allMailServers={filtered}
-          setAllMailServers={setAllMailServers}
-          handleRowSelect={handleRowSelect}
-          handleSelectAll={handleSelectAll}
-          selectedRows={selectedRows}
-          selectAll={selectAll}
-        />
+        <div className="overflow-x-auto">
+          <MailServersList
+            allMailServers={filtered}
+            setAllMailServers={setAllMailServers}
+            handleRowSelect={handleRowSelect}
+            handleSelectAll={handleSelectAll}
+            selectedRows={selectedRows}
+            selectAll={selectAll}
+          />
+        </div>
       </div>
     </section>
   );

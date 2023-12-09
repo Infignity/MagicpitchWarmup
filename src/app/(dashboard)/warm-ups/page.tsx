@@ -342,9 +342,9 @@ const WarmUp = () => {
             </div>
           )
         }
-        <div className="flex flex-col w-full h-full overflow-x-auto border-x-[0.5px] text-sm">
+        <div className="flex flex-col w-full h-full  border-x-[0.5px] text-sm">
           {/* action buttons */}
-          <div className="flex justify-between items-center min-w-[60rem]">
+          <div className="flex justify-between items-center ">
             <div className="w-full flex p-2">
               <button
                 className="flex items-center w-fit bg-[#dd2222] px-3 py-2 text-base disabled:opacity-20 rounded-md text-white"
@@ -431,8 +431,8 @@ const WarmUp = () => {
               </Link>
             </button>
           </div>
-
-          <div className="flex flex-col w-full min-w-[60rem]">
+            <div className="overflow-x-auto">
+            <div className="flex flex-col w-full min-w-[60rem]">
             <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
               <div className="flex justify-center">
                 <button
@@ -593,6 +593,8 @@ const WarmUp = () => {
               ))
             )}
           </div>
+            </div>
+         
         </div>
       </section>
     </RequireAuth>

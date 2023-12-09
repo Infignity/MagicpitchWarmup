@@ -81,9 +81,9 @@ const Login = () => {
       } else {
         showErrorToast("Could not complete sign in");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Sign in error: ", error);
-      showErrorToast("An error occurred during sign in");
+      showErrorToast(error.response?.data?.message || "An error occurred during sign in");
     } finally {
       setIsLoading(false);
     }

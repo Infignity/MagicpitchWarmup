@@ -59,7 +59,7 @@ const Sidebar = () => {
       { /* primary navigation */}
       <nav className="flex w-fit flex-col gap-2 justify-between bg-blue">
         <ul className="flex flex-col  h-full gap-5 md:gap-10 items-center justify-start py-5">
-          <Link href={"/"} className="shadow-md">
+          <Link href={warmUpsRoute} className="shadow-md">
             {
               // <Image src={Link5} alt="" className="w-8 h-8" />
               <Link5 />

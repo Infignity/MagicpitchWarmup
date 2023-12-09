@@ -33,7 +33,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <ul className="flex flex-col gap-1.5 md:gap-3">
           {
             items.map((item, index) => (
-              <li className="flex gap-2 md:gap-4 items-center text-sm md:text-base">
+              <li className="flex gap-2 md:gap-4 items-center text-sm md:text-base" key={index}>
                 <CheckMark />
                 <p className="break-all">{item}</p>
               </li>
