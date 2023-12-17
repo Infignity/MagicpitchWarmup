@@ -132,24 +132,6 @@ const Signup = () => {
         } else {
           showErrorToast("Couldn't sign in. Something went wrong");
         }
-        // const response = await signIn("credentials", {
-        //   redirect: false,
-        //   username: formState.username,
-        //   password: formState.password,
-        // });
-        // if (response) {
-        //   if (response.error === null) {
-        //     router.push(routes.HOME);
-        //     setFormState(initialFormState);
-        //     showSuccessToast("Login Successful!");
-        //   } else if (response.error === "CredentialsSignin") {
-        //     showErrorToast("username or password is incorrect");
-        //   } else {
-        //     showErrorToast("Couldn't sign in. Something went wrong");
-        //   }
-        // } else {
-        //   showErrorToast("Unable to complete sign in");
-        // }
       }
     } catch (error: any) {
       if (error.response) {
