@@ -203,6 +203,7 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
                 <TextInput
                   errRef={smtpPasswordRef}
                   label="Password"
+                  type="password"
                   placeholder="Enter password"
                   value={formFields.smtpPassword}
                   onChange={handleInputChange}

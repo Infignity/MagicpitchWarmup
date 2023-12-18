@@ -68,7 +68,7 @@ async def import_emails(
     if file.content_type != "text/csv":
         return EmailListImportError(description="File Content type must be 'text/csv'")
 
-    if await EmailList.find(EmailList.name == name).first_or_none():
+    if await EmailList.find(EmailList.name == name, EmailList.user_id == user.id).first_or_none():
         return EmailListImportError(
             description=f"An email list already has name `{name}`, please enter another name"
         )
@@ -178,7 +178,7 @@ async def get_all_email_lists(
         search_params["name"] = {"$regex": rf"^{name}", "$options": "i"}
 
     if list_type in ["replyEmails", "clientEmails"]:
-        search_params["emailListType"] = EmailList.email_list_type
+        search_params["emailListType"] = list_type
 
     res = EmailList.find(search_params)
 

@@ -16,9 +16,7 @@ export const ViewAllModal = ({ onClose }) => {
     <div className="modal bg-gray-800 bg-opacity-50 w-full h-full overflow-auto z-50 flex justify-center items-center">
       <div className="modal-content bg-white h-fit max-w-[60rem]  mx-auto w-full z-50">
         <div className="flex justify-between p-5">
-          <h2>
-          All Details
-          </h2>
+          <h2>All Details</h2>
           <button
             type="button"
             className="w-fit h-fit self-end"
@@ -52,21 +50,50 @@ export const ViewAllModal = ({ onClose }) => {
 
             <div className="flex flex-col">
               <h3 className="text-sm font-bold">Status</h3>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4">
-                  {warupDetailsJSON.state === "notStarted" ? (
-                    <CheckYellow />
-                  ) : warupDetailsJSON.state === "running" ? (
-                    <CheckGreen />
-                  ) : warupDetailsJSON.state === "completed" ? (
-                    <CheckGreen />
-                  ) : warupDetailsJSON.state === "failed" ? (
-                    <CheckRed />
-                  ) : (
-                    <CheckYellow />
-                  )}
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4">
+                    {warupDetailsJSON.state === "notStarted" ? (
+                      <CheckYellow />
+                    ) : warupDetailsJSON.state === "running" ? (
+                      <CheckGreen />
+                    ) : warupDetailsJSON.state === "completed" ? (
+                      <CheckGreen />
+                    ) : warupDetailsJSON.state === "failed" ? (
+                      <CheckRed />
+                    ) : (
+                      <CheckYellow />
+                    )}
+                  </div>
+                  <p>{warupDetailsJSON.state}</p>
                 </div>
-                <p>{warupDetailsJSON.state}</p>
+                <p
+                  className={`text-xs rounded-lg px-2 py-1 ${
+                    warupDetailsJSON.state === "notStarted"
+                      ? "text-yellow bg-opacity-20"
+                      : warupDetailsJSON.state === "running"
+                      ? "text-green  bg-opacity-20"
+                      : warupDetailsJSON.state === "completed"
+                      ? "text-green  bg-opacity-20"
+                      : warupDetailsJSON.state === "failed"
+                      ? "text-red  bg-opacity-20"
+                      : "text-yellow bg-opacity-20"
+                  }`}
+                  style={{
+                    backgroundImage:
+                      warupDetailsJSON.state === "notStarted"
+                        ? "linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0.1))"
+                        : warupDetailsJSON.state === "running"
+                        ? "linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))"
+                        : warupDetailsJSON.state === "completed"
+                        ? "linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))"
+                        : warupDetailsJSON.state === "failed"
+                        ? "linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))"
+                        : "linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0.1))",
+                  }}
+                >
+                  {warupDetailsJSON.statusText}
+                </p>
               </div>
             </div>
             <div className="flex flex-col">
@@ -74,17 +101,17 @@ export const ViewAllModal = ({ onClose }) => {
               <p>{warupDetailsJSON.currentWarmupDay}</p>
             </div>
             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Increase Rate</h3>
-                <p>{warupDetailsJSON.increaseRate}</p>
-             </div>
-             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Target Open Rate</h3>
-                <p>{warupDetailsJSON.targetOpenRate}</p>
-             </div>   
-             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Total Addresses Mailed</h3>
-                <p>{warupDetailsJSON.totalAddressesMailed}</p>
-              </div>  
+              <h3 className="text-sm font-bold">Increase Rate</h3>
+              <p>{warupDetailsJSON.increaseRate}</p>
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-sm font-bold">Target Open Rate</h3>
+              <p>{warupDetailsJSON.targetOpenRate}</p>
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-sm font-bold">Total Addresses Mailed</h3>
+              <p>{warupDetailsJSON.totalAddressesMailed}</p>
+            </div>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -109,21 +136,21 @@ export const ViewAllModal = ({ onClose }) => {
               <p>{warupDetailsJSON.maxDays}</p>
             </div>
             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Daily Send Limit</h3>
-                <p>{warupDetailsJSON.dailySendLimit}</p>
-            </div>    
+              <h3 className="text-sm font-bold">Daily Send Limit</h3>
+              <p>{warupDetailsJSON.dailySendLimit}</p>
+            </div>
             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Start Volume</h3>
-                <p>{warupDetailsJSON.startVolume}</p>
-            </div> 
+              <h3 className="text-sm font-bold">Start Volume</h3>
+              <p>{warupDetailsJSON.startVolume}</p>
+            </div>
             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Target Reply Rate</h3>
-                <p>{warupDetailsJSON.targetReplyRate}</p>
-            </div>  
+              <h3 className="text-sm font-bold">Target Reply Rate</h3>
+              <p>{warupDetailsJSON.targetReplyRate}</p>
+            </div>
             <div className="flex flex-col">
-                <h3 className="text-sm font-bold">Total WarmUp Days</h3>
-                <p>{warupDetailsJSON.totalWarmupDays}</p>
-            </div>         
+              <h3 className="text-sm font-bold">Total WarmUp Days</h3>
+              <p>{warupDetailsJSON.totalWarmupDays}</p>
+            </div>
           </div>
         </div>
       </div>

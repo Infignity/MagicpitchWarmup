@@ -23,6 +23,7 @@ import Loader2 from "@/app/(dashboard)/components/Loader2";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "../contexts/UserProvider";
 import { Tooltip } from "react-tooltip";
+import toast from "react-hot-toast";
 export default function MailServersWrapper() {
   const [isShowSearch] = useState(true);
 
@@ -67,37 +68,65 @@ function MailServers() {
     setIsLoading(true);
     const fetchMailServers = async () => {
       try {
-        const resp = await AllMailServersApi(currentPage);
+        const resp = await AllMailServersApi(
+          currentPage,
+          searchQuery === "" ? null : searchQuery
+        );
         console.log("resp: ", resp);
         setAllMailServers(resp.data.results);
         setTotalResults(resp.data.totalResults);
         setPageSize(resp.data.pageSize);
         setIsLoading(false);
-      } catch (err: any) {
-        if (err.data) {
-          console.log(err.data.description);
-          showErrorToast(err.data.description);
-        } else if (err.message) {
-          console.log(err.message);
-          showErrorToast(err.message);
-        } else if (err.error) {
-          console.log(err.error);
-          showErrorToast(err.error);
-        } else {
-          showErrorToast("Unable to complete delete");
-        }
+      } catch (error: any) {
+        toast.error(
+          (t) => (
+            <div className="flex w-full">
+              {/* Assuming the icon is automatically added by react-hot-toast */}
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold">
+                  {error.response?.data?.message ||
+                    "An error occurred during sign in"}
+                </h3>
+                <p>
+                  {error.response?.data?.description ||
+                    "An error occurred during sign in"}
+                </p>
+              </div>
+            </div>
+          ),
+          {
+            duration: 6000,
+            style: {
+              width: "100%",
+              textAlign: "left",
+              // Add any custom styling here
+            },
+          }
+        );
+        // if (err.data) {
+        //   console.log(err.data.description);
+        //   showErrorToast(err.data.description);
+        // } else if (err.message) {
+        //   console.log(err.message);
+        //   showErrorToast(err.message);
+        // } else if (err.error) {
+        //   console.log(err.error);
+        //   showErrorToast(err.error);
+        // } else {
+        //   showErrorToast("Unable to complete delete");
+        // }
       }
     };
     fetchMailServers();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Loader1 />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="w-full h-full flex justify-center items-center">
+  //       <Loader1 />
+  //     </div>
+  //   );
+  // }
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -140,17 +169,37 @@ function MailServers() {
       setAllMailServers(newResults.data.results);
       // Upon successful deletion, clear selected rows and stop the loader
       setSelectedRows([]);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      showErrorToast("Unable to delete Email List");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     } finally {
       setIsLoading(false); // Stop loader whether deletion succeeds or fails
     }
   };
-
-  const filtered = allMailServers.filter((server) =>
-    server.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   function handlePageChange(isprev: boolean) {
     if (Number(currentPage) === 0 && isprev) {
@@ -163,9 +212,25 @@ function MailServers() {
   }
 
   return (
-    <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-hidden">
+    <section className="flex flex-col gap-2 w-full h-full relative bg-white overflow-x-hidden">
       {isMailServerModal && (
         <MailServerForm setAllMailServers={setAllMailServers} />
+      )}
+      {isLoading && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            background: "rgba(255, 255, 255, 0.8)",
+            padding: "20px",
+            borderRadius: "5px",
+          }}
+        >
+          <Loader1 />
+        </div>
       )}
       <div className="w-full h-full flex flex-col">
         <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative">
@@ -206,6 +271,7 @@ function MailServers() {
               <Search
                 placeholder={"Search Emails"}
                 onChange={(value) => setSearchQuery(value)}
+                hideFlare={true}
               />
             </div>
           ) : (
@@ -274,9 +340,9 @@ function MailServers() {
             </Link>
           </button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
           <MailServersList
-            allMailServers={filtered}
+            allMailServers={allMailServers}
             setAllMailServers={setAllMailServers}
             handleRowSelect={handleRowSelect}
             handleSelectAll={handleSelectAll}

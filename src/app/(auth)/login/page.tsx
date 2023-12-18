@@ -3,11 +3,14 @@ import React, { useRef, useState } from "react";
 import TextInput from "@/app/(auth)/components/TextInput";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import { useRouter } from "next/navigation";
+import { IconContext } from "react-icons";
+import { BsX as XMark } from "react-icons/bs";
 import { SignInApi } from "@/app/api/signinapi";
 import { signIn } from "next-auth/react";
 import Loader1 from "@/app/(dashboard)/components/Loader1";
 import Loader2 from "@/app/(dashboard)/components/Loader2";
 import { useAuth } from "@/app/(dashboard)/contexts/authContext";
+import { Toaster, toast } from "react-hot-toast";
 
 const initialFormState = {
   username: "",
@@ -17,6 +20,9 @@ const initialFormState = {
 const Login = () => {
   const usernameErrRef = useRef<HTMLParagraphElement | null>(null);
   const passwordErrRef = useRef<HTMLParagraphElement | null>(null);
+  const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
+  const [errorDescription, setErrorDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] =
     useState<typeof initialFormState>(initialFormState);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +76,7 @@ const Login = () => {
       formData.append("password", formState.password);
       const response = await SignInApi(formData);
       console.log("response: ", response);
-      console.log(response.data.accessToken)
+      console.log(response.data.accessToken);
       const token = sessionStorage.setItem("token", response.data.accessToken);
       if (response) {
         const token = response.data.accessToken;
@@ -79,67 +85,68 @@ const Login = () => {
         setFormState(initialFormState);
         showSuccessToast("Login Successful!");
       } else {
-        showErrorToast("Could not complete sign in");
+        // showErrorToast("Could not complete sign in");
+        toast.error("Could not complete sign in");
       }
     } catch (error: any) {
       console.error("Sign in error: ", error);
-      showErrorToast(error.response?.data?.message || "An error occurred during sign in");
+
+      // setErrorMessage(error.response?.data?.message || "An error occurred during sign in");
+      // setErrorDescription(error.response?.data?.description || "An error occurred during sign in");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
+      // setErrorMessage(
+      //   error.response?.data?.description || "An error occurred during sign in"
+      // );
+      // showErrorToast(error.response?.data?.message || "An error occurred during sign in");
     } finally {
       setIsLoading(false);
     }
-    // try {
-    //   const response = await signIn("credentials", {
-    //     redirect: false,
-    //     username: formState.username,
-    //     password: formState.password,
-    //   });
-    //   const token = sessionStorage.setItem("token", response?.token || "");
-    //   console.log("token: ", token);
-    //   console.log("auth response: ", response);
-    //   if (response?.error === "CredentialsSignin") {
-    //     showErrorToast("username or password is incorrect");
-    //   } else if (response?.error === null) {
-    //     router.push("/");
-    //     setFormState(initialFormState);
-    //     showSuccessToast("Login Successful!");
-    //   }
-    // } catch (error) {
-    //   console.error("Sign in error: ", error);
-    //   showErrorToast("An error occurred during sign in");
-    // } finally {
-    //   setIsLoading(false);
-    // }
-    // if (response){
-    //   if (response.error === null){
-    //     router.push("/")
-    //     setFormState(initialFormState)
-    //     showSuccessToast("Login Successful!")
-    //   }else if (response.error === "CredentialsSignin"){
-    //     showErrorToast("username or password is incorrect")
-    //   }else {
-    //     showErrorToast("Couldn't sign in. Something went wrong")
-    //   }
-    // }else{
-    //   showErrorToast("Could not complete sign in")
-    // }
   }
+
 
   return (
     <div className="w-full flex flex-col gap-3">
-       {/* {isLoading && (
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 9999,
-            background: "rgba(255, 255, 255, 0.8)",
-            padding: "20px",
-            borderRadius: "5px",
-          }}
-        >
-          <Loader1 />
+
+
+      {/* {showPopup && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+            <button
+              type="button"
+              onClick={closePopup}
+              className="self-end p-2 rounded-full hover:bg-gray-100 transition duration-200"
+            >
+              <IconContext.Provider value={{ size: "1.5em" }}>
+                <XMark />
+              </IconContext.Provider>
+            </button>
+            <h3 className="text-base font-semibold">Error Info</h3>
+            <p>{errorMessage}</p>
+          </div>
         </div>
       )} */}
 
@@ -179,4 +186,3 @@ const Login = () => {
 };
 
 export default Login;
-

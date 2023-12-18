@@ -11,15 +11,16 @@ import { usePathname } from 'next/navigation'
 
 const links = [
   {
-    text: "Reply Emails",
-    url: routes.REPLY_EMAILS,
-    Icon: FaReply
-  },
-  {
     text: "Client Emails",
     url: routes.CLIENT_EMAILS,
     Icon: FaUsers
   },
+  {
+    text: "Reply Emails",
+    url: routes.REPLY_EMAILS,
+    Icon: FaReply
+  },
+ 
 ]
 
 export default function EmailListsSidebar() {
@@ -29,7 +30,11 @@ export default function EmailListsSidebar() {
     <div className="flex flex-col w-full h-full items-center gap-3">
       {
         links.map(link => (
-          <Link href={link.url} data-tooltip-id={link.text} type="button" className={`capitalize rounded-[7px] hover:bg-[#F4F5FE] hover:text-blue flex justify-start gap-4 items-center p-2 transition-all duration-300 text-sm w-full ${pathname.startsWith(link.url) ? "bg-[#F4F5FE] text-blue" : "bg-white text-gray-500"}`}>
+          <Link href={link.url} data-tooltip-id={link.text} type="button" className={`capitalize rounded-[7px] hover:bg-[#F4F5FE] hover:text-blue flex justify-start gap-4 items-center p-2 transition-all duration-300 text-sm w-full ${pathname.startsWith(link.url) ? "bg-[#F4F5FE] text-blue" : "bg-white text-gray-500"}
+            ${
+              link.text === "Reply Emails" ? "pointer-events-none cursor-not-allowed opacity-50" : ""
+            }
+          `}>
             <IconContext.Provider value={{ color: "" }}>
               <link.Icon />
             </IconContext.Provider>

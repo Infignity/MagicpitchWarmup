@@ -4,11 +4,17 @@ import EmailList from "../components/EmailList";
 import React, { useEffect, useState } from "react";
 import { AllEmailListApi } from "@/app/api/allemaillistapi";
 import Loader1 from "../../components/Loader1";
+import { useSearchParams } from "next/navigation";
 
 export default function ReplyEmails() {
   const [isLoading, setIsLoading] = useState(false);
   const [clientEmails, setClientEmails] = useState<any[]>([]);
   const [routeurl, setRouteUrl] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const currentPage = searchParams.get("page") ?? 0;
+  const [totalResults, setTotalResults] = useState(0);
+  const [pageSize, setPageSize] = useState(50);
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -26,10 +32,11 @@ export default function ReplyEmails() {
   useEffect(() => {
     setIsLoading(true);
     const getEmails = async () => {
+      console.log(currentPage)
       try {
         if (routeurl) {
           // Check if routeurl has a value before making the API call
-          const response = await AllEmailListApi(routeurl);
+          const response = await AllEmailListApi(routeurl, currentPage);
           console.log(response);
           setClientEmails(response.data.emailLists); // Assuming response is the array of email lists
           setIsLoading(false);
@@ -40,7 +47,29 @@ export default function ReplyEmails() {
       }
     };
     getEmails();
-  }, [routeurl]); // Run this effect whenever routeurl changes
+  }, [routeurl, currentPage]); // Run this effect whenever routeurl changes
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getEmails = async () => {
+      try {
+        if (routeurl) {
+          // Check if routeurl has a value before making the API call
+          const response = await AllEmailListApi(routeurl, 
+                currentPage,
+                searchQuery === "" ? null : searchQuery,
+            );
+          console.log(response);
+          setClientEmails(response.data.emailLists); // Assuming response is the array of email lists
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    };
+    getEmails();
+  }, [routeurl, currentPage, searchQuery]); // Run this effect whenever routeurl changes
 
   const searchTerm = "";
   return (
@@ -60,10 +89,16 @@ export default function ReplyEmails() {
               title={<>Result Not Found</>}
             />
           ) : (
-            <EmailList results={clientEmails} setResults={setClientEmails} />
+            <EmailList results={clientEmails} setResults={setClientEmails} 
+            searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+            currentPage={currentPage} pageSize = {pageSize} totalResults = {totalResults}
+            />
           )
         ) : (
-          <EmailList results={clientEmails} setResults={setClientEmails} />
+          <EmailList results={clientEmails} setResults={setClientEmails} 
+            searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+            currentPage={currentPage} pageSize = {pageSize} totalResults = {totalResults}
+            />
         )
       }
       {isLoading && (

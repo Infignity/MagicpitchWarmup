@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Loader1 from "../../components/Loader1";
 import EditEmailListApi from "@/app/api/editemaillistapi";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
-
+import toast from "react-hot-toast";
 const EditDragNDrop = ({
   close,
   setResults,
@@ -96,10 +96,34 @@ const EditDragNDrop = ({
       const newResults = await AllEmailListApi(routeurl);
       setResults(newResults.data.emailLists);
       setIsLoading(false);
-    } catch (error) {
+    } catch (error : any) {
       console.log(error);
       setIsLoading(false);
-      showErrorToast("Something went wrong");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     }
   }
 

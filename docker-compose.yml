@@ -1,36 +1,36 @@
 version: '3'
 
 services:
-  nextjs:
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "3000:8098"
-    env_file:
+      - "8098:3000"
+    env_file: &app_env
       - .env
+    depends_on:
+      - api
+    restart: always
 
   api:
-    build:
+    build: &backend_build
       context: .
       dockerfile: Dockerfile.api
     ports:
       - "8070:8080"
-    volumes:
+    volumes: &backend_volumes
       - ./files:/files
     restart: always
     depends_on:
       - worker
-    env_file:
-      - .env
+    env_file: *app_env
   
   worker:
-    build: .
-    command: ["python3" ,"-m", "scheduler.main"]
-    volumes:
-      - ./files:/files
-    restart: always
+    build: *backend_build
     ports:
       - "8203:8203"
-    env_file:
-      - .env
+    volumes: *backend_volumes
+    restart: always
+    env_file: *app_env
+    command: ["python3" ,"-m", "scheduler.main"]
