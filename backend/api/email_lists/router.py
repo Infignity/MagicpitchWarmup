@@ -68,7 +68,7 @@ async def import_emails(
     if file.content_type != "text/csv":
         return EmailListImportError(description="File Content type must be 'text/csv'")
 
-    if await EmailList.find(EmailList.name == name).first_or_none():
+    if await EmailList.find(EmailList.name == name, EmailList.user_id == user.id).first_or_none():
         return EmailListImportError(
             description=f"An email list already has name `{name}`, please enter another name"
         )
