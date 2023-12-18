@@ -119,7 +119,7 @@ class Warmup(Document):
         description="Email addresses mailed across all warmup days", default=[]
     )
 
-    current_warmup_day: int = Field(description="Current warmup day count", default=1)
+    current_warmup_day: int = Field(description="Current warmup day count", default=0)
     status_text: Optional[str] = Field(
         description="Message about current status, could be error message.",
         default=None,
