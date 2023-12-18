@@ -30,7 +30,7 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
     warmup: Warmup = Warmup.find(Warmup.id == warmup_.id).first_or_none()
 
     if warmup is not None:
-        if warmup.current_warmup_day <= 1:
+        if warmup.current_warmup_day >= 0:
             warmup.state = "running"
             warmup.save_changes()
 
@@ -61,15 +61,15 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             warmup.save_changes()
             return
         warmup.state = "running"
-        warmup.status_text = None
+        warmup.status_text = "Warmup is running without any issues :)"
         warmup.save_changes()
 
         # Check warmup day
-        if warmup.current_warmup_day >= warmup.max_days:
+        if warmup.current_warmup_day + 1 > warmup.max_days:
             logger.info(f"Warmup [{warmup_id}] completed")
             remove_job(warmup_id)
             warmup.state = "completed"
-            warmup.status_text = None
+            warmup.status_text = "Warmup has been completed"
             warmup.save_changes()
 
         # mail_server = MailServer.find(MailServer.id == warmup.mailserver_id).first_or_none()
@@ -108,7 +108,6 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             # Check if warmup.current_warmup_day is 1 then use startVolume otherwise calculate new sendVolume by getting the last warmup day and using the field `actual_total_send_volume`
             send_volume = warmup.start_volume
             if warmup.current_warmup_day <= 1:
-                warmup.current_warmup_day = 1
                 send_volume = warmup.start_volume
             else:
                 last_warmup_day = (
@@ -146,6 +145,9 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
                 return
 
             # Send emails to those clients
+            warmup.current_warmup_day += 1
+            warmup.save_changes()
+            
             send_warmup_emails(batch_id, unused_contacts, mail_server)
             logger.info(
                 f"Warmup [{warmup_id}] => Warmup emails sent to {len(unused_contacts)} contacts"
@@ -168,12 +170,12 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             )
             warmup.save_changes()
 
-        if warmup.current_warmup_day < warmup.max_days:
-            warmup.current_warmup_day += 1
-            try:
-                warmup.save_changes()
-            except AttributeError:
-                pass
+        # if warmup.current_warmup_day < warmup.max_days:
+        #     warmup.current_warmup_day += 1
+        #     try:
+        #         warmup.save_changes()
+        #     except AttributeError:
+        #         pass
 
     else:
         # Warmup has been deleted

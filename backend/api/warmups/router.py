@@ -238,6 +238,8 @@ async def create_warmup(
         status_text=new_warmup.status_text,
     )
 
+    await new_warmup.create()
+    
     try:
         scheduler_conn: Connection = rpyc.connect(
             SCHEDULER_CLIENT_HOST, SCHEDULER_CLIENT_PORT
@@ -250,8 +252,6 @@ async def create_warmup(
             message="An error occured in our server",
             description="Sorry, we could not complete your requset.",
         )
-
-    await new_warmup.create()
 
     response.status_code = status.HTTP_201_CREATED
     return CreateWarmupSuccess(warmup=new_warmup_result)

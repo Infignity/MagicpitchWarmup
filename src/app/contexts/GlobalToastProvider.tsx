@@ -35,7 +35,7 @@ export default function GlobalProvider({
           // Default options for all toasts
           error: {
             style: {
-              maxWidth: "400px", // Remove maximum width constraint
+              maxWidth: "440px", // Remove maximum width constraint
               width: "100%", // Set the desired width, adjust as needed
               border: "1px solid #FF5555",
               background:
