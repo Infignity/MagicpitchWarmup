@@ -7,6 +7,7 @@ import { BsX as XMark } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Loader1 from "../../components/Loader1";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
+import { Toaster, toast } from "react-hot-toast";
 
 const DragNDrop = ({
   close,
@@ -84,10 +85,34 @@ const DragNDrop = ({
       const newResults = await AllEmailListApi(routeurl);
       setResults(newResults.data.emailLists);
       setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      showErrorToast("Something went wrong");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     }
 
     // // Simulating file upload progress for demonstration purposes
@@ -108,6 +133,7 @@ const DragNDrop = ({
           <Loader1 />
         </p>
       ) : null}
+  
       <section className="flex justify-center w-full h-full overflow-auto absolute inset-0 bg-opacity-80 bg-gray-100 p-5">
         <div className="flex  w-full items-center justify-center max-w-[40rem] p-5">
           {/* upload file section */}

@@ -23,6 +23,7 @@ import Search from "../components/Header/Search";
 import { ViewAllModal } from "./components/viewallmodal";
 import { useSearchParams } from "next/navigation";
 import { Tooltip } from "react-tooltip";
+import toast from "react-hot-toast";
 import "react-tooltip/dist/react-tooltip.css";
 
 const WarmUp = () => {
@@ -68,7 +69,7 @@ const WarmUp = () => {
   }, []);
   const toggleDropdown = (dropdownId: number | null) => {
     const newDropdownStates = new Map(dropdownStates);
-  
+
     if (dropdownId === null) {
       // Close all dropdowns
       newDropdownStates.forEach((value, key) => {
@@ -78,7 +79,7 @@ const WarmUp = () => {
       // Toggle the specific dropdown
       newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
-  
+
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
   };
@@ -107,8 +108,33 @@ const WarmUp = () => {
         setTotalResults(response.data.totalResults);
         setPageSize(response.data.pageSize);
         setIsLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        toast.error(
+          (t) => (
+            <div className="flex w-full">
+              {/* Assuming the icon is automatically added by react-hot-toast */}
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold">
+                  {error.response?.data?.message ||
+                    "An error occurred during sign in"}
+                </h3>
+                <p>
+                  {error.response?.data?.description ||
+                    "An error occurred during sign in"}
+                </p>
+              </div>
+            </div>
+          ),
+          {
+            duration: 6000,
+            style: {
+              width: "100%",
+              textAlign: "left",
+              // Add any custom styling here
+            },
+          }
+        );
         setIsLoading(false);
       }
     };
@@ -129,8 +155,33 @@ const WarmUp = () => {
         console.log(response.data);
         setWarmups(response.data.results);
         setIsLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        toast.error(
+          (t) => (
+            <div className="flex w-full">
+              {/* Assuming the icon is automatically added by react-hot-toast */}
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold">
+                  {error.response?.data?.message ||
+                    "An error occurred during sign in"}
+                </h3>
+                <p>
+                  {error.response?.data?.description ||
+                    "An error occurred during sign in"}
+                </p>
+              </div>
+            </div>
+          ),
+          {
+            duration: 6000,
+            style: {
+              width: "100%",
+              textAlign: "left",
+              // Add any custom styling here
+            },
+          }
+        );
         setIsLoading(false);
       }
     };
@@ -171,8 +222,33 @@ const WarmUp = () => {
           console.log(response.data);
           setWarmups(response.data.results);
           setIsLoading(false);
-        } catch (error) {
+        } catch (error: any) {
           console.log(error);
+          toast.error(
+            (t) => (
+              <div className="flex w-full">
+                {/* Assuming the icon is automatically added by react-hot-toast */}
+                <div className="flex flex-col">
+                  <h3 className="text-base font-semibold">
+                    {error.response?.data?.message ||
+                      "An error occurred during sign in"}
+                  </h3>
+                  <p>
+                    {error.response?.data?.description ||
+                      "An error occurred during sign in"}
+                  </p>
+                </div>
+              </div>
+            ),
+            {
+              duration: 6000,
+              style: {
+                width: "100%",
+                textAlign: "left",
+                // Add any custom styling here
+              },
+            }
+          );
           setIsLoading(false);
         }
       };
@@ -215,10 +291,34 @@ const WarmUp = () => {
       };
 
       fetchWarmups();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      showErrorToast("Error pausing warmup");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     }
   };
   const toggleDeleteModal = () => {
@@ -246,17 +346,66 @@ const WarmUp = () => {
           console.log(response.data);
           setWarmups(response.data.results);
           setIsLoading(false);
-        } catch (error) {
+        } catch (error: any) {
           console.log(error);
           setIsLoading(false);
+          toast.error(
+            (t) => (
+              <div className="flex w-full">
+                {/* Assuming the icon is automatically added by react-hot-toast */}
+                <div className="flex flex-col">
+                  <h3 className="text-base font-semibold">
+                    {error.response?.data?.message ||
+                      "An error occurred during sign in"}
+                  </h3>
+                  <p>
+                    {error.response?.data?.description ||
+                      "An error occurred during sign in"}
+                  </p>
+                </div>
+              </div>
+            ),
+            {
+              duration: 6000,
+              style: {
+                width: "100%",
+                textAlign: "left",
+                // Add any custom styling here
+              },
+            }
+          );
         }
       };
 
       fetchWarmups();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      showErrorToast("Error resuming warmup");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     }
   };
   function handlePageChange(isprev: boolean) {
@@ -431,171 +580,175 @@ const WarmUp = () => {
               </Link>
             </button>
           </div>
-            <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
+          <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
             <div className="flex flex-col w-full min-w-[60rem]">
-            <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
-              <div className="flex justify-center">
-                <button
-                  onClick={handleSelectAll}
-                  className={`custom-checkbox ${selectAll ? "checked" : ""}`}
-                >
-                  <span className="checkmark border-2 rounded-sm">
-                    {selectAll && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 50 50"
-                        style={{
-                          filter: "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
-                        }}
-                      >
-                        {/* Adjust the properties of the checkmark */}
-                        <polyline
-                          points="10,25 20,35 40,15"
-                          stroke="#fff"
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                      </svg>
-                    )}
-                  </span>
-                </button>
-              </div>
-              <div className="flex justify-center text-gray-800">Name</div>
-              <div className="flex justify-center text-gray-800">Status</div>
-              <div className="flex justify-center text-gray-800">
-                Emails Sent
-              </div>
-              <div className="flex justify-center text-gray-800">CreatedAt</div>
-              <div className="flex justify-center text-gray-800">MaxDays</div>
-              <div className="flex justify-center text-gray-800">Actions</div>
-            </div>
-            {warmups.length === 0 ? (
-              // warmups.length === 0
-              <div className="w-full h-full flex justify-center items-center">
-                <div className="flex flex-col gap-4 justify-center items-center">
-                  <div className="mt-10">
-                    <NotFound />
-                  </div>
-                  <h2 className="text-gray-800 text-2xl text-center font-medium">
-                    Warmup not found
-                  </h2>
-                  <p className="text-gray-500 text-sm text-center">
-                    We couldn't find Email that match your search. Please try
-                    using <br />
-                    different, fewer filters or typing another search request.
-                  </p>
+              <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleSelectAll}
+                    className={`custom-checkbox ${selectAll ? "checked" : ""}`}
+                  >
+                    <span className="checkmark border-2 rounded-sm">
+                      {selectAll && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 50 50"
+                          style={{
+                            filter:
+                              "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
+                          }}
+                        >
+                          {/* Adjust the properties of the checkmark */}
+                          <polyline
+                            points="10,25 20,35 40,15"
+                            stroke="#fff"
+                            strokeWidth="4"
+                            fill="none"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                  </button>
                 </div>
+                <div className="flex justify-center text-gray-800">Name</div>
+                <div className="flex justify-center text-gray-800">Status</div>
+                <div className="flex justify-center text-gray-800">
+                  Emails Sent
+                </div>
+                <div className="flex justify-center text-gray-800">
+                  CreatedAt
+                </div>
+                <div className="flex justify-center text-gray-800">MaxDays</div>
+                <div className="flex justify-center text-gray-800">Actions</div>
               </div>
-            ) : (
-              warmups.map((warmup) => (
-                <div
-                  className="grid grid-cols-7 p-4 lg:px-8 border-b-[0.5px]"
-                  key={warmup._id}
-                >
-                  <div className="flex  justify-center w-full">
-                    <button
-                      className={`custom-checkbox ${
-                        selectedRows.includes(warmup._id) ? "checked" : ""
-                      }`}
-                      onClick={() => handleRowSelect(warmup._id)}
-                    >
-                      <span className="checkmark border-2 rounded-sm">
-                        {selectedRows.includes(warmup._id) && (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 50 50"
-                            style={{
-                              filter:
-                                "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
-                            }}
-                          >
-                            <polyline
-                              points="10,25 20,35 40,15"
-                              stroke="#fff"
-                              strokeWidth="4"
-                              fill="none"
-                            />
-                          </svg>
-                        )}
-                      </span>
-                    </button>
+              {warmups.length === 0 ? (
+                // warmups.length === 0
+                <div className="w-full h-full flex justify-center items-center">
+                  <div className="flex flex-col gap-4 justify-center items-center">
+                    <div className="mt-10">
+                      <NotFound />
+                    </div>
+                    <h2 className="text-gray-800 text-2xl text-center font-medium">
+                      Warmup not found
+                    </h2>
+                    <p className="text-gray-500 text-sm text-center">
+                      We couldn't find Email that match your search. Please try
+                      using <br />
+                      different, fewer filters or typing another search request.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                warmups.map((warmup) => (
+                  <div
+                    className="grid grid-cols-7 p-4 lg:px-8 border-b-[0.5px]"
+                    key={warmup._id}
+                  >
+                    <div className="flex  justify-center w-full">
+                      <button
+                        className={`custom-checkbox ${
+                          selectedRows.includes(warmup._id) ? "checked" : ""
+                        }`}
+                        onClick={() => handleRowSelect(warmup._id)}
+                      >
+                        <span className="checkmark border-2 rounded-sm">
+                          {selectedRows.includes(warmup._id) && (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 50 50"
+                              style={{
+                                filter:
+                                  "drop-shadow(0px 0px 2px rgba(0, 0, 0, .7))",
+                              }}
+                            >
+                              <polyline
+                                points="10,25 20,35 40,15"
+                                stroke="#fff"
+                                strokeWidth="4"
+                                fill="none"
+                              />
+                            </svg>
+                          )}
+                        </span>
+                      </button>
 
-                    {/* <input
+                      {/* <input
                       type="checkbox"
                       key={warmup._id}
                       onChange={() => handleRowSelect(warmup._id)}
                     checked={selectedRows.includes(warmup._id)}
                     /> */}
-                  </div>
-                  <div className="flex text-center  mx-auto">{warmup.name}</div>
-                  <div className="flex justify-center items-center w-full mx-auto gap-1.5">
-                    <div className="w-4 h-4">
-                      {warmup.state === "notStarted" ? (
-                        <CheckYellow />
-                      ) : warmup.state === "running" ? (
-                        <CheckGreen />
-                      ) : warmup.state === "completed" ? (
-                        <CheckGreen />
-                      ) : warmup.state === "failed" ? (
-                        <CheckRed />
-                      ) : (
-                        <CheckYellow />
-                      )}
                     </div>
-                    <p>{warmup.state}</p>
-                  </div>
-                  <div className="flex items-center justify-center w-full">
-                    {warmup.totalAddressesMailed}
-                  </div>
-                  <div className="flex items-center justify-center mx-auto w-full">
-                    {
-                      // warmup.createdAt
-                      formatDateToDDMMYYYY(warmup.createdAt)
-                    }
-                  </div>
-                  <div className="flex items-center justify-center w-full">
-                    {warmup.maxDays}
-                  </div>
-                  <div className="flex items-center justify-center text-center w-full">
-                    <div className="relative">
-                      <button
-                        onClick={() => toggleDropdown(warmup._id)}
-                        className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-                      >
-                        <svg
-                          className="w-4 h-4 text-gray-600"
-                          viewBox="0 0 3 15"
-                          fill="currentColor"
+                    <div className="flex text-center  mx-auto">
+                      {warmup.name}
+                    </div>
+                    <div className="flex justify-center items-center w-full mx-auto gap-1.5">
+                      <div className="w-4 h-4">
+                        {warmup.state === "notStarted" ? (
+                          <CheckYellow />
+                        ) : warmup.state === "running" ? (
+                          <CheckGreen />
+                        ) : warmup.state === "completed" ? (
+                          <CheckGreen />
+                        ) : warmup.state === "failed" ? (
+                          <CheckRed />
+                        ) : (
+                          <CheckYellow />
+                        )}
+                      </div>
+                      <p>{warmup.state}</p>
+                    </div>
+                    <div className="flex items-center justify-center w-full">
+                      {warmup.totalAddressesMailed}
+                    </div>
+                    <div className="flex items-center justify-center mx-auto w-full">
+                      {
+                        // warmup.createdAt
+                        formatDateToDDMMYYYY(warmup.createdAt)
+                      }
+                    </div>
+                    <div className="flex items-center justify-center w-full">
+                      {warmup.maxDays}
+                    </div>
+                    <div className="flex items-center justify-center text-center w-full">
+                      <div className="relative">
+                        <button
+                          onClick={() => toggleDropdown(warmup._id)}
+                          className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
                         >
-                          {/* Three dots SVG path */}
-                          <circle cx="1.5" cy="2.5" r="1.5" />
-                          <circle cx="1.5" cy="7.5" r="1.5" />
-                          <circle cx="1.5" cy="12.5" r="1.5" />
-                        </svg>
-                      </button>
-                      {dropdownStates.get(warmup._id) && (
-                        <div
-                          ref={dropdownRef}
-                          className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
-                        >
-                          {/* Dropdown content */}
-                          <button
-                            onClick={handleEditModal(warmup._id)}
-                            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
-                            style={{ bottom: 'auto' }}
+                          <svg
+                            className="w-4 h-4 text-gray-600"
+                            viewBox="0 0 3 15"
+                            fill="currentColor"
                           >
-                            View Details
-                          </button>
-                        </div>
-                      )}
+                            {/* Three dots SVG path */}
+                            <circle cx="1.5" cy="2.5" r="1.5" />
+                            <circle cx="1.5" cy="7.5" r="1.5" />
+                            <circle cx="1.5" cy="12.5" r="1.5" />
+                          </svg>
+                        </button>
+                        {dropdownStates.get(warmup._id) && (
+                          <div
+                            ref={dropdownRef}
+                            className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                          >
+                            {/* Dropdown content */}
+                            <button
+                              onClick={handleEditModal(warmup._id)}
+                              className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
+                              style={{ bottom: "auto" }}
+                            >
+                              View Details
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
             </div>
-         
+          </div>
         </div>
       </section>
     </RequireAuth>

@@ -21,7 +21,7 @@ const Login = () => {
   const usernameErrRef = useRef<HTMLParagraphElement | null>(null);
   const passwordErrRef = useRef<HTMLParagraphElement | null>(null);
   const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
-
+  const [errorDescription, setErrorDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] =
     useState<typeof initialFormState>(initialFormState);
@@ -86,66 +86,53 @@ const Login = () => {
         showSuccessToast("Login Successful!");
       } else {
         // showErrorToast("Could not complete sign in");
-        toast.error(
-          (t) => (
-            <div>
-              <strong>Could not complete sign in</strong>
-              <p>Additional error details...</p>
-              <button onClick={() => toast.dismiss(t.id)}>Close</button>
-            </div>
-          ),
-          {
-            duration: 4000,
-            style: {
-              // Add any custom styling here
-            },
-          }
-        );
         toast.error("Could not complete sign in");
       }
     } catch (error: any) {
       console.error("Sign in error: ", error);
+
+      // setErrorMessage(error.response?.data?.message || "An error occurred during sign in");
+      // setErrorDescription(error.response?.data?.description || "An error occurred during sign in");
       toast.error(
         (t) => (
-          <div className="flex items-center">
+          <div className="flex w-full">
             {/* Assuming the icon is automatically added by react-hot-toast */}
-            <div className="ml-3 flex flex-col text-center">
-              <strong className="text-base">
-                {error.response?.data?.message || "An error occurred"}
-              </strong>
-              <span className="text-sm block">Click for more details</span>
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
             </div>
           </div>
         ),
         {
           duration: 6000,
           style: {
+            width: "100%",
+            textAlign: "left",
             // Add any custom styling here
           },
         }
       );
-      setErrorMessage(
-        error.response?.data?.description || "An error occurred during sign in"
-      );
+      // setErrorMessage(
+      //   error.response?.data?.description || "An error occurred during sign in"
+      // );
       // showErrorToast(error.response?.data?.message || "An error occurred during sign in");
     } finally {
       setIsLoading(false);
     }
   }
 
-  const handleToastClick = () => {
-    console.log("toast");
-    setShowPopup(true); // Show the popup when the toast is clicked
-  };
-
-  const closePopup = () => setShowPopup(false); // Function to close the popup
 
   return (
     <div className="w-full flex flex-col gap-3">
-      <div onClick={handleToastClick} className=" cursor-pointer">
-        <Toaster />
-      </div>
-      {showPopup && (
+
+
+      {/* {showPopup && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
             <button
@@ -161,7 +148,7 @@ const Login = () => {
             <p>{errorMessage}</p>
           </div>
         </div>
-      )}
+      )} */}
 
       <TextInput
         errRef={usernameErrRef}

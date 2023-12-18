@@ -17,6 +17,8 @@ import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import path from "path";
 import { Tooltip } from "react-tooltip";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
+
 export default function EmailList({
   results,
   setResults,
@@ -32,7 +34,7 @@ export default function EmailList({
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   currentPage: any;
   pageSize: any;
-  totalResults: any
+  totalResults: any;
 }) {
   const { showErrorToast, showSuccessToast } = useGlobalToastContext();
   const [dropdownStates, setDropdownStates] = useState<Map<number, boolean>>(
@@ -95,7 +97,6 @@ export default function EmailList({
     }
     return `/email-lists/client-emails?page=${Number(currentPage) + 30}`;
   }
-
 
   let button = buttons[0];
   const pathname = usePathname();
@@ -160,9 +161,33 @@ export default function EmailList({
       setResults(newResults.data.emailLists);
       // Upon successful deletion, clear selected rows and stop the loader
       setSelectedRows([]);
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
-      showErrorToast("Unable to delete Email List");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     } finally {
       setIsLoading(false); // Stop loader whether deletion succeeds or fails
     }
@@ -212,6 +237,7 @@ export default function EmailList({
           <Loader1 />
         </div>
       )}
+     
       <section className="flex flex-col gap-2 w-full h-full relative bg-white">
         <div className="flex  justify-between w-full h-fit  items-center p-5">
           <button
@@ -232,7 +258,6 @@ export default function EmailList({
                 FlareIcon={<Funel />}
                 hideSearchIcon={true}
                 hideBorder={true}
-            
               />
             ) : (
               <Search
@@ -240,7 +265,6 @@ export default function EmailList({
                 hideSearchIcon={true}
                 hideBorder={true}
                 hideFlare={true}
-               
               />
             )}
           </div>
