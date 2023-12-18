@@ -14,12 +14,12 @@ def test_smtp_server(
         # Create an SMTP object based on the security option
         if security == "ssl":
             context = ssl.create_default_context()
-            server = smtplib.SMTP_SSL(hostname, port, context=context, timeout=10)
+            server = smtplib.SMTP_SSL(hostname, port, timeout=20)
         elif security == "tls":
-            server = smtplib.SMTP(hostname, port, timeout=10)
+            server = smtplib.SMTP(hostname, port, timeout=20)
             server.starttls()
         elif security == "unsecure":
-            server = smtplib.SMTP(hostname, port, timeout=10)
+            server = smtplib.SMTP(hostname, port, timeout=20)
 
         # Login to the SMTP server
         server.login(email, password)

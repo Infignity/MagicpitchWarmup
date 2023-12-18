@@ -17,7 +17,7 @@ def send_single_mail(
 
         if security == "ssl":
             context = ssl.create_default_context()
-            server = smtplib.SMTP_SSL(hostname, port, context=context, timeout=10)
+            server = smtplib.SMTP_SSL(hostname, port, timeout=10)
         elif security == "tls":
             server = smtplib.SMTP(hostname, port, timeout=10)
             server.starttls()
