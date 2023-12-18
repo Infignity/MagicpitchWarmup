@@ -108,7 +108,6 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             # Check if warmup.current_warmup_day is 1 then use startVolume otherwise calculate new sendVolume by getting the last warmup day and using the field `actual_total_send_volume`
             send_volume = warmup.start_volume
             if warmup.current_warmup_day <= 1:
-                warmup.current_warmup_day = 1
                 send_volume = warmup.start_volume
             else:
                 last_warmup_day = (
