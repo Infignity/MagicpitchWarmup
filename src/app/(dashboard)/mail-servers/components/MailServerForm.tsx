@@ -19,7 +19,7 @@ import { CreateMailServerApi } from "@/app/api/createmailserverapi";
 import { useUser } from "../../contexts/UserProvider";
 import Loader1 from "../../components/Loader1";
 import { AllMailServersApi } from "@/app/api/allmailserversapi";
-
+import toast from "react-hot-toast";
 type MailServerFormProps = {
   name: string;
   smtpHostname: string;
@@ -93,12 +93,65 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
     try {
       const response = await VerifyMailServerApi(data);
       console.log(response);
-      showSuccessToast("Mail server verified successfully");
-      isSubmitDisabled && setIsSMTPVerified(true);
-      setIsLoading(false);
-    } catch (error) {
+      if (response.data.verificationStatus === "failed") {
+        toast.error(
+          (t) => (
+            <div className="flex w-full">
+              {/* Assuming the icon is automatically added by react-hot-toast */}
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold">
+                  {response?.data?.message ||
+                    "An error occurred during sign in"}
+                </h3>
+                <p>
+                  {response?.data?.description ||
+                    "An error occurred during sign in"}
+                </p>
+              </div>
+            </div>
+          ),
+          {
+            duration: 6000,
+            style: {
+              width: "100%",
+              textAlign: "left",
+              // Add any custom styling here
+            },
+          }
+        );
+        setIsLoading(false);
+      } else {
+        showSuccessToast("Mail server verified successfully");
+        isSubmitDisabled && setIsSMTPVerified(true);
+        setIsLoading(false);
+      }
+    } catch (error: any) {
       console.log(error);
-      showErrorToast("Unable to verify mail server");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error?.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error?.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
       setIsLoading(false);
     }
   };
@@ -124,10 +177,34 @@ export default function MailServerForm({ setAllMailServers }: MailServerProps) {
       setAllMailServers(allMailServersResponse.data.results);
       setIsLoading(false);
       showSuccessToast("Mail server Added successfully");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      showErrorToast("Unable to add mail server");
+      toast.error(
+        (t) => (
+          <div className="flex w-full">
+            {/* Assuming the icon is automatically added by react-hot-toast */}
+            <div className="flex flex-col">
+              <h3 className="text-base font-semibold">
+                {error?.response?.data?.message ||
+                  "An error occurred during sign in"}
+              </h3>
+              <p>
+                {error?.response?.data?.description ||
+                  "An error occurred during sign in"}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            width: "100%",
+            textAlign: "left",
+            // Add any custom styling here
+          },
+        }
+      );
     }
   };
 
