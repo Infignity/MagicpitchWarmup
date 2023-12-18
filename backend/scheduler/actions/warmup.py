@@ -36,15 +36,15 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
 
         if warmup.state == "failed":
             logger.error(
-                f"Warmup [state: {warmup.state}] : [{warmup.status_text}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day}"
+                f"Warmup [state: {warmup.state}] : [{warmup.status_text}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day + 1}"
             )
         elif warmup.state == "paused":
             logger.warning(
-                f"Warmup [state: {warmup.state}] : [{warmup.status_text}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day}"
+                f"Warmup [state: {warmup.state}] : [{warmup.status_text}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day + 1}"
             )
         else:
             logger.info(
-                f"Warmup [state: {warmup.state}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day}"
+                f"Warmup [state: {warmup.state}] [{warmup_id}] => {warmup.name} => Day {warmup.current_warmup_day + 1}"
             )
 
         # Check warmup state
