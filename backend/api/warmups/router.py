@@ -60,7 +60,7 @@ async def refine_warmup(
             created_at=input_w.created_at,
             started_at=input_w.started_at,
             state=input_w.state,
-            mailserver_name=mail_server.name,
+            mailserver_name=mail_server.name if mail_server else None,
             client_email_list_name=client_email_list.name
             if client_email_list
             else None,
@@ -104,7 +104,7 @@ async def refine_warmup(
                 created_at=input_w.created_at,
                 started_at=input_w.started_at,
                 state=input_w.state,
-                mailserver_name=mail_server.name,
+                mailserver_name=mail_server.name if mail_server else None,
                 client_email_list_name=client_email_list.name
                 if client_email_list
                 else None,

@@ -36,8 +36,9 @@ class WarmupResult(CustomSchemaWithConfig):
         description="Current state of warmup", default="notStarted"
     )
 
-    mailserver_name: str = Field(
-        description="Name of mailserver associated with this warmup"
+    mailserver_name: Optional[str] = Field(
+        description="Name of mailserver associated with this warmup",
+        default=None
     )
     client_email_list_name: Optional[str] = Field(
         description="Name of client email list associated with this warmup",
