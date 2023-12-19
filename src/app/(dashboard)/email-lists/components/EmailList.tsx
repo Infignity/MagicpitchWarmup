@@ -161,7 +161,7 @@ export default function EmailList({
       setResults(newResults.data.emailLists);
       // Upon successful deletion, clear selected rows and stop the loader
       setSelectedRows([]);
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       toast.error(
         (t) => (
@@ -237,7 +237,7 @@ export default function EmailList({
           <Loader1 />
         </div>
       )}
-     
+
       <section className="flex flex-col gap-2 w-full h-full relative bg-white">
         <div className="flex  justify-between w-full h-fit  items-center p-5">
           <button
@@ -312,7 +312,7 @@ export default function EmailList({
             </button>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto pb-[200px]">
           <table className=" border-collapse w-full min-w-[60rem]">
             <thead>
               <tr>
@@ -397,6 +397,9 @@ export default function EmailList({
                             className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
                           >
                             Edit
+                          </button>
+                          <button className="block px-4 py-2 text-gray-800 hover:bg-indigo-500">
+                            Download
                           </button>
                         </div>
                       )}
