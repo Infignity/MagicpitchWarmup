@@ -20,7 +20,7 @@ services:
     ports:
       - "8070:8080"
     volumes: &backend_volumes
-      - ./files:/files
+      - ./backend/files/:/app/files/
     restart: always
     depends_on:
       - worker

@@ -38,6 +38,7 @@ from api.email_lists.models import EmailList
 from api.utils.decorators import auth_decorators
 from api.email_lists.schemas import BasicEmailList
 from api.schemas import EmailDetails
+from tempfile import TemporaryFile
 
 email_list_router = APIRouter(prefix="/email-lists")
 
@@ -316,61 +317,65 @@ async def update_email_list(
         target_email_list_file_path = os.path.join(
             app_config.USER_FILES_DIR, path_without_url
         )
+        
         random_filename = (
             generate_random_string(length=12, include_chars=False) + ".csv"
         )
-        update_file_path = os.path.join(app_config.TEMP_FILES_DIR, random_filename)
-        if os.path.exists(target_email_list_file_path):
-            file_encoding = chardet.detect(csv_content)["encoding"]
-            with open(update_file_path, file.file.mode) as upload_f:
-                upload_f.write(csv_content)
-            update_df = pandas.read_csv(update_file_path, encoding=file_encoding)
-            update_df_columns = update_df.columns.to_list()
-            os.remove(update_file_path)
-            if "email" and "password" not in update_df_columns:
-                os.remove(update_file_path)
-                return EmailListImportError(
-                    description=f"Csv file must contain 'email' and 'password' columns ",
-                    input=update_df_columns,
-                )
-            if not update_df["email"].notna().all():
-                return EmailListImportError(
-                    description=f"Not all rows in file `{file.filename}` have a valid email"
-                )
-            if (
-                not update_df["password"].notna().all()
-                and target_email_list.email_list_type == "replyEmails"
-            ):
-                return EmailListImportError(
-                    description=f"Not all rows in file `{file.filename}` have a valid password. Since this list is replyEmails, all rows must have a valid password."
-                )
-            update_df = update_df.fillna("")
-            original_df = pandas.read_csv(target_email_list_file_path)
-            original_df = original_df.fillna("")
-            if update_type in ["mergeOverwrite", "merge"]:
-                # Calaulate difference - Rows from update_df that are not in original_df
+        
+    
+        with TemporaryFile(mode="rb+", suffix=".csv") as upload_f:
+            upload_f.write(csv_content)
+            upload_f.seek(0)
+            
+            if os.path.exists(target_email_list_file_path):
+                file_encoding = chardet.detect(csv_content)["encoding"]
+                
+                update_df = pandas.read_csv(upload_f, encoding=file_encoding)
+                update_df_columns = update_df.columns.to_list()
 
-                if update_type == "merge":
-                    df_diff = update_df[
-                        ~(update_df["email"].isin(original_df["email"]))
-                    ].reset_index(drop=True)
-                    # Add only new rows without overwriting already existing ones
-                    resulting_df = pandas.concat(
-                        [original_df, df_diff], ignore_index=True
+                if "email" and "password" not in update_df_columns:
+                    return EmailListImportError(
+                        description=f"Csv file must contain 'email' and 'password' columns ",
+                        input=update_df_columns,
                     )
+                if not update_df["email"].notna().all():
+                    return EmailListImportError(
+                        description=f"Not all rows in file `{file.filename}` have a valid email"
+                    )
+                if (
+                    not update_df["password"].notna().all()
+                    and target_email_list.email_list_type == "replyEmails"
+                ):
+                    return EmailListImportError(
+                        description=f"Not all rows in file `{file.filename}` have a valid password. Since this list is replyEmails, all rows must have a valid password."
+                    )
+                update_df = update_df.fillna("")
+                original_df = pandas.read_csv(target_email_list_file_path)
+                original_df = original_df.fillna("")
+                if update_type in ["mergeOverwrite", "merge"]:
+                    # Calaulate difference - Rows from update_df that are not in original_df
 
-                else:
-                    # Add rows and overwrite already existing ones with updated password
-                    merged_df = pandas.merge(
-                        update_df, original_df, how="outer", on=["email", "password"]
-                    )
-                    resulting_df = merged_df.drop_duplicates(
-                        keep="first", subset=["email"]
-                    )
+                    if update_type == "merge":
+                        df_diff = update_df[
+                            ~(update_df["email"].isin(original_df["email"]))
+                        ].reset_index(drop=True)
+                        # Add only new rows without overwriting already existing ones
+                        resulting_df = pandas.concat(
+                            [original_df, df_diff], ignore_index=True
+                        )
 
-            elif update_type == "replace":
-                # Replace all rows
-                resulting_df = update_df.copy(deep=True)
+                    else:
+                        # Add rows and overwrite already existing ones with updated password
+                        merged_df = pandas.merge(
+                            update_df, original_df, how="outer", on=["email", "password"]
+                        )
+                        resulting_df = merged_df.drop_duplicates(
+                            keep="first", subset=["email"]
+                        )
+
+                elif update_type == "replace":
+                    # Replace all rows
+                    resulting_df = update_df.copy(deep=True)
 
     is_modified = False
     if name:
