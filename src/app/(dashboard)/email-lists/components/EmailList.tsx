@@ -215,14 +215,13 @@ export default function EmailList({
           responseType: "blob",
         })
         .then((res) => {
-          const blob = new Blob([res.data]);
+          console.log(res);
+          const blob = new Blob([res.data], { type: res.data.type });
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(blob);
-          link.download = "email lists";
+          link.download = `Email Lists`;
           link.click();
-        })
-        .finally(() => {
-          toast.success("Downloaded Successfully");
+          toast.success("Downloaded successfully!");
         });
     } catch (err) {
       console.log(err);

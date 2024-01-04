@@ -582,7 +582,7 @@ const WarmUp = () => {
           </div>
           <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
             <div className="flex flex-col w-full min-w-[60rem]">
-              <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
+              <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px] text-left justify-start">
                 <div className="flex justify-start">
                   <button
                     onClick={handleSelectAll}
@@ -644,7 +644,7 @@ const WarmUp = () => {
                     className="grid grid-cols-7 p-4 lg:px-8 border-b-[0.5px]"
                     key={warmup._id}
                   >
-                    <div className="flex  justify-center w-full">
+                    <div className="flex  justify-start w-full">
                       <button
                         className={`custom-checkbox ${
                           selectedRows.includes(warmup._id) ? "checked" : ""
@@ -679,10 +679,10 @@ const WarmUp = () => {
                     checked={selectedRows.includes(warmup._id)}
                     /> */}
                     </div>
-                    <div className="flex text-center  mx-auto">
+                    <div className="flex text-left lg:pr-2 break-words">
                       {warmup.name}
                     </div>
-                    <div className="flex justify-center items-center w-full mx-auto gap-1.5">
+                    <div className="flex justify-start items-center w-full mx-auto gap-1.5">
                       <div className="w-4 h-4">
                         {warmup.state === "notStarted" ? (
                           <CheckYellow />
@@ -698,19 +698,19 @@ const WarmUp = () => {
                       </div>
                       <p>{warmup.state}</p>
                     </div>
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex items-center justify-start w-full">
                       {warmup.totalAddressesMailed}
                     </div>
-                    <div className="flex items-center justify-center mx-auto w-full">
+                    <div className="flex items-center justify-start mx-auto w-full">
                       {
                         // warmup.createdAt
                         formatDateToDDMMYYYY(warmup.createdAt)
                       }
                     </div>
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex items-center justify-start w-full">
                       {warmup.maxDays}
                     </div>
-                    <div className="flex items-center justify-center text-center w-full">
+                    <div className="flex items-center justify-start text-center w-full">
                       <div className="relative">
                         <button
                           onClick={() => toggleDropdown(warmup._id)}
