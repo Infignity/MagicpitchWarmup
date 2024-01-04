@@ -583,7 +583,7 @@ const WarmUp = () => {
           <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
             <div className="flex flex-col w-full min-w-[60rem]">
               <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px]">
-                <div className="flex justify-center">
+                <div className="flex justify-start">
                   <button
                     onClick={handleSelectAll}
                     className={`custom-checkbox ${selectAll ? "checked" : ""}`}
@@ -610,16 +610,16 @@ const WarmUp = () => {
                     </span>
                   </button>
                 </div>
-                <div className="flex justify-center text-gray-800">Name</div>
-                <div className="flex justify-center text-gray-800">Status</div>
-                <div className="flex justify-center text-gray-800">
+                <div className="flex justify-start text-gray-800">Name</div>
+                <div className="flex justify-start text-gray-800">Status</div>
+                <div className="flex justify-start text-gray-800">
                   Emails Sent
                 </div>
-                <div className="flex justify-center text-gray-800">
+                <div className="flex justify-start text-gray-800">
                   CreatedAt
                 </div>
-                <div className="flex justify-center text-gray-800">MaxDays</div>
-                <div className="flex justify-center text-gray-800">Actions</div>
+                <div className="flex justify-start text-gray-800">MaxDays</div>
+                <div className="flex justify-start text-gray-800">Actions</div>
               </div>
               {warmups.length === 0 ? (
                 // warmups.length === 0

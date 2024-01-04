@@ -233,7 +233,7 @@ function MailServers() {
         </div>
       )}
       <div className="w-full h-full flex flex-col">
-        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:pr-10  py-3 relative">
+        <section className="bg-gray-100 flex gap-2 w-full justify-between items-center lg:px-10  py-3 relative">
           <button
             type="button"
             className="z-30 rounded-full bg-gray-200 transition duration-200 -translate-x-1/2 w-7 h-7 flex justify-center items-center"

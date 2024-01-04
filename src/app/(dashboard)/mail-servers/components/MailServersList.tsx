@@ -43,7 +43,7 @@ export default function MailServersList({
   }, []);
   const toggleDropdown = (dropdownId: number | null) => {
     const newDropdownStates = new Map(dropdownStates);
-  
+
     if (dropdownId === null) {
       // Close all dropdowns
       newDropdownStates.forEach((value, key) => {
@@ -53,12 +53,12 @@ export default function MailServersList({
       // Toggle the specific dropdown
       newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
-  
+
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
   };
   const handleEditModal = (rowId: any) => () => {
-    localStorage.setItem("rowId", rowId)
+    localStorage.setItem("rowId", rowId);
     // Find the mail server object corresponding to the rowId
     const selectedMailServer = allMailServers.find(
       (server) => server._id === rowId
@@ -88,7 +88,7 @@ export default function MailServersList({
           />
         </section>
       )}
-      <table className=" border-collapse w-full">
+      <table className=" border-collapse w-full text-left">
         <thead>
           <tr>
             <th className="px-4 py-2">
@@ -115,7 +115,7 @@ export default function MailServersList({
           )}
           {allMailServers.map((mailServer: any) => (
             <tr key={mailServer._id} className="border-b border-gray-200">
-              <td className="px-4 py-2 flex items-center justify-center">
+              <td className="px-4 py-2 flex items-center justify-start">
                 <input
                   type="checkbox"
                   className="form-checkbox rounded-sm"
@@ -123,18 +123,16 @@ export default function MailServersList({
                   checked={selectedRows.includes(mailServer._id)} // Use mailServer._id instead of mailServer.id
                 />
               </td>
-              <td className="px-4 py-2 text-center">
-                <a className="hover:underline">
-                  {mailServer.name}
-                </a>
+              <td className="px-4 py-2 text-left">
+                <a className="hover:underline">{mailServer.name}</a>
               </td>
-              <td className="px-4 py-2 text-center">
+              <td className="px-4 py-2 text-left">
                 {formatDateToDDMMYYYY(mailServer.addedOn)}
               </td>
-              <td className="px-4 py-2 text-center">
+              <td className="px-4 py-2 text-left">
                 {formatDateToDDMMYYYY(mailServer.lastModified)}
               </td>
-              <td className="px-4 py-2 text-center flex items-center justify-center relative">
+              <td className="px-4 py-2 text-left flex items-center justify-start relative">
                 <div className="relative">
                   <button
                     onClick={() => toggleDropdown(mailServer._id)}
