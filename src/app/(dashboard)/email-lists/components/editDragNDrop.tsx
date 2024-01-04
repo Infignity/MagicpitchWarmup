@@ -36,34 +36,57 @@ const EditDragNDrop = ({
     } else {
       setRouteUrl(""); // Set routeUrl to null if pathname doesn't match any condition
     }
-    console.log(pathname);
   }, []); // This useEffect runs only once on initial mount due to the empty dependency array
 
-  // store the data of the uploaded file, so it can be uploaded to the server
-  function setSelectedFiles(files: FileList | null) {
-    if (files) {
-      const file = files[0];
+  useEffect(() => {
+    if (fileData) {
+      const file = fileData[0];
       const validFileTypes = [
         "text/csv",
         "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "text/plain",
       ];
-      if (!validFileTypes.includes(file.type)) {
+      if (!validFileTypes.includes(file?.type)) {
         showErrorToast(
           "Invalid file type. Only CSV, XLS, XLSX and TXT files are supported."
         );
         return;
       }
-      if (file.size > 5000000) {
+      if (file?.size > 5000000) {
         // 5MB
         showErrorToast("File is too large. Maximum file size is 5MB.");
         return;
       }
     }
     setIsUploadingFiles(false);
-    setFileData(files);
-  }
+  }, [fileData]);
+
+  // store the data of the uploaded file, so it can be uploaded to the server
+  // function setSelectedFiles(files: FileList | null) {
+  //   if (files) {
+  //     const file = files[0];
+  //     const validFileTypes = [
+  //       "text/csv",
+  //       "application/vnd.ms-excel",
+  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //       "text/plain",
+  //     ];
+  //     if (!validFileTypes.includes(file.type)) {
+  //       showErrorToast(
+  //         "Invalid file type. Only CSV, XLS, XLSX and TXT files are supported."
+  //       );
+  //       return;
+  //     }
+  //     if (file.size > 5000000) {
+  //       // 5MB
+  //       showErrorToast("File is too large. Maximum file size is 5MB.");
+  //       return;
+  //     }
+  //   }
+  //   setIsUploadingFiles(false);
+  //   setFileData(files);
+  // }
 
   function handleOnDragOver(e: DragEvent) {
     e.preventDefault();
@@ -72,31 +95,27 @@ const EditDragNDrop = ({
 
   function handleOnDrop(e: DragEvent) {
     e.preventDefault();
-    setSelectedFiles(e.dataTransfer.files);
+    setFileData(e.dataTransfer.files);
   }
 
-  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     const id = localStorage.getItem("rowId");
     const formData = new FormData();
     formData.append("name", listName);
     if (fileData) {
-      formData.append("file", fileData[0]);
+      formData.append("file", fileData?.[0]);
     }
     formData.append("updateType", "merge");
-
     try {
-      console.log(formData);
-      console.log(id);
       const response = await EditEmailListApi(id, formData);
-      console.log(response);
       close();
       showSuccessToast("List updated successfully");
       const newResults = await AllEmailListApi(routeurl);
       setResults(newResults.data.emailLists);
       setIsLoading(false);
-    } catch (error : any) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
       toast.error(
@@ -125,19 +144,22 @@ const EditDragNDrop = ({
         }
       );
     }
-  }
+  };
 
   return (
     <>
       {isLoading ? (
-        <p className="scale-75 flex justify-center items-center relative h-full w-full">
+        <div className="scale-75 flex justify-center items-center relative h-full w-full">
           <Loader1 />
-        </p>
+        </div>
       ) : null}
       <section className="flex justify-center w-full h-full overflow-auto absolute inset-0 bg-opacity-80 bg-gray-100 p-5">
         <div className="flex  w-full items-center justify-center max-w-[40rem] p-5">
           {/* upload file section */}
-          <form className="flex flex-col gap-2 bg-white w-full p-5">
+          <form
+            className="flex flex-col gap-2 bg-white w-full p-5"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               value={listName}
@@ -173,9 +195,9 @@ const EditDragNDrop = ({
                 id="file-upload"
                 className="hidden"
                 onChange={(e) => {
-                  e.preventDefault();
-                  setSelectedFiles(e.target.files);
+                  setFileData(e.target.files);
                 }}
+                accept=".csv, .xlsx, .txt, .xls"
               />
               {
                 // show the name of the file if it is selected
@@ -200,7 +222,7 @@ const EditDragNDrop = ({
               </div>
             )}
             <button
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
               disabled={!fileData || !listName.trim() || isLoading}
               className={`bg-gray-placeholder ${
                 !fileData ? "hidden" : ""

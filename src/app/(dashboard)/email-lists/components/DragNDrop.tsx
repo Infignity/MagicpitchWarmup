@@ -41,13 +41,21 @@ const DragNDrop = ({
   function setSelectedFiles(files: FileList | null) {
     if (files) {
       const file = files[0];
-      const validFileTypes = ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/plain'];
+      const validFileTypes = [
+        "text/csv",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/plain",
+      ];
       if (!validFileTypes.includes(file.type)) {
-        showErrorToast('Invalid file type. Only CSV, XLS, XLSX and TXT files are supported.');
+        showErrorToast(
+          "Invalid file type. Only CSV, XLS, XLSX and TXT files are supported."
+        );
         return;
       }
-      if (file.size > 5000000) { // 5MB
-        showErrorToast('File is too large. Maximum file size is 5MB.');
+      if (file.size > 5000000) {
+        // 5MB
+        showErrorToast("File is too large. Maximum file size is 5MB.");
         return;
       }
     }
@@ -65,7 +73,7 @@ const DragNDrop = ({
     setSelectedFiles(e.dataTransfer.files);
   }
 
-  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleNewSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData();
@@ -133,7 +141,7 @@ const DragNDrop = ({
           <Loader1 />
         </p>
       ) : null}
-  
+
       <section className="flex justify-center w-full h-full overflow-auto absolute inset-0 bg-opacity-80 bg-gray-100 p-5">
         <div className="flex  w-full items-center justify-center max-w-[40rem] p-5">
           {/* upload file section */}
@@ -160,7 +168,7 @@ const DragNDrop = ({
                 </IconContext.Provider>
               </button>
               <h3 className="text-2xl text-gray-800 font-medium">
-                Upload or Drop File 
+                Upload or Drop File
               </h3>
               <label
                 htmlFor="file-upload"
@@ -200,7 +208,7 @@ const DragNDrop = ({
               </div>
             )}
             <button
-              onClick={handleSubmit}
+              onClick={handleNewSubmit}
               disabled={!fileData || !listName.trim() || isLoading}
               className={`bg-gray-placeholder ${
                 !fileData ? "hidden" : ""

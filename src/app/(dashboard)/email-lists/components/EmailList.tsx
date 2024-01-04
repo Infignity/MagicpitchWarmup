@@ -18,6 +18,8 @@ import path from "path";
 import { Tooltip } from "react-tooltip";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import axios from "axios";
+import { useAuth } from "../../contexts/authContext";
 
 export default function EmailList({
   results,
@@ -201,8 +203,32 @@ export default function EmailList({
     setIsEditDragNDropOpen(true);
   };
 
+  const { token } = useAuth();
   // Update the rendering logic for results based on the search query
-
+  const handleDownload = async (downloadUrl: string) => {
+    try {
+      await axios
+        .get(`https://api-warmup.infignity.uk${downloadUrl}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        })
+        .then((res) => {
+          const blob = new Blob([res.data]);
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "email lists";
+          link.click();
+        })
+        .finally(() => {
+          toast.success("Downloaded Successfully");
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error("Couldn't download the file!");
+    }
+  };
   return (
     <>
       {isDragNDropOpen && (
@@ -214,12 +240,14 @@ export default function EmailList({
         </section>
       )}
       {isEditDragNDropOpen && (
-        <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
-          <EditDragNDrop
-            close={() => setIsEditDragNDropOpen(false)}
-            setResults={setResults}
-          />
-        </section>
+        <>
+          <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+            <EditDragNDrop
+              close={() => setIsEditDragNDropOpen(false)}
+              setResults={setResults}
+            />
+          </section>
+        </>
       )}
       {isLoading && (
         <div
@@ -313,7 +341,7 @@ export default function EmailList({
           </div>
         </div>
         <div className="overflow-x-auto pb-[200px]">
-          <table className=" border-collapse w-full min-w-[60rem]">
+          <table className=" border-collapse w-full min-w-[60rem] text-left">
             <thead>
               <tr>
                 {/* button to select all */}
@@ -349,27 +377,25 @@ export default function EmailList({
               {results.map((server) => (
                 <tr key={server._id} className="border-b border-gray-200">
                   {/* checkbox to select each row */}
-                  <td className="px-4 py-2 flex items-center justify-center">
+                  <td className="px-4 py-2 flex items-center justify-start">
                     <input
                       type="checkbox"
                       checked={selectedRows.includes(server._id)}
                       onChange={() => handleRowSelect(server._id)}
                     />
                   </td>
-                  <td className="px-4 py-2 text-center">{server.name}</td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-start">{server.name}</td>
+                  <td className="px-4 py-2 text-start">
                     {formatDateToDDMMYYYY(server.createdAt)}
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-start">
                     {formatDateToDDMMYYYY(server.lastModified)}
                   </td>
-                  <td className="px-4 py-2 text-center">
-                    {server.totalEmails}
-                  </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-start">{server.totalEmails}</td>
+                  <td className="px-4 py-2 text-start">
                     {server.emailListType}
                   </td>
-                  <td className="px-4 py-2 text-center flex items-center justify-center">
+                  <td className="px-4 py-2 text-start flex items-center justify-start">
                     <div className="relative">
                       <button
                         onClick={() => toggleDropdown(server._id)}
@@ -398,7 +424,10 @@ export default function EmailList({
                           >
                             Edit
                           </button>
-                          <button className="block px-4 py-2 text-gray-800 hover:bg-indigo-500">
+                          <button
+                            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500"
+                            onClick={() => handleDownload(server.url)}
+                          >
                             Download
                           </button>
                         </div>
