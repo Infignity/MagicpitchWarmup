@@ -239,7 +239,7 @@ async def create_warmup(
     )
 
     await new_warmup.create()
-    
+
     try:
         scheduler_conn: Connection = rpyc.connect(
             SCHEDULER_CLIENT_HOST, SCHEDULER_CLIENT_PORT

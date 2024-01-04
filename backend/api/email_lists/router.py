@@ -69,7 +69,9 @@ async def import_emails(
     if file.content_type != "text/csv":
         return EmailListImportError(description="File Content type must be 'text/csv'")
 
-    if await EmailList.find(EmailList.name == name, EmailList.user_id == user.id).first_or_none():
+    if await EmailList.find(
+        EmailList.name == name, EmailList.user_id == user.id
+    ).first_or_none():
         return EmailListImportError(
             description=f"An email list already has name `{name}`, please enter another name"
         )
@@ -317,19 +319,18 @@ async def update_email_list(
         target_email_list_file_path = os.path.join(
             app_config.USER_FILES_DIR, path_without_url
         )
-        
+
         random_filename = (
             generate_random_string(length=12, include_chars=False) + ".csv"
         )
-        
-    
+
         with TemporaryFile(mode="rb+", suffix=".csv") as upload_f:
             upload_f.write(csv_content)
             upload_f.seek(0)
-            
+
             if os.path.exists(target_email_list_file_path):
                 file_encoding = chardet.detect(csv_content)["encoding"]
-                
+
                 update_df = pandas.read_csv(upload_f, encoding=file_encoding)
                 update_df_columns = update_df.columns.to_list()
 
@@ -367,7 +368,10 @@ async def update_email_list(
                     else:
                         # Add rows and overwrite already existing ones with updated password
                         merged_df = pandas.merge(
-                            update_df, original_df, how="outer", on=["email", "password"]
+                            update_df,
+                            original_df,
+                            how="outer",
+                            on=["email", "password"],
                         )
                         resulting_df = merged_df.drop_duplicates(
                             keep="first", subset=["email"]

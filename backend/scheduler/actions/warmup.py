@@ -147,7 +147,7 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             # Send emails to those clients
             warmup.current_warmup_day += 1
             warmup.save_changes()
-            
+
             send_warmup_emails(batch_id, unused_contacts, mail_server)
             logger.info(
                 f"Warmup [{warmup_id}] => Warmup emails sent to {len(unused_contacts)} contacts"
