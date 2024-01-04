@@ -25,6 +25,7 @@ const EditDragNDrop = ({
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [routeurl, setRouteUrl] = useState<string>("");
+  const [updateType, setUpdateType] = useState<string>("merge");
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -98,6 +99,12 @@ const EditDragNDrop = ({
     setFileData(e.dataTransfer.files);
   }
 
+  const handleUpdateType = (e: React.SyntheticEvent<HTMLElement>) => {
+    setUpdateType((e.target as HTMLSelectElement).value);
+  };
+
+  console.log("update", updateType);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -107,7 +114,7 @@ const EditDragNDrop = ({
     if (fileData) {
       formData.append("file", fileData?.[0]);
     }
-    formData.append("updateType", "merge");
+    formData.append("updateType", updateType);
     try {
       const response = await EditEmailListApi(id, formData);
       close();
@@ -160,13 +167,24 @@ const EditDragNDrop = ({
             className="flex flex-col gap-2 bg-white w-full p-5"
             onSubmit={handleSubmit}
           >
-            <input
-              type="text"
-              value={listName}
-              onChange={(e) => setListName(e.target.value)}
-              placeholder="Enter list name"
-              className="px-2 py-1 max-w-[200px] w-full border-[1px] border-gray-500 rounded-md"
-            />
+            <div className="flex justify-between">
+              <input
+                type="text"
+                value={listName}
+                onChange={(e) => setListName(e.target.value)}
+                placeholder="Enter list name"
+                className="px-2 py-1 max-w-[200px] w-full border-[1px] border-gray-500 rounded-md"
+              />
+              <select
+                value={updateType}
+                onChange={handleUpdateType}
+                className="px-2 py-1 max-w-[200px] w-full border-[1px] border-gray-500 rounded-md"
+              >
+                <option value="merge">Merge</option>
+                <option value="replace">Replace</option>
+                <option value="mergeOverwrite">MergeOverwrite</option>
+              </select>
+            </div>
             <div
               className="flex flex-col items-center gap-5 px-2 pt-2 pb-10 border-[1px] bg-white border-gray-500 rounded-md border-dashed hover:border-blue "
               onDragOver={handleOnDragOver}
