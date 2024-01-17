@@ -40,9 +40,9 @@ const CreateWarmup = () => {
     }
     if (
       Number(formFields.dailySendLimit) < 200 ||
-      Number(formFields.dailySendLimit) > 500
+      Number(formFields.dailySendLimit) > 1000000
     ) {
-      showErrorToast("Daily Send Limit must be between 200 and 500");
+      showErrorToast("Daily Send Limit must be between 200 and 1,000,000");
       return;
     }
 
@@ -159,7 +159,7 @@ const CreateWarmup = () => {
                 name="dailySendLimit"
                 label="Daily Send Limit"
                 min={200}
-                max={500}
+                max={1000000}
                 placeholder="Enter your Daily Send Limit"
                 value={formFields.dailySendLimit}
                 onChange={handleOnChange}
