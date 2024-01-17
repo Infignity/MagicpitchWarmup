@@ -11,6 +11,8 @@ from api.schemas import CustomSchemaWithConfig, EmailDetails
 from api.warmups import WARMUP_STATE
 
 
+DAILY_EMAIL_SEND_LIMIT =  1000000
+
 class AutoresponderDayData(CustomSchemaWithConfig):
     reply_volume: int = Field(description="Amount of emails to reply to")
     open_volume: int = Field(description="Amount of emails to open")
@@ -64,7 +66,7 @@ class WarmupResult(CustomSchemaWithConfig):
         le=20,
     )
     daily_send_limit: int = Field(
-        description="Max number of emails to send daily", ge=200, le=500
+        description="Max number of emails to send daily", ge=200, le=DAILY_EMAIL_SEND_LIMIT
     )
 
     auto_responder_enabled: bool = Field(

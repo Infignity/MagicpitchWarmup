@@ -9,6 +9,7 @@ from api.mail_servers.models import MailServer
 from api.warmups.models import Warmup
 from api.email_lists.models import EmailList
 
+DAILY_EMAIL_SEND_LIMIT = 1000000
 
 class CreateWarmUpRequest(CustomSchemaWithConfig):
     name: str = Field(description="Name of warmup", default="New warmup")
@@ -38,7 +39,7 @@ class CreateWarmUpRequest(CustomSchemaWithConfig):
         le=20,
     )
     daily_send_limit: int = Field(
-        description="Max number of emails to send daily", ge=200, le=500
+        description="Max number of emails to send daily", ge=200, le=DAILY_EMAIL_SEND_LIMIT
     )
 
     auto_responder_enabled: bool = Field(

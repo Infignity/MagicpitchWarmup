@@ -12,6 +12,8 @@ from beanie.odm.documents import Document
 from typing import Any, Optional, Literal, List
 from api.warmups import WARMUP_STATE
 
+DAILY_EMAIL_SEND_LIMIT = 1000000
+
 
 class WarmupDay(Document):
     class Settings:
@@ -98,7 +100,7 @@ class Warmup(Document):
         le=20,
     )
     daily_send_limit: int = Field(
-        description="Max number of emails to send daily", ge=200, le=500
+        description="Max number of emails to send daily", ge=200, le=DAILY_EMAIL_SEND_LIMIT
     )
 
     auto_responder_enabled: bool = Field(

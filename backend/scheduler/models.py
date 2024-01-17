@@ -15,7 +15,7 @@ from scheduler.schemas import (
 
 WARMUP_STATE = Literal["running", "completed", "failed", "paused", "notStarted"]
 EmailListType = Literal["replyEmails", "clientEmails"]
-
+DAILY_EMAIL_SEND_LIMIT = 1000000
 
 class WarmupEmail(Document):
     class Settings:
@@ -141,7 +141,7 @@ class Warmup(Document):
         le=20,
     )
     daily_send_limit: int = Field(
-        description="Max number of emails to send daily", ge=200, le=500
+        description="Max number of emails to send daily", ge=200, le=DAILY_EMAIL_SEND_LIMIT
     )
 
     auto_responder_enabled: bool = Field(
