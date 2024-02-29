@@ -2,28 +2,35 @@ version: '3'
 
 services:
   frontend:
-    image: mplabci.azurecr.io/warmup-frontend:v1
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
-      - "8080:3000"
-    restart: always
+      - "8098:3000"
+    env_file: &app_env
+      - .env
     depends_on:
       - api
+    restart: always
 
   api:
-    image: mplabci.azurecr.io/warmup-backend:v1
+    build: &backend_build
+      context: .
+      dockerfile: Dockerfile.api
     ports:
-      - "8090:8080"
+      - "8070:8080"
     volumes: &backend_volumes
-      - warmupFiles:/app/files/
-      
+      - ./backend/files/:/app/files/
     restart: always
     depends_on:
       - worker
-
+    env_file: *app_env
+  
   worker:
-    image: mplabci.azurecr.io/warmup-backend:v1
+    build: *backend_build
     ports:
       - "8203:8203"
     volumes: *backend_volumes
     restart: always
+    env_file: *app_env
     command: ["python3" ,"-m", "scheduler.main"]
