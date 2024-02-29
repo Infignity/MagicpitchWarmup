@@ -1,6 +1,6 @@
 import { MailServerVerificationTypeObject } from "./types"
 
-export const API_BASE = "http://localhost:8070/v1"
+export const API_BASE = process.env.NEXT_API_BASE || 'http://localhost:8070/v1';
 
 export const mode: {
   NEW: "NEW",
