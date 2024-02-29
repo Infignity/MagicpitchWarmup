@@ -2,9 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-    :root{
-        --bg-blue: 91 10 225;
-    }
+  :root {
+    --bg-blue: 91 10 225;
+  }
 }
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s linear infinite;
+}
+
+/* Style for custom checkbox button */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+}
+
+.checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-checkbox.checked .checkmark {
+  background-color: #2196f3;
+  border-color: #2196f3;
+}
+
+/* Style the SVG inside the checkmark */
+.checkmark svg {
+  width: 100%;
+  height: 100%;
+  stroke: #fff;
+  stroke-width:10;
+  fill: none;
+}
+

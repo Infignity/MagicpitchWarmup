@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8098:3000"
+    env_file: &app_env
+      - .env
+    depends_on:
+      - api
+    restart: always
+
+  api:
+    build: &backend_build
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8070:8080"
+    volumes: &backend_volumes
+      - ./backend/files/:/app/files/
+    restart: always
+    depends_on:
+      - worker
+    env_file: *app_env
+  
+  worker:
+    build: *backend_build
+    ports:
+      - "8203:8203"
+    volumes: *backend_volumes
+    restart: always
+    env_file: *app_env
+    command: ["python3" ,"-m", "scheduler.main"]

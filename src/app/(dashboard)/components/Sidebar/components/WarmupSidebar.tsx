@@ -6,12 +6,12 @@ import { FaPlus } from 'react-icons/fa'
 import SecNavItem from './SecNavItem'
 import Disk from "@/app/assets/icons/svg/Vector.svg"
 import Trash from "@/app/assets/icons/svg/Vector-1.svg"
-import { useAppSelector } from '@/app/(dashboard)/store/hooks'
-import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
+// import { useAppSelector } from '@/app/(dashboard)/store/hooks'
+// import { selectIsSidebarOpen } from '@/app/(dashboard)/store/slices/sidebarSlice'
 import { Tooltip } from 'react-tooltip'
 
 const WarmupSidebar = () => {
-  const isSidebarOpen = useAppSelector(selectIsSidebarOpen)
+  const isSidebarOpen = true
   const newWarmupRoute = "/warm-ups/new"
   const buttonText = "new warm up"
   return (
@@ -24,10 +24,10 @@ const WarmupSidebar = () => {
         <Tooltip id={buttonText} place="top" content={buttonText} />
       </Link>
 
-      <div className="flex flex-col items-center w-full gap-5">
+      {/* <div className="flex flex-col items-center w-full gap-5">
         <SecNavItem Icon={<Disk />} text="All Warm-ups" count={0} altText='warm-ups icon' />
         <SecNavItem Icon={<Trash />} text="Delete" count={0} altText='trash can icon' />
-      </div>
+      </div> */}
     </div>
   )
 }

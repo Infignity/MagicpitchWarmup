@@ -1,53 +1,30 @@
-"use client"
-import React from 'react'
-import { useGetUserQuery } from '../store/api/apiSlice'
-import { User } from '@/app/types'
-import Loader1 from '../components/Loader1'
-import { signOut } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+'use client'
 
-const UserContext = React.createContext<Partial<{
-  user:  User,
-  token: string
-}>>({})
+import React, { useState, createContext, useContext, useEffect } from "react";
+type Props = {
+    children: React.ReactNode;
+  };
+  type UserContextType = {
+    isMailServerModal: boolean;
+    setIsMailServerModal: (value: boolean) => void;
+  };
 
-export function useUserContext(){
-  return React.useContext(UserContext)
-}
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-const UserProvider = ({ children, token }: {
-  children: React.ReactNode,
-  token: string
-}) => {
-  const currentPath = usePathname()
-  const { data, isLoading, isError, error } = useGetUserQuery({ token })
-
-  if (isLoading){
-    return <div>
-      <Loader1 />
-    </div>
-  }
-
-  if (isError){
-    const err =  error as any
-    if(err.status){
-      if (err.status === 401){
-        signOut({ callbackUrl: `${currentPath}` })
-      }
-    }
-    return <div>
-      <Loader1 />
-    </div>
-  }
+export const UserProvider: React.FC<Props> = ({ children }) => {
+  const [isMailServerModal , setIsMailServerModal] = useState<boolean>(false);
 
   return (
-    <UserContext.Provider value={{ 
-      user: data as User, 
-      token
-    }}>
-      { children }
+    <UserContext.Provider value={{ isMailServerModal, setIsMailServerModal }}>
+      {children}
     </UserContext.Provider>
-  )
+  );
 }
 
-export default UserProvider
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUser must be used within an UserProvider");
+  }
+  return context;
+};

@@ -1,6 +1,6 @@
 import { MailServerVerificationTypeObject } from "./types"
 
-export const API_BASE = "https://mpwarm.azurewebsites.net/v1"
+export const API_BASE = "http://localhost:8070/v1"
 
 export const mode: {
   NEW: "NEW",

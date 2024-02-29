@@ -33,7 +33,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <ul className="flex flex-col gap-1.5 md:gap-3">
           {
             items.map((item, index) => (
-              <li className="flex gap-2 md:gap-4 items-center text-sm md:text-base">
+              <li className="flex gap-2 md:gap-4 items-center text-sm md:text-base" key={index}>
                 <CheckMark />
                 <p className="break-all">{item}</p>
               </li>
@@ -43,7 +43,9 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="pt-5 md:pt-10 flex flex-col gap-2">
           <p className="font-bold text-white ">Technical issues or product questions?</p>
           <button className="flex gap-3 items-center transition-all duration-300 border-none outline-none w-fit hover:gap-5">
-            <p>Contact Support</p>
+            <a
+              href='mailto:support@magicpitch.ai'
+            >Contact Support</a>
             <IconContext.Provider value={{size: "1em"}}>
               <ArrowRight />
             </IconContext.Provider>

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  api:
+    image: mplabci.azurecr.io/warmup-backend:v1
+    ports:
+      - "8080:8080"
+    volumes: &backend_volumes
+      - warmupFiles:/app/files/
+      
+    restart: always
+    depends_on:
+      - worker
+
+  worker:
+    image: mplabci.azurecr.io/warmup-backend:v1
+    ports:
+      - "8203:8203"
+    volumes: *backend_volumes
+    restart: always
+    command: ["python3" ,"-m", "scheduler.main"]
