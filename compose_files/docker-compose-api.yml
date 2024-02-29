@@ -6,7 +6,8 @@ services:
     ports:
       - "8080:8080"
     volumes: &backend_volumes
-      - ./backend/files/:/app/files/
+      - warmupFiles:/app/files/
+      
     restart: always
     depends_on:
       - worker
