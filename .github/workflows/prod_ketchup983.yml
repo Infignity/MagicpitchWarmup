@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://mplabci.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_f267e9b230e147c4a4e295ba2962f0dc }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_8b20a34b745d466abedcd61d7402e9ba }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_39b6a1332c704a0a8e7e5045f070f548 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_b83b6a8ec96b4be483c1b6b13569afba }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mplabci.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f267e9b230e147c4a4e295ba2962f0dc }}/warmup-backend:${{ github.sha }}
+        tags: mplabci.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_39b6a1332c704a0a8e7e5045f070f548 }}/mplabci/warmup-frontend:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'ketchup983'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_0b76da4618e64fd4b614d49b4b348e04 }}
-        images: 'mplabci.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f267e9b230e147c4a4e295ba2962f0dc }}/warmup-backend:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_413cd0faf62f4e3d81716faf5a0b733d }}
+        images: 'mplabci.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_39b6a1332c704a0a8e7e5045f070f548 }}/mplabci/warmup-frontend:${{ github.sha }}'
