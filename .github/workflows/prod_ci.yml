@@ -30,14 +30,14 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mplabci.azurecr.io/warmup-frontend:v1
+        tags: "mplabci.azurecr.io/warmup-frontend:${{ github.sha }}"
         file: ./Dockerfile.frontend
 
     - name: Build and push backend image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mplabci.azurecr.io/warmup-backend:v1
+        tags: "mplabci.azurecr.io/warmup-backend:${{ github.sha }}"
         file: ./Dockerfile.api
 
   # deploy:
