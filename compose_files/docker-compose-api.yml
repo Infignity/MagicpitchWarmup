@@ -3,9 +3,6 @@ version: '3'
 services:
   api:
     image: mplabci.azurecr.io/warmup-backend:v1
-    # build: &backend_build
-    #   context: .
-    #   dockerfile: Dockerfile.api
     ports:
       - "8080:8080"
     volumes: &backend_volumes
@@ -13,14 +10,11 @@ services:
     restart: always
     depends_on:
       - worker
-    # env_file: *app_env
-  
+
   worker:
-    # build: *backend_build
     image: mplabci.azurecr.io/warmup-backend:v1
     ports:
       - "8203:8203"
     volumes: *backend_volumes
     restart: always
-    # env_file: *app_env
     command: ["python3" ,"-m", "scheduler.main"]
