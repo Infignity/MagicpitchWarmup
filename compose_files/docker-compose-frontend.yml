@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  frontend:
+    image: mplabci.azurecr.io/warmup-frontend:v1
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.frontend
+    ports:
+      - "8098:3000"
+    env_file: &app_env
+      - .env
+    depends_on:
+      - api
+    restart: always
