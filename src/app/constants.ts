@@ -1,6 +1,7 @@
 import { MailServerVerificationTypeObject } from "./types"
 
-export const API_BASE = process.env.NEXT_API_BASE || 'http://localhost:8070/v1';
+export const API_BASE_NO_PREFIX = 'https://ketchwarmup.azurewebsites.net'; // || 'http://localhost:8070';
+export const API_BASE = API_BASE_NO_PREFIX + "/v1";
 
 export const mode: {
   NEW: "NEW",

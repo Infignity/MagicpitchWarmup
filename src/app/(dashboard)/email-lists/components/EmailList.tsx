@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { DeleteListApi } from "@/app/api/deletelistapi";
 import { AllEmailListApi } from "@/app/api/allemaillistapi";
+import { API_BASE, API_BASE_NO_PREFIX } from "@/app/constants";
 import Loader1 from "../../components/Loader1";
 import Funel from "@/app/assets/icons/svg/funel.svg";
 import Search from "../../components/Header/Search";
@@ -208,7 +209,7 @@ export default function EmailList({
   const handleDownload = async (downloadUrl: string) => {
     try {
       await axios
-        .get(`https://api-warmup.infignity.uk${downloadUrl}`, {
+        .get(`${API_BASE_NO_PREFIX+downloadUrl}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
