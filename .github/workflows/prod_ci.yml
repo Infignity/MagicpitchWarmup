@@ -38,7 +38,7 @@ jobs:
       with:
         push: true
         tags: mplabci.azurecr.io/warmup-backend:v1
-        file: ./Dockerfile.backend
+        file: ./Dockerfile.api
 
   # deploy:
   #   runs-on: ubuntu-latest
