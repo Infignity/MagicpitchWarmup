@@ -9,8 +9,10 @@ from api.mail_servers.request_schemas import (
     DeleteMailServersRequest,
     MailServerVerificationRequest,
     NewMailServerRequest,
+    
     UpdateMailServerRequest,
 )
+from api.app_config import current_utc_timestamp
 from api.mail_servers.response_schemas import (
     AddMailserverError,
     AddMailserverSuccess,
@@ -187,7 +189,7 @@ async def delete_mail_servers(
     target_mail_server.name = update_request.name
     # target_mail_server.imap_details = update_request.imap_details
     target_mail_server.smtp_details = update_request.smtp_details
-    target_mail_server.last_modified = datetime.now()
+    target_mail_server.last_modified = current_utc_timestamp()
 
     await target_mail_server.save_changes()
 

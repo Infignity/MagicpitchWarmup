@@ -77,6 +77,7 @@ async def refine_warmup(
             total_addresses_mailed=len(input_w.addresses_mailed),
             current_warmup_day=input_w.current_warmup_day,
             status_text=input_w.status_text,
+            scheduled_at=input_w.scheduled_at
         )
     elif isinstance(input_wrms, list):
         refined = []
@@ -123,6 +124,7 @@ async def refine_warmup(
                 total_addresses_mailed=len(input_w.addresses_mailed),
                 current_warmup_day=input_w.current_warmup_day,
                 status_text=input_w.status_text,
+                scheduled_at=input_w.scheduled_at
             )
             refined.append(refined_w)
     else:
@@ -209,6 +211,7 @@ async def create_warmup(
         auto_responder_enabled=new_warmup_request.auto_responder_enabled,
         target_open_rate=new_warmup_request.target_open_rate,
         target_reply_rate=new_warmup_request.target_reply_rate,
+        scheduled_at=new_warmup_request.scheduled_at
     )
 
     total_warmup_days = await WarmupDay.find(
@@ -236,6 +239,7 @@ async def create_warmup(
         total_addresses_mailed=len(new_warmup.addresses_mailed),
         current_warmup_day=new_warmup.current_warmup_day,
         status_text=new_warmup.status_text,
+        scheduled_at=new_warmup.scheduled_at
     )
 
     await new_warmup.create()
@@ -247,6 +251,7 @@ async def create_warmup(
         job = scheduler_conn.root.add_job(new_warmup.model_dump_json(by_alias=True))
         print("JOB : ", job)
     except ConnectionRefusedError:
+        await new_warmup.delete()
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return CreateWarmupError(
             message="An error occured in our server",

@@ -15,6 +15,8 @@ from bunnet.odm.operators.find.comparison import NotIn
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.triggers.interval import IntervalTrigger
+from datetime import datetime, tzinfo
+
 
 from scheduler.settings import (
     MONGODB_CONN_STRING,
@@ -43,17 +45,20 @@ scheduler.start()
 def add_job(warmup: Warmup):
     """Adds job to scheduler"""
 
+    _start_at = datetime.fromtimestamp(warmup.scheduled_at)
+    
     interval_trigger = IntervalTrigger(days=1)
     # if environment is development then set interval trigger to be 30mins
     if ENVIRONMENT == "development":
         interval_trigger = IntervalTrigger(seconds=30)
 
+    
     return scheduler.add_job(
         periodic_warmup,
         trigger=interval_trigger,
         id=str(warmup.id),
         replace_existing=True,
-        next_run_time=datetime.now(),
+        next_run_time=_start_at,
         kwargs={"warmup_": warmup},
     )
 

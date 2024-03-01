@@ -1,6 +1,6 @@
 from beanie import PydanticObjectId
 from pydantic import Field
-from api.app_config import simple_pydantic_model_config
+from api.app_config import simple_pydantic_model_config, current_utc_timestamp
 from beanie.odm.documents import Document
 from datetime import datetime
 
@@ -21,11 +21,11 @@ class MailServer(Document):
     )
 
     name: str = Field(description="Name of mail server", default="New mail server")
-    added_on: datetime = Field(
-        description="Creation time", default_factory=datetime.now
+    added_on: int = Field(
+        description="Creation time - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
-    last_modified: datetime = Field(
-        description="Last modified date", default_factory=datetime.now
+    last_modified: int = Field(
+        description="Last modified date - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
     user_id: PydanticObjectId = Field(description="Id of user")

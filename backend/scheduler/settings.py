@@ -1,6 +1,7 @@
 import os
 import random
 import string
+from datetime import datetime
 from typing import List, Literal, Union
 from bunnet import PydanticObjectId
 from pydantic import ConfigDict
@@ -50,6 +51,8 @@ def create_path(path_str: str, allow_absolute=False) -> str:
         os.makedirs(full_path, exist_ok=True)
     return full_path
 
+def current_utc_timestamp() -> int:
+    return int(datetime.now().timestamp())
 
 def to_camel_case(snake_str: str):
     """

@@ -56,6 +56,8 @@ class CreateWarmUpRequest(CustomSchemaWithConfig):
         ge=0.1,
         le=1000,
     )
+    
+    scheduled_at: int = Field(description="Preferred time warmup should run - UTC TIMESTAMP")
 
 
 class UpdateWarmupStateRequest(CustomSchemaWithConfig):

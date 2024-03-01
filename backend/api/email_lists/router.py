@@ -395,7 +395,7 @@ async def update_email_list(
         is_modified = True
 
     if is_modified:
-        target_email_list.last_modified = datetime.now()
+        target_email_list.last_modified = app_config.current_utc_timestamp()
 
     await target_email_list.save_changes()
 
