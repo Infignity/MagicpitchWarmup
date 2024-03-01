@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Literal
 from api.schemas import CustomSchemaWithConfig, EmailDetails
 from api.warmups import WARMUP_STATE
+from api.app_config import current_utc_timestamp
 
 
 DAILY_EMAIL_SEND_LIMIT =  1000000
@@ -28,11 +29,10 @@ class WarmupResult(CustomSchemaWithConfig):
     )
 
     name: str = Field(description="Name of warmup", default="New warmup")
-    created_at: datetime = Field(
-        description="Date when warmup was created", default_factory=datetime.now
-    )
-    started_at: datetime = Field(
-        description="Date when warmup was started", default_factory=datetime.now
+    created_at: int = Field(
+        description="Date when warmup was created - UTC TIMEZONE", default_factory=current_utc_timestamp)
+    started_at: int = Field(
+        description="Date when warmup was started - UTC TIMEZONE", default_factory=current_utc_timestamp
     )
     state: WARMUP_STATE = Field(
         description="Current state of warmup", default="notStarted"
@@ -95,3 +95,5 @@ class WarmupResult(CustomSchemaWithConfig):
         description="Message about current status, could be error message.",
         default=None,
     )
+    
+    scheduled_at: int = Field(description="Preferred time warmup should run - UTC TIMESTAMP")

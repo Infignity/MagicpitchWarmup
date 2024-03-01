@@ -1,6 +1,6 @@
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
-from scheduler.settings import simple_pydantic_model_config
+from scheduler.settings import simple_pydantic_model_config, current_utc_timestamp
 from datetime import datetime
 
 MailServerSecurityProtocol = Literal["ssl", "tls", "unsecure"]
@@ -15,7 +15,7 @@ class CustomSchemaWithConfig(BaseModel):
 class AutoResponder(CustomSchemaWithConfig):
     is_active: bool = Field(description="Autoresponder is active", default=False)
     created_on: datetime = Field(
-        description="Creation date of autoresponder", default_factory=datetime.now
+        description="Creation date of autoresponder - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
 

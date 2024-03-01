@@ -54,7 +54,7 @@ class WarmupDay(Document):
         name = "warmup_days"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="WarmupDay Id",
@@ -67,27 +67,21 @@ class WarmupDay(Document):
     actual_total_send_volume: int = Field(
         description="The actual amount of send emails this day"
     )
-    date: datetime = Field(
-        description="Date when warmupday was ran", default_factory=datetime.now
+    date: int = Field(
+        description="Date when warmupday was ran - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
     state: WARMUP_STATE = Field(description="Current state of warmupday")
-    reputation_score: float = Field(description="Reputation score 0-1", default=0)
-    reply_rate_score: float = Field(description="Reply rate score 0-1", default=0)
-    open_rate_score: float = Field(description="Open rate score 0-1", default=0)
+    reputation_score: float = Field(description="Reputation score 0-1")
+    reply_rate_score: float = Field(description="Reply rate score 0-1")
+    open_rate_score: float = Field(description="Open rate score 0-1")
 
     autoresponder_data: Optional[AutoresponderDayData] = Field(
-        description="Data associated with autoresponder only if autoresponder is enabled in warmup",
-        default=None,
+        description="Data associated with autoresponder"
     )
 
-    client_emails_sent: List[EmailDetails] = Field(
-        description="Client emails sent", default=[]
-    )
-    reply_emails_sent: List[EmailDetails] = Field(
-        description="Reply emails sent", default=[]
-    )
-
+    client_emails_sent: List[EmailDetails] = Field(description="Client emails sent")
+    reply_emails_sent: List[EmailDetails] = Field(description="Reply emails sent")
     batch_id: str = Field(description="Unique identifier for all emails sent this day")
 
 
@@ -96,7 +90,7 @@ class Warmup(Document):
         name = "warmups"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="Warmup id ",
@@ -105,11 +99,11 @@ class Warmup(Document):
     )
 
     name: str = Field(description="Name of warmup", default="New warmup")
-    created_at: datetime = Field(
-        description="Date when warmup was created", default_factory=datetime.now
+    created_at: int = Field(
+        description="Date when warmup was created - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
-    started_at: datetime = Field(
-        description="Date when warmup was started", default_factory=datetime.now
+    started_at: int = Field(
+        description="Date when warmup was started - UTC TIMESTAMP", default_factory=dcurrent_utc_timestamp
     )
     state: WARMUP_STATE = Field(
         description="Current state of warmup", default="notStarted"
@@ -167,6 +161,9 @@ class Warmup(Document):
         description="Message about current status, could be error message.",
         default=None,
     )
+    
+    scheduled_at: int = Field(description="Preferred time warmup should run - UTC TIMESTAMP")
+
 
 
 class EmailList(Document):
@@ -174,7 +171,7 @@ class EmailList(Document):
         name = "email_lists"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="Email list id",
@@ -186,11 +183,11 @@ class EmailList(Document):
     emails: List[EmailDetails] = Field(
         description="List of email addresses", default=[]
     )
-    created_at: datetime = Field(
-        description="Creation time of email list", default_factory=datetime.now
+    created_at: int = Field(
+        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
     )
-    last_modified: datetime = Field(
-        description="Last modified date of email list", default_factory=datetime.now
+    last_modified: int = Field(
+        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
     )
     email_list_type: EmailListType = Field(description="Email list type")
     user_id: PydanticObjectId = Field(description="Id of user")
@@ -202,7 +199,7 @@ class MailServer(Document):
         name = "mail_servers"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="Mail server id",
@@ -211,11 +208,11 @@ class MailServer(Document):
     )
 
     name: str = Field(description="Name of mail server", default="New mail server")
-    added_on: datetime = Field(
-        description="Creation time", default_factory=datetime.now
+    added_on: int = Field(
+        description="Creation time - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
-    last_modified: datetime = Field(
-        description="Last modified date", default_factory=datetime.now
+    last_modified: int = Field(
+        description="Last modified date - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
     user_id: PydanticObjectId = Field(description="Id of user")

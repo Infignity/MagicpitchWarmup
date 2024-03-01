@@ -5,7 +5,7 @@ from beanie import PydanticObjectId
 from api.email_lists.schemas import EmailListType
 from api.schemas import EmailDetails
 from pydantic import Field
-from api import app_config
+from api.app_config import current_utc_timestamp, simple_pydantic_model_config
 
 
 class EmailList(Document):
@@ -13,7 +13,7 @@ class EmailList(Document):
         name = "email_lists"
         use_state_management = True
 
-    model_config = app_config.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="Email list id",
@@ -25,11 +25,11 @@ class EmailList(Document):
     emails: List[EmailDetails] = Field(
         description="List of email addresses", default=[]
     )
-    created_at: datetime = Field(
-        description="Creation time of email list", default_factory=datetime.now
+    created_at: int = Field(
+        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
     )
-    last_modified: datetime = Field(
-        description="Last modified date of email list", default_factory=datetime.now
+    last_modified: int = Field(
+        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
     )
     email_list_type: EmailListType = Field(description="Email list type")
     user_id: PydanticObjectId = Field(description="Id of user")

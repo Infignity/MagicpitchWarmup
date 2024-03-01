@@ -1,14 +1,15 @@
 from enum import Enum
 from typing import List, Literal
 from api.schemas import CustomSchemaWithConfig
+from api.app_config import current_utc_timestamp
 from pydantic import Field
 from datetime import datetime
 
 
 class AutoResponder(CustomSchemaWithConfig):
     is_active: bool = Field(description="Autoresponder is active", default=False)
-    created_on: datetime = Field(
-        description="Creation date of autoresponder", default_factory=datetime.now
+    created_on: int = Field(
+        description="Creation date of autoresponder - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
 

@@ -8,6 +8,7 @@ from pydantic import ConfigDict
 from starlette.config import Config
 from starlette.datastructures import CommaSeparatedStrings, Secret
 from apscheduler.triggers.interval import IntervalTrigger
+from datetime import datetime
 
 BASE_DIR = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
 
@@ -24,6 +25,9 @@ def create_path(path_str: str, allow_absolute=False) -> str:
     if not os.path.exists(full_path):
         os.makedirs(full_path, exist_ok=True)
     return full_path
+
+def current_utc_timestamp() -> int:
+    return int(datetime.now().timestamp())
 
 
 ACCESS_TOKEN_EXPIRE_TIME = 3600 * 72  # 3 days

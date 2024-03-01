@@ -33,8 +33,8 @@ class WarmupDay(Document):
     actual_total_send_volume: int = Field(
         description="The actual amount of send emails this day"
     )
-    date: datetime = Field(
-        description="Date when warmupday was ran", default_factory=datetime.now
+    date: int = Field(
+        description="Date when warmupday was ran - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
 
     state: WARMUP_STATE = Field(description="Current state of warmupday")
@@ -48,7 +48,7 @@ class WarmupDay(Document):
 
     client_emails_sent: List[EmailDetails] = Field(description="Client emails sent")
     reply_emails_sent: List[EmailDetails] = Field(description="Reply emails sent")
-
+    
 
 class Warmup(Document):
     class Settings:
@@ -64,11 +64,11 @@ class Warmup(Document):
     )
 
     name: str = Field(description="Name of warmup", default="New warmup")
-    created_at: datetime = Field(
-        description="Date when warmup was created", default_factory=datetime.now
+    created_at: int = Field(
+        description="Date when warmup was created - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
-    started_at: datetime = Field(
-        description="Date when warmup was started", default_factory=datetime.now
+    started_at: int = Field(
+        description="Date when warmup was started - UTC TIMESTAMP", default_factory=dcurrent_utc_timestamp
     )
     state: WARMUP_STATE = Field(
         description="Current state of warmup", default="notStarted"
@@ -126,3 +126,5 @@ class Warmup(Document):
         description="Message about current status, could be error message.",
         default=None,
     )
+    
+    scheduled_at: int = Field(description="Preferred time warmup should run - UTC TIMESTAMP")
