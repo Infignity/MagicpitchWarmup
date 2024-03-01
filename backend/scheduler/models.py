@@ -4,7 +4,7 @@ from typing import List, Optional, Literal
 from bunnet import PydanticObjectId, Indexed
 from bunnet.odm.documents import Document
 from pydantic import Field
-
+from scheduler.settings import simple_pydantic_model_config, current_utc_timestamp
 from scheduler import settings
 from scheduler.schemas import (
     AutoresponderDayData,
@@ -22,7 +22,7 @@ class WarmupEmail(Document):
         name = "warmup_emails"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="Warmup Id", default_factory=lambda: PydanticObjectId(), alias="_id"
@@ -37,7 +37,7 @@ class User(Document):
         name = "users"
         use_state_management = True
 
-    model_config = settings.simple_pydantic_model_config
+    model_config = simple_pydantic_model_config
 
     id: PydanticObjectId = Field(
         description="User Id", default_factory=lambda: PydanticObjectId(), alias="_id"
@@ -72,17 +72,18 @@ class WarmupDay(Document):
     )
 
     state: WARMUP_STATE = Field(description="Current state of warmupday")
-    reputation_score: float = Field(description="Reputation score 0-1")
-    reply_rate_score: float = Field(description="Reply rate score 0-1")
-    open_rate_score: float = Field(description="Open rate score 0-1")
+    reputation_score: float = Field(description="Reputation score 0-1", default=0)
+    reply_rate_score: float = Field(description="Reply rate score 0-1", default=0)
+    open_rate_score: float = Field(description="Open rate score 0-1", default=0)
 
     autoresponder_data: Optional[AutoresponderDayData] = Field(
-        description="Data associated with autoresponder"
+        description="Data associated with autoresponder only if autoresponder is enabled in warmup",
+        default=None
     )
 
-    client_emails_sent: List[EmailDetails] = Field(description="Client emails sent")
-    reply_emails_sent: List[EmailDetails] = Field(description="Reply emails sent")
-    batch_id: str = Field(description="Unique identifier for all emails sent this day")
+    client_emails_sent: List[EmailDetails] = Field(description="Client emails sent", default=[])
+    reply_emails_sent: List[EmailDetails] = Field(description="Reply emails sent", default=[])
+    batch_id: str = Field(description="Unique identifier for all emails sent this day", default="no-batch-id")
 
 
 class Warmup(Document):
@@ -103,7 +104,7 @@ class Warmup(Document):
         description="Date when warmup was created - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     started_at: int = Field(
-        description="Date when warmup was started - UTC TIMESTAMP", default_factory=dcurrent_utc_timestamp
+        description="Date when warmup was started - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     state: WARMUP_STATE = Field(
         description="Current state of warmup", default="notStarted"
@@ -184,10 +185,10 @@ class EmailList(Document):
         description="List of email addresses", default=[]
     )
     created_at: int = Field(
-        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
+        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     last_modified: int = Field(
-        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
+        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     email_list_type: EmailListType = Field(description="Email list type")
     user_id: PydanticObjectId = Field(description="Id of user")

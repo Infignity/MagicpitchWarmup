@@ -7,7 +7,7 @@ from pydantic import Field
 from beanie import PydanticObjectId
 from api.schemas import EmailDetails
 from api.warmups.schemas import AutoresponderDayData
-from api.app_config import simple_pydantic_model_config
+from api.app_config import simple_pydantic_model_config, current_utc_timestamp
 from beanie.odm.documents import Document
 from typing import Any, Optional, Literal, List
 from api.warmups import WARMUP_STATE
@@ -48,7 +48,7 @@ class WarmupDay(Document):
 
     client_emails_sent: List[EmailDetails] = Field(description="Client emails sent")
     reply_emails_sent: List[EmailDetails] = Field(description="Reply emails sent")
-    
+    batch_id: str = Field(description="Unique identifier for all emails sent this day")
 
 class Warmup(Document):
     class Settings:
@@ -68,7 +68,7 @@ class Warmup(Document):
         description="Date when warmup was created - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     started_at: int = Field(
-        description="Date when warmup was started - UTC TIMESTAMP", default_factory=dcurrent_utc_timestamp
+        description="Date when warmup was started - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     state: WARMUP_STATE = Field(
         description="Current state of warmup", default="notStarted"

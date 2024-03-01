@@ -251,6 +251,7 @@ async def create_warmup(
         job = scheduler_conn.root.add_job(new_warmup.model_dump_json(by_alias=True))
         print("JOB : ", job)
     except ConnectionRefusedError:
+        await new_warmup.delete()
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return CreateWarmupError(
             message="An error occured in our server",

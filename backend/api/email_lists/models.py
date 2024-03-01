@@ -26,10 +26,10 @@ class EmailList(Document):
         description="List of email addresses", default=[]
     )
     created_at: int = Field(
-        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
+        description="Creation time of email list - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     last_modified: int = Field(
-        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc__timestamp
+        description="Last modified date of email list - UTC TIMESTAMP", default_factory=current_utc_timestamp
     )
     email_list_type: EmailListType = Field(description="Email list type")
     user_id: PydanticObjectId = Field(description="Id of user")

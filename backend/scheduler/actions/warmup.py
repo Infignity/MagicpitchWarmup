@@ -5,11 +5,11 @@ from scheduler.settings import (
     generate_random_string,
     SCHEDULER_CLIENT_HOST,
     SCHEDULER_CLIENT_PORT,
+    current_utc_timestamp
 )
 from apscheduler.schedulers.background import BackgroundScheduler
 from rpyc.core.protocol import Connection
 import rpyc
-from datetime import datetime
 
 
 def remove_job(job_id):
@@ -158,7 +158,7 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
                 warmup_id=warmup.id,
                 nday=warmup.current_warmup_day,
                 actual_total_send_volume=len(unused_contacts),
-                date=datetime.now(),
+                date=current_utc_timestamp(),
                 state="completed",
                 client_emails_sent=unused_contacts,
                 batch_id=batch_id,
