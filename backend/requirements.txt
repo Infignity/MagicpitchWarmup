@@ -1,4 +1,4 @@
-aiohttp==3.9.2
+aiohttp==3.8.5
 aiosignal==1.3.1
 amqp==5.1.1
 annotated-types==0.5.0
@@ -36,7 +36,7 @@ click-repl==0.3.0
 colorama==0.4.6
 colorlog==6.7.0
 comm==0.1.4
-cryptography==42.0.4
+cryptography==41.0.4
 dateparser==1.1.8
 debugpy==1.6.7.post1
 decorator==5.1.1
@@ -51,7 +51,7 @@ entrypoint2==1.1
 exceptiongroup==1.1.3
 executing==1.2.0
 Faker==19.6.0
-fastapi==0.109.1
+fastapi==0.101.1
 fastjsonschema==2.18.0
 fqdn==1.5.1
 frozenlist==1.4.0
@@ -83,7 +83,7 @@ isort==5.12.0
 itsdangerous==2.1.2
 jedi==0.19.0
 jeepney==0.8.0
-Jinja2==3.1.3
+Jinja2==3.1.2
 jose==1.0.0
 json5==0.9.14
 jsonpointer==2.4
@@ -92,12 +92,12 @@ jsonschema-specifications==2023.7.1
 jupyter==1.0.0
 jupyter-console==6.6.3
 jupyter-events==0.7.0
-jupyter-lsp==2.2.2
+jupyter-lsp==2.2.0
 jupyter_client==8.3.0
 jupyter_core==5.3.1
 jupyter_server==2.7.2
 jupyter_server_terminals==0.4.4
-jupyterlab==4.0.11
+jupyterlab==4.0.5
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.8
 jupyterlab_server==2.24.0
@@ -125,12 +125,12 @@ nbclient==0.8.0
 nbconvert==7.7.4
 nbformat==5.9.2
 nest-asyncio==1.5.7
-notebook==7.0.7
+notebook==7.0.2
 notebook_shim==0.2.3
 numpy==1.25.2
 oauthlib==3.2.2
 openai==0.28.1
-orjson==3.9.15
+orjson==3.9.4
 overrides==7.4.0
 packaging==23.1
 pandas==2.0.3
@@ -141,7 +141,7 @@ pathspec==0.11.2
 pendulum==2.1.2
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==10.2.0
+Pillow==10.0.0
 platformdirs==3.10.0
 pluggy==1.3.0
 plumbum==1.8.2
@@ -155,7 +155,7 @@ pyasn1==0.5.0
 pyasn1-modules==0.3.0
 PyAutoGUI==0.9.54
 pycparser==2.21
-pycryptodome==3.19.1
+pycryptodome==3.18.0
 pydantic==2.3.0
 pydantic-extra-types==2.0.0
 pydantic-settings==2.0.3
@@ -175,7 +175,7 @@ python-docx==0.8.11
 python-dotenv==1.0.0
 python-jose==3.3.0
 python-json-logger==2.0.7
-python-multipart==0.0.7
+python-multipart==0.0.6
 python3-xlib==0.15
 pytweening==1.0.7
 pytz==2023.3
@@ -204,7 +204,7 @@ sniffio==1.3.0
 soupsieve==2.4.1
 SQLAlchemy==1.4.49
 stack-data==0.6.2
-starlette==0.36.2
+starlette==0.27.0
 terminado==0.17.1
 tinycss2==1.2.1
 tokenize-rt==5.2.0
@@ -222,7 +222,7 @@ tzlocal==5.1
 ujson==5.8.0
 uri-template==1.3.0
 uritemplate==4.1.1
-urllib3==2.0.7
+urllib3==2.0.4
 uvicorn==0.23.2
 uvloop==0.17.0
 vine==5.0.0
