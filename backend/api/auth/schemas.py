@@ -12,3 +12,5 @@ class Token(BaseModel):
     access_token: str = Field(description="Access Token")
     token_type: str = Field(description="Access Token Type")
     user_id: PydanticObjectId = Field(description="Id of current user")
+    username: str = Field(description="Username")
+    
