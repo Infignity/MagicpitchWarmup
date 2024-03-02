@@ -134,3 +134,5 @@ SCHEDULER_SERVER_PORT = config("SCHEDULER_SERVER_PORT", cast=int, default=8203)
 
 SCHEDULER_CLIENT_HOST = config("SCHEDULER_CLIENT_HOST", default="worker")
 SCHEDULER_CLIENT_PORT = config("SCHEDULER_CLIENT_PORT", cast=int, default=8203)
+
+TRACKING_PIXELS_DIR = create_path("files/tpx_emails")

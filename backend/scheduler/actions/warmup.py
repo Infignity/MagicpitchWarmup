@@ -10,6 +10,7 @@ from scheduler.settings import (
 from apscheduler.schedulers.background import BackgroundScheduler
 from rpyc.core.protocol import Connection
 import rpyc
+from scheduler.tracking import gen_tracking_images
 
 
 def remove_job(job_id):
@@ -148,7 +149,9 @@ def periodic_warmup(*args, warmup_: Warmup, **kwargs):
             warmup.current_warmup_day += 1
             warmup.save_changes()
 
-            send_warmup_emails(batch_id, unused_contacts, mail_server)
+
+            tracking_images = gen_tracking_images(batch_id, total=len(unused_contacts))
+            send_warmup_emails(batch_id, unused_contacts, tracking_images, mail_server)
             logger.info(
                 f"Warmup [{warmup_id}] => Warmup emails sent to {len(unused_contacts)} contacts"
             )
