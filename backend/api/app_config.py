@@ -51,6 +51,7 @@ SCHEDULER_CLIENT_PORT = config("SCHEDULER_CLIENT_PORT", cast=int, default=8203)
 LOG_FILES_DIR = create_path("logs")
 TEMP_FILES_DIR = create_path("files/tmps")
 USER_FILES_DIR = create_path("files/user_data")
+TRACKING_PIXELS_DIR = create_path("files/tpx_emails")
 ENV_DIR = create_path("env")
 
 

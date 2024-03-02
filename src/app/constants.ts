@@ -1,32 +1,32 @@
-import { MailServerVerificationTypeObject } from "./types"
+import { MailServerVerificationTypeObject } from "./types";
 
-export const API_BASE_NO_PREFIX = 'https://ketchwarmup.azurewebsites.net'; // || 'http://localhost:8070';
+export const API_BASE_NO_PREFIX = "https://ketchwarmup.azurewebsites.net"; // || 'http://localhost:8070';
 export const API_BASE = API_BASE_NO_PREFIX + "/v1";
 
 export const mode: {
-  NEW: "NEW",
-  EDIT: "EDIT"
+  NEW: "NEW";
+  EDIT: "EDIT";
 } = {
   NEW: "NEW",
-  EDIT: "EDIT"
-}
+  EDIT: "EDIT",
+};
 
 export const mailServerVerificationType: MailServerVerificationTypeObject = {
   imap: "imap",
   smtp: "smtp",
-}
+};
 
 export const securityOptions = [
   { text: "SSL", value: "ssl" },
   { text: "TLS", value: "tls" },
   { text: "Unsecure", value: "unsecure" },
-]
+];
 
 export const SESSION_STATUS = {
   LOADING: "loading",
   AUTHENTICATED: "authenticated",
-  UNAUTHENTICATED: "unauthenticated"
-}
+  UNAUTHENTICATED: "unauthenticated",
+};
 
 export const routes = {
   HOME: "/",
@@ -39,9 +39,9 @@ export const routes = {
   REPLY_EMAILS: "/email-lists/reply-emails",
   SETTINGS: "/settings",
   SIGNUP: "/signup",
-  LOGIN: "/login"
-}
-
+  LOGIN: "/login",
+  USER: "/users",
+};
 
 export const sampleWarmups = [
   {
@@ -51,7 +51,7 @@ export const sampleWarmups = [
     status: "draft",
     day: 0,
     spamEmail: 0,
-    sentEmail: 0
+    sentEmail: 0,
   },
   {
     _id: "asdkfjasdf",
@@ -60,10 +60,9 @@ export const sampleWarmups = [
     status: "Sent 15 Aug, 8:30PM",
     day: 0,
     spamEmail: 0,
-    sentEmail: 200
+    sentEmail: 200,
   },
-]
-
+];
 
 export const sampleMailServers = [
   {
@@ -75,7 +74,7 @@ export const sampleMailServers = [
     day: 5,
     reputation: 70,
     bounceRate: 15,
-    spamRate: 2
+    spamRate: 2,
   },
   {
     _id: "asdkfjasdf",
@@ -86,7 +85,7 @@ export const sampleMailServers = [
     day: 8,
     reputation: 60,
     bounceRate: 20,
-    spamRate: 2
+    spamRate: 2,
   },
   {
     _id: "aklsdfnsdmf",
@@ -97,6 +96,6 @@ export const sampleMailServers = [
     day: 20,
     reputation: 80,
     bounceRate: 10,
-    spamRate: 1
+    spamRate: 1,
   },
-]
+];

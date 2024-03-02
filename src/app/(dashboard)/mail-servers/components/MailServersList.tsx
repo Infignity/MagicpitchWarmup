@@ -79,7 +79,7 @@ export default function MailServersList({
   };
 
   return (
-    <div className="flex flex-col w-full min-w-[60rem]">
+    <div className="flex flex-col w-full min-w-[60rem] pb-14 min-h-screen">
       {isEditDragNDropOpen && (
         <section className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
           <EditServerForm

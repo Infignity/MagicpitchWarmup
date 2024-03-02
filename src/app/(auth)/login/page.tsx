@@ -2,7 +2,12 @@
 import React, { useRef, useState } from "react";
 import TextInput from "@/app/(auth)/components/TextInput";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
-import { useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { IconContext } from "react-icons";
 import { BsX as XMark } from "react-icons/bs";
 import { SignInApi } from "@/app/api/signinapi";
@@ -11,6 +16,7 @@ import Loader1 from "@/app/(dashboard)/components/Loader1";
 import Loader2 from "@/app/(dashboard)/components/Loader2";
 import { useAuth } from "@/app/(dashboard)/contexts/authContext";
 import { Toaster, toast } from "react-hot-toast";
+import { SignInUser } from "@/app/types";
 
 const initialFormState = {
   username: "",
@@ -28,6 +34,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { showErrorToast, showSuccessToast } = useGlobalToastContext();
   const router = useRouter();
+  const params = useSearchParams();
   const { token, login } = useAuth();
   function handleOnChange(update: { [key: string]: string }) {
     setFormState((prev) => {
@@ -75,12 +82,29 @@ const Login = () => {
       formData.append("username", formState.username);
       formData.append("password", formState.password);
       const response = await SignInApi(formData);
-      console.log("response: ", response);
-      console.log(response.data.accessToken);
-      const token = sessionStorage.setItem("token", response.data.accessToken);
+      sessionStorage.setItem("token", response.data.accessToken);
+
       if (response) {
         const token = response.data.accessToken;
-        login(token);
+        if (params.get("referer") !== "addprofile") {
+          login(token);
+        }
+        if (!localStorage.getItem("users")) {
+          localStorage.setItem("users", JSON.stringify([response.data]));
+        } else {
+          let users = JSON.parse(
+            localStorage.getItem("users") as string
+          ) as Array<SignInUser>;
+          console.log("users", users);
+          const userExist = users.some(
+            (user: SignInUser) => user.userId === response.data.userId
+          );
+          console.log("userExist", userExist);
+          if (!userExist) {
+            users.push(response.data);
+            localStorage.setItem("users", JSON.stringify(users));
+          }
+        }
         router.push("/warm-ups");
         setFormState(initialFormState);
         showSuccessToast("Login Successful!");
@@ -127,11 +151,8 @@ const Login = () => {
     }
   }
 
-
   return (
     <div className="w-full flex flex-col gap-3">
-
-
       {/* {showPopup && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">

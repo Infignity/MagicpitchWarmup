@@ -10,7 +10,7 @@ from scheduler.settings import ENVIRONMENT
 
 
 def send_single_mail(
-    hostname, port, security, email, password, to_email, subject, body, batch_id
+    hostname, port, security, email, password, to_email, subject, body, batch_id, tracking_image_url
 ):
     try:
         # Create an SMTP object based on the security option
@@ -36,7 +36,8 @@ def send_single_mail(
             <html>
                 <body>
                     <div data-warmup-id="{batch_id}">
-                        {body}
+                        <p>{body}</p>
+                        <img src="{tracking_image_url}" alt="tpximg">
                     </div>
                 </body>
             </html>
@@ -62,18 +63,20 @@ def send_single_mail(
         return f"An error occurred: {str(e)}", "failed"
 
 
-def send_warmup_emails(batch_id, contacts: List[EmailDetails], mail_server: MailServer):
+def send_warmup_emails(batch_id, contacts: List[EmailDetails], tracking_images:List[str], mail_server: MailServer):
     """Send warmup emails to contacts"""
 
     chunk_size = 10
 
     for i in range(0, len(contacts), chunk_size):
         contacts_list = contacts[i : i + chunk_size]
+        tracking_images_list = tracking_images[i:i+chunk_size]
+        
         result: List[Dict] = WarmupEmail.aggregate(
             [{"$sample": {"size": chunk_size}}]
         ).to_list()
 
-        for contact, warmup_email in zip(contacts_list, result):
+        for contact, warmup_email, tracking_image_url in zip(contacts_list, result, tracking_images_list):
             send_single_mail(
                 hostname=mail_server.smtp_details.hostname,
                 port=mail_server.smtp_details.port,
@@ -86,4 +89,5 @@ def send_warmup_emails(batch_id, contacts: List[EmailDetails], mail_server: Mail
                 subject=warmup_email["subject"],
                 body=warmup_email["body"],
                 batch_id=batch_id,
+                tracking_image_url = tracking_image_url
             )

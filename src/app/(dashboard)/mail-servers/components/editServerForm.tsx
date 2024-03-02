@@ -131,7 +131,7 @@ export default function EditServerForm({
         isSubmitDisabled && setIsSMTPVerified(true);
         setIsLoading(false);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       toast.error(
         (t) => (
@@ -184,7 +184,7 @@ export default function EditServerForm({
       setAllMailServers(allMailServersResponse.data.results);
       setIsLoading(false);
       showSuccessToast("Mail server Added successfully");
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       setIsLoading(false);
       toast.error(
@@ -291,6 +291,7 @@ export default function EditServerForm({
                   value={formFields.smtpPassword}
                   onChange={handleInputChange}
                   name="smtpPassword"
+                  type="password"
                 />
               </div>
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
