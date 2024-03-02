@@ -1,5 +1,7 @@
 """  Main entrypoint of application """
 
+import numpy as np
+import re
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
@@ -8,7 +10,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-
 from api.response_schemas import CustomValidationErrorResponse
 
 from api import app_config
@@ -62,6 +63,7 @@ app.add_middleware(
 )
 
 app.mount("/files", StaticFiles(directory="files/user_data"), name="files")
+app.mount("/tpximgs", StaticFiles(directory="files/tpx_emails"), name="tpx_tracking")
 
 # Used for rate limiting ..
 app.state.limiter = limiter
@@ -83,6 +85,16 @@ MODELS = [User, EmailList, MailServer, WarmupDay, Warmup, Announcement]
 async def start_db():
     """Initializes the database"""
     await init_db(MODELS)
+    
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next) -> Response:
+    if request.url.path.startswith("/tpximgs/"):
+        print(f"Request: {request.method} {request.url}")
+        
+    response = await call_next(request)
+    return response
 
 
 @app.exception_handler(RequestValidationError)
