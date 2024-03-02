@@ -1,6 +1,7 @@
 from api.schemas import CustomSchemaWithConfig
 from pydantic import Field
-from typing import List
+from typing import List, Optional, Literal
+from api.announcements import ANNOUNCEMENT_PRIORITY
 
 class NewAnnouncementRequest(CustomSchemaWithConfig):
     message: str = Field(description="Short announcement")

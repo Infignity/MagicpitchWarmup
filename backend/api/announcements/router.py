@@ -13,14 +13,15 @@ from fastapi import (
     UploadFile,
     Query,
 )
-from typing import Optional, Union, Literal
+from typing import Optional, Union, Literal, List
 import pandas
 import os
 from datetime import datetime
 import chardet
 from api.auth import API_USER_TYPE, generate_random_string, get_current_user
-from api.auth.response_schemas import AuthorizationError, AnnouncementsDeleted
+from api.auth.response_schemas import AuthorizationError
 from api.announcements.request_schemas import DeleteAnnouncementRequest, NewAnnouncementRequest
+from api.announcements.response_schemas import AnnouncementsDeleted
 from beanie.odm.operators.find.comparison import In
 from api.response_schemas import ResourceNotFound
 
@@ -37,7 +38,7 @@ announcements_router = APIRouter(prefix="/announcements")
     "",
     tags=["Announcements"],
     summary="Add new announcement",
-    description="Add a new announcement, note that only admin accounts can add , update and delete announcements, regular accounts can only see announcements",
+    description="Add a new announcement, note that only admin accounts can add and delete announcements, regular accounts can only see announcements",
     responses={
         status.HTTP_201_CREATED: {"model": Announcement},
         status.HTTP_401_UNAUTHORIZED: {"model": AuthorizationError}
@@ -86,9 +87,9 @@ async def get_all_announcements(
     "/delete",
     tags=["Anouncements"],
     summary="Delete announcements",
-    description="Delete multiple announcements",
+    description="Delete multiple announcements, note that only admin accounts can add and delete announcements, regular accounts can only see announcements",
     responses={
-        status.HTTP_200_OK: {"model": AnouncementsDeleted},
+        status.HTTP_200_OK: {"model": AnnouncementsDeleted},
         status.HTTP_401_UNAUTHORIZED: {"model": AuthorizationError},
     },
 )

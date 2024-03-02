@@ -2,12 +2,10 @@ from datetime import datetime
 from typing import Optional, List
 from beanie.odm.documents import Document
 from beanie import PydanticObjectId
-from api.email_lists.schemas import EmailListType
-from api.schemas import EmailDetails
+from api.announcements import ANNOUNCEMENT_PRIORITY
 from pydantic import Field
 from api.app_config import current_utc_timestamp, simple_pydantic_model_config
 
-ANNOUNCEMENT_PRIORITY = Literal["high", "normal"]
 
 class Announcement(Document):
     class Settings:
