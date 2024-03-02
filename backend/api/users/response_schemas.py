@@ -26,6 +26,7 @@ class UserResponse(CustomSchemaWithConfig):
     username: str = Field(description="Username")
     email: str = Field(description="Email")
     fullname: str = Field(description="Full name - Firstname Lastname")
+    is_admin: bool = Field(description="If user is admin or regular user", default=False)
 
 
 class CreateUserSuccess(CustomSchemaWithConfig):
