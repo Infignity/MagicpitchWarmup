@@ -10,6 +10,7 @@ from scheduler.settings import (
 from apscheduler.schedulers.background import BackgroundScheduler
 from rpyc.core.protocol import Connection
 import rpyc
+from scheduler.tracking import gen_tracking_images
 
 
 def remove_job(job_id):
