@@ -24,3 +24,4 @@ class User(Document):
     email: str = Field(description="Email")
     password: str = Field(description="Password")
     fullname: str = Field(description="Full name - Firstname Lastname")
+    is_admin: bool = Field(description="If user is admin or regular user", default=False)

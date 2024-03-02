@@ -4,6 +4,7 @@ from typing import Union, Callable
 from starlette import status
 from fastapi import Request, Response
 from api.app_config import ALLOWED_IPS, ENVIRONMENT
+from api.auth import API_USER_TYPE
 from api.auth.response_schemas import AuthorizationError
 
 
@@ -21,6 +22,30 @@ def authorization_required(func):
             return AuthorizationError(
                 description="Unable to validate user, check Bearer token"
             )
+        return await func(*args, **kwargs)
+
+    return wrapper
+
+def admin_only(func):
+    """Decorator to ensure that endpoint is endpoint is only accessible by admin accounts. Use like this `@admin_only` without parentheses"""
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        user: API_USER_TYPE = kwargs["user"]
+        response = kwargs["response"]
+
+        # Check if user is valid
+        if user is None:
+            response.status_code = status.HTTP_401_UNAUTHORIZED
+            return AuthorizationError(
+                description="Unable to validate user, check Bearer token"
+            )
+        else:
+            if not user.is_admin:
+                response.status_code = status.HTTP_401_UNAUTHORIZED
+                return AuthorizationError(
+                    description="Only admin accounts can access this resource"
+                )
         return await func(*args, **kwargs)
 
     return wrapper

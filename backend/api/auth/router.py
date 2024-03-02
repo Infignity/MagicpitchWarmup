@@ -59,4 +59,4 @@ async def login_for_access_token(
     token = create_access_token(
         user.username, user.id, timedelta(seconds=app_config.ACCESS_TOKEN_EXPIRE_TIME)
     )
-    return Token(access_token=token, token_type="bearer", user_id=user.id)
+    return Token(access_token=token, token_type="bearer", user_id=user.id, username=user.username)
