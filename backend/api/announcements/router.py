@@ -85,7 +85,7 @@ async def get_all_announcements(
 
 @announcements_router.post(
     "/delete",
-    tags=["Anouncements"],
+    tags=["Announcements"],
     summary="Delete announcements",
     description="Delete multiple announcements, note that only admin accounts can add and delete announcements, regular accounts can only see announcements",
     responses={
