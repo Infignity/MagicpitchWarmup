@@ -61,5 +61,5 @@
   border: 1px solid #b2b2b2 !important;
   padding: 2px 5px;
   border-radius: 4px;
-  width: 100%;
+  width: 100% !important;
 }

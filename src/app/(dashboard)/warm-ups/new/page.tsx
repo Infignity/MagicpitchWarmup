@@ -35,7 +35,7 @@ const CreateWarmup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
   const [dateTime, setDateTime] = useState<Value>(new Date());
-  console.log(new Date(dateTime as Date).getTime());
+
   const handleOnChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormFields((prev) => ({ ...prev, [name]: value }));

@@ -26,7 +26,6 @@ const Header = () => {
   const [user, setUser] = useState<UserType>();
   const [openDropdown, setOpenDropdown] = useState(false);
   const storedUsers = JSON.parse(localStorage.getItem("users") as string);
-  console.log("stored", storedUsers);
 
   const getUser = async () => {
     try {
@@ -78,11 +77,16 @@ const Header = () => {
         </div>
         {openDropdown && (
           <div className="bg-white shadow-lg rounded-md w-[300px] h-auto absolute top-14 right-5 z-50 p-5 border">
-            <div className="flex items-center gap-x-1 text-base font-medium">
-              <p>{user?.fullname}</p>
-              <p>({user?.username})</p>
+            <div
+              onClick={() => router.push("/profile")}
+              className="cursor-pointer"
+            >
+              <div className="flex items-center gap-x-1 text-base font-medium">
+                <p>{user?.fullname}</p>
+                <p>({user?.username})</p>
+              </div>
+              <p className="text-serif text-sm">{user?.email}</p>
             </div>
-            <p className="text-serif text-sm">{user?.email}</p>
             {/* <hr className="my-3" />
             <div className="flex items-center gap-x-2">
               <LiaUserEditSolid className="text-black w-6 h-6" />
