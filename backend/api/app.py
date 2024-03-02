@@ -20,11 +20,13 @@ from api.warmups.router import warmup_router
 from api.auth.router import auth_router
 from api.email_lists.router import email_list_router
 from api.mail_servers.router import mail_server_router
+from api.announcements.router import announcements_router
 
 from api.users.models import User
 from api.warmups.models import Warmup, WarmupDay
 from api.email_lists.models import EmailList
 from api.mail_servers.models import MailServer
+from api.announcements.models import Announcement
 
 
 app = FastAPI(
@@ -71,9 +73,10 @@ app.include_router(warmup_router, prefix=app_config.VERSION_PREFIX)
 app.include_router(auth_router, prefix=app_config.VERSION_PREFIX)
 app.include_router(email_list_router, prefix=app_config.VERSION_PREFIX)
 app.include_router(mail_server_router, prefix=app_config.VERSION_PREFIX)
+app.include_router(announcements_router, prefix=app_config.VERSION_PREFIX)
 
 # Models to initialize
-MODELS = [User, EmailList, MailServer, WarmupDay, Warmup]
+MODELS = [User, EmailList, MailServer, WarmupDay, Warmup, Announcement]
 
 
 @app.on_event("startup")
