@@ -11,6 +11,15 @@ import { CreateWarmupApi } from "@/app/api/createwarmupapi";
 import Loader1 from "../../components/Loader1";
 import { useGlobalToastContext } from "@/app/contexts/GlobalToastProvider";
 import { useRouter } from "next/navigation";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 const CreateWarmup = () => {
   const [formFields, setFormFields] = useState({
     warmupName: "",
@@ -25,6 +34,8 @@ const CreateWarmup = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { showSuccessToast, showErrorToast } = useGlobalToastContext();
+  const [dateTime, setDateTime] = useState<Value>(new Date());
+  console.log(new Date(dateTime as Date).getTime());
   const handleOnChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormFields((prev) => ({ ...prev, [name]: value }));
@@ -65,6 +76,7 @@ const CreateWarmup = () => {
       autoResponderEnabled: Number(formFields.autoResponderEnabled),
       targetOpenRate: 0.1,
       targetReplyRate: 0.1,
+      scheduledAt: new Date(dateTime as Date).getTime() / 1000,
     };
     try {
       const response = await CreateWarmupApi(data);
@@ -142,6 +154,16 @@ const CreateWarmup = () => {
                 value={formFields.maxDays}
                 onChange={handleOnChange}
               />
+              <div className="w-full">
+                <p className="text-gray-800">{"Scheduled Time"}</p>
+                <DateTimePicker
+                  onChange={(date) => {
+                    setDateTime(date);
+                  }}
+                  value={dateTime}
+                  minDate={new Date()}
+                />
+              </div>
             </div>
 
             <div className="w-full flex flex-col gap-5">
@@ -214,6 +236,7 @@ const CreateWarmup = () => {
               !formFields.startVolume ||
               !formFields.dailySendLimit ||
               !formFields.increaseRate ||
+              !dateTime ||
               isLoading
             }
           >

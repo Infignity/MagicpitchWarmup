@@ -79,6 +79,7 @@ const WarmUp = () => {
       // Toggle the specific dropdown
       newDropdownStates.set(dropdownId, !newDropdownStates.get(dropdownId));
     }
+    console.log("new", newDropdownStates);
 
     setDropdownStates(newDropdownStates);
     console.log(dropdownId);
@@ -463,7 +464,7 @@ const WarmUp = () => {
           </div>
         )}
         {isEditDragNDropOpen && (
-          <div className="absolute w-full z-50 inset-0 overflow-y-auto flex items-center justify-center">
+          <div className="absolute z-50 right-0 top-14 overflow-y-auto flex items-center justify-center shadow-2xl">
             <ViewAllModal onClose={setIsEditDragNDropOpen} />
           </div>
         )}
@@ -580,7 +581,7 @@ const WarmUp = () => {
               </Link>
             </button>
           </div>
-          <div className="flex flex-col w-full h-full overflow-x-auto overflow-y-visible">
+          <div className="flex flex-col w-full h-full pb-14 overflow-x-auto overflow-y-visible">
             <div className="flex flex-col w-full min-w-[60rem]">
               <div className="grid grid-cols-7  p-4 lg:px-8 border-b-[0.5px] text-left justify-start">
                 <div className="flex justify-start">
@@ -710,7 +711,7 @@ const WarmUp = () => {
                     <div className="flex items-center justify-start w-full">
                       {warmup.maxDays}
                     </div>
-                    <div className="flex items-center justify-start text-center w-full">
+                    <div className="flex items-center justify-start text-center w-full ">
                       <div className="relative">
                         <button
                           onClick={() => toggleDropdown(warmup._id)}
@@ -730,7 +731,7 @@ const WarmUp = () => {
                         {dropdownStates.get(warmup._id) && (
                           <div
                             ref={dropdownRef}
-                            className="absolute right-0 z-10 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                            className="absolute right-0 z-30 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
                           >
                             {/* Dropdown content */}
                             <button
