@@ -39,7 +39,7 @@ const sidebars: Sidebar[] = [
 const Sidebar = () => {
   const pathname = usePathname();
   let SecSidebar: Sidebar | null = null;
-  const router = useRouter()
+  const router = useRouter();
   // const dispatch = useAppDispatch()
   const isSidebarOpen = true;
   const warmUpsRoute = "/warm-ups";
@@ -57,13 +57,12 @@ const Sidebar = () => {
   }
 
   const SignOut = () => {
-    sessionStorage.removeItem('token')
-    router.push('/login')
-  }
-    
+    sessionStorage.removeItem("token");
+    router.push("/login");
+  };
 
   return (
-    <section className="flex h-full">
+    <section className="flex h-screen">
       {/* primary navigation */}
       <nav className="flex w-fit flex-col gap-2 justify-between bg-blue">
         <ul className="flex flex-col  h-full gap-5 md:gap-10 items-center justify-start py-5">
@@ -119,9 +118,7 @@ const Sidebar = () => {
               pathname.startsWith(settingsRoute) ? `bg-blue-highlight` : ""
             }`}
           >
-            <button 
-            onClick={SignOut}
-            data-tooltip-id={settingsRoute}>
+            <button onClick={SignOut} data-tooltip-id={settingsRoute}>
               <Logout />
             </button>
             <Tooltip id={settingsRoute} content={"Logout"} place="right" />
