@@ -156,7 +156,7 @@ pyasn1-modules==0.3.0
 PyAutoGUI==0.9.54
 pycparser==2.21
 pycryptodome==3.18.0
-pydantic==2.3.0
+pydantic==2.4.0
 pydantic-extra-types==2.0.0
 pydantic-settings==2.0.3
 pydantic_core==2.6.3
